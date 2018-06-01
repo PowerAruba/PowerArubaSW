@@ -62,3 +62,61 @@ function Connect-ArubaSW {
     End {
     }
 }
+
+function Disconnect-ArubaSW {
+
+    <#
+        .SYNOPSIS
+        Disconnect to a ArubaOS Switches (Provision)
+
+        .DESCRIPTION
+        Disconnect the connection on ArubaOS Switchs
+
+        .EXAMPLE
+        Disconnect-ArubaSW
+
+        Disconnect the connection
+
+        .EXAMPLE
+        Disconnect-ArubaSW -noconfirm
+
+        Disconnect the connection with no confirmation
+
+    #>
+
+    Param(
+        [Parameter(Mandatory = $false)]
+        [switch]$noconfirm
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v1/login-sessions"
+
+        if ( -not ( $Noconfirm )) {
+            $message  = "Remove Aruba Switch connection."
+            $question = "Proceed with removal of Aruba Switch connection ?"
+            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+        }
+        else { $decision = 0 }
+        if ($decision -eq 0) {
+            Write-Progress -activity "Remove Aruba SW connection"
+            $null = invoke-ArubaSWWebRequest -method "DELETE" -url $url
+            write-progress -activity "Remove Aruba SW connection" -completed
+            if (Get-Variable -Name DefaultArubaSWConnection -scope global ) {
+                Remove-Variable -name DefaultArubaSWConnection -scope global
+            }
+        }
+
+    }
+
+    End {
+    }
+}
