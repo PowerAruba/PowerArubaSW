@@ -16,9 +16,10 @@ function Connect-ArubaSW {
       Actually only support to use HTTP
 
       .EXAMPLE
-      Connect-ArubaSW -Server 192.0.2.1 -Username manager -Password aruba
+      $mysecpassword = ConvertTo-SecureString aruba -AsPlainText -Force
+      Connect-ArubaSW -Server 192.0.2.1 -Username manager -Password $mysecpassword
 
-      Connect to a ArubaOS Switch with IP 192.0.2.1
+      Connect to a ArubaOS Switch with IP 192.0.2.1 using Username and Password
 
   #>
 
@@ -28,7 +29,7 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [String]$Username,
         [Parameter(Mandatory = $false)]
-        [String]$Password
+        [SecureString]$Password
     )
 
     Begin {
@@ -37,8 +38,10 @@ function Connect-ArubaSW {
     Process {
 
         $connection = @{server="";session="";cookie=""}
+        $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+        $PlainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
-        $postParams = @{userName=$Username;password=$Password}
+        $postParams = @{userName=$Username;password=$PlainPassword}
         $url = "http://${Server}:80/rest/v3/login-sessions"
         try {
             $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw
