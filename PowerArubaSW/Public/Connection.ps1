@@ -16,11 +16,21 @@ function Connect-ArubaSW {
       Actually only support to use HTTP
 
       .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1
+
+      Connect to a ArubaOS Switch with IP 192.0.2.1 using (Get-)credential
+
+      .EXAMPLE
+      $cred = get-credential
+      Connect-ArubaSW -Server 192.0.2.1 -credential $cred
+
+      Connect to a ArubaOS Switch with IP 192.0.2.1 and passing (Get-)credential
+
+      .EXAMPLE
       $mysecpassword = ConvertTo-SecureString aruba -AsPlainText -Force
       Connect-ArubaSW -Server 192.0.2.1 -Username manager -Password $mysecpassword
 
       Connect to a ArubaOS Switch with IP 192.0.2.1 using Username and Password
-
   #>
 
     Param(
@@ -29,7 +39,9 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [String]$Username,
         [Parameter(Mandatory = $false)]
-        [SecureString]$Password
+        [SecureString]$Password,
+        [Parameter(Mandatory = $false)]
+        [PSCredential]$Credentials
     )
 
     Begin {
@@ -38,10 +50,18 @@ function Connect-ArubaSW {
     Process {
 
         $connection = @{server="";session="";cookie=""}
-        $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
-        $PlainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
-        $postParams = @{userName=$Username;password=$PlainPassword}
+        #If there is a password (and a user), create a credentials
+        if ($Password) {
+            $Credentials = New-Object System.Management.Automation.PSCredential($Username, $Password)
+        }
+        #Not Credentials (and no password)
+        if ($Credentials -eq $null)
+        {
+            $Credentials = Get-Credential -Message 'Please enter administrative credentials for your ArubaOS Switch'
+        }
+
+        $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
         $url = "http://${Server}:80/rest/v3/login-sessions"
         try {
             $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw
