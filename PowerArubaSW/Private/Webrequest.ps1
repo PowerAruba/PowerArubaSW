@@ -13,7 +13,7 @@ function Invoke-ArubaSWWebRequest(){
         #Valid POST, GET...
         [String]$method,
         [Parameter(Mandatory = $false)]
-        [String]$body,
+        [psobject]$body,
         [Parameter(Mandatory = $false)]
         [Microsoft.PowerShell.Commands.WebRequestSession]$sessionvariable
     )
@@ -32,7 +32,11 @@ function Invoke-ArubaSWWebRequest(){
         }
         
         try {
-            $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable
+            if($body){
+                $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable
+            } else {
+                $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable
+            }
         }
         catch {
             Write-host $_
