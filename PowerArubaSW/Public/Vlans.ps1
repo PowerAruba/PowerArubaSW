@@ -146,8 +146,8 @@ function Set-ArubaSWVlans {
         Configure vlan info (Id, Name, Voice, Snooping...)
 
         .EXAMPLE
-        Get-ArubaSWVlans -id 85
-        PS /> $vlan | Set-ArubaSWVlans -Name PowerArubaSW -is_voice_enabled -is_jumbo_enabled:$false
+        $vlan = Get-ArubaSWVlans -id 85
+        PS C:\>$vlan | Set-ArubaSWVlans -Name PowerArubaSW -is_voice_enabled -is_jumbo_enabled:$false
 
         Configure vlan id 85 with name PowerArubaSW and enable voice vlan and disable jumbo
         .EXAMPLE
