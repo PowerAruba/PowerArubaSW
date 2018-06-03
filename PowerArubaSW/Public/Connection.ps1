@@ -34,7 +34,7 @@ function Connect-ArubaSW {
   #>
 
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true,position=1)]
         [String]$Server,
         [Parameter(Mandatory = $false)]
         [String]$Username,
