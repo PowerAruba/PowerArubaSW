@@ -70,7 +70,7 @@ function Add-ArubaSWVlans {
                 $vlan | add-member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $false
             }
         }
-        $vlan | ConvertTo-Json
+
         $response = invoke-ArubaSWWebRequest -method "POST" -body $vlan -url $url
         $vlans = ($response.Content | convertfrom-json)
 
