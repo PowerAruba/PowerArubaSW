@@ -233,7 +233,8 @@ function Remove-ArubaSWVlans {
         Remove vlan on the switch
 
         .EXAMPLE
-        Remove-ArubaSWVlans -id 85
+        $vlan = Get-ArubaSWVlans -id 85
+        PS C:\>$vlan | Remove-ArubaSWVlans
 
         Remove vlan id 85
 
@@ -244,8 +245,11 @@ function Remove-ArubaSWVlans {
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory=$true,ParameterSetName="id")]
         [int]$id,
+        [Parameter (Mandatory=$true,ValueFromPipeline=$true,Position=1,ParameterSetName="vlan")]
+        #ValidateScript({ ValidateVlan $_ })]
+        [psobject]$vlan,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
     )
@@ -254,6 +258,11 @@ function Remove-ArubaSWVlans {
     }
 
     Process {
+
+        #get vlan id from vlan ps object
+        if($vlan){
+            $id = $vlan.vlan_id
+        }
 
         $url = "rest/v4/vlans/${id}"
 
