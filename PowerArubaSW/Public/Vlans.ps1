@@ -32,6 +32,7 @@ function Add-ArubaSWVlans {
         [Parameter (Mandatory=$false)]
         [switch]$is_dsnoop_enabled
     )
+
     Begin {
     }
 
@@ -113,6 +114,7 @@ function Get-ArubaSWVlans {
         [Parameter (Mandatory=$false, ParameterSetName="name", Position=1)]
         [string]$Name
     )
+
     Begin {
     }
 
@@ -170,6 +172,7 @@ function Set-ArubaSWVlans {
         [Parameter (Mandatory=$false)]
         [switch]$is_dsnoop_enabled
     )
+
     Begin {
     }
 
