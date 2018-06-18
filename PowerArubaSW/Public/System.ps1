@@ -251,3 +251,35 @@ function Get-ArubaSWSystemStatusTime {
     End {
     }
 }
+
+function Get-ArubaSWSystemStatusSwitch {
+
+    <#
+        .SYNOPSIS
+        Get System Status Switch about ArubaOS Switch (Provision)
+
+        .DESCRIPTION
+        Get System Status Switch Product and Hardware info
+
+        .EXAMPLE
+        Get-ArubaSWSystemStatusSwitch
+
+        Get System Status Switch Product (Name / Number) and Hardware (FAN / ports) info
+
+    #>
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/system/status/switch"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $response.content | convertfrom-json
+    }
+
+    End {
+    }
+}
