@@ -63,7 +63,7 @@ We can only connnect using http (for moment...)
 
 ### Vlans Management
 
-You can create a new LUN `Add-ArubaSWVlans`, retrieve its information `Get-ArubaSWVlans`, modify its properties `Set-ArubaSWVLans`, or delete it `Remove-ArubaSWVlans`.
+You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-ArubaSWVlans`, modify its properties `Set-ArubaSWVLans`, or delete it `Remove-ArubaSWVlans`.
 
 ```powershell
 # Create a vlan
