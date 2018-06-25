@@ -41,7 +41,9 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [SecureString]$Password,
         [Parameter(Mandatory = $false)]
-        [PSCredential]$Credentials
+        [PSCredential]$Credentials,
+        [Parameter(Mandatory = $false)]
+        [switch]$noverbose=$false
     )
 
     Begin {
@@ -80,6 +82,11 @@ function Connect-ArubaSW {
 
         set-variable -name DefaultArubaSWConnection -value $connection -scope Global
 
+        if (-not $noverbose) {
+            $switchsystem = Get-ArubaSwSystem
+            $switchstatus = Get-ArubaSWSystemStatusSwitch
+            write-host "Welcome on"$switchsystem.name"-"$switchstatus.product_name
+        }
     }
 
     End {
