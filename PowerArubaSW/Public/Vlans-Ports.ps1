@@ -131,14 +131,14 @@ function Set-ArubaSWVlansPorts {
 
         .EXAMPLE
         $vlanport = Get-ArubaSWVlansPorts -vlan_id 85 -port_id 8
-        PS C:\>$vlan | Set-ArubaSWVlans -port_mode untagged
+        PS C:\>$vlanport | Set-ArubaSWVlansPorts -port_mode untagged
 
-        Configure vlan id 85 on port id 8 with mode untagged
+        (Re)configure vlan id 85 on port id 8 with mode untagged
 
         .EXAMPLE
-        Set-ArubaSWVlans -vlan_id 23 -port_id 8 -port_mode tagged
+        Set-ArubaSWVlansPorts -vlan_id 23 -port_id 8 -port_mode tagged
 
-        Configure vlan id 23 on port id 8 with mode tagged
+        (Re)configure vlan id 23 on port id 8 with mode tagged
     #>
 
     Param(
@@ -191,19 +191,19 @@ function Remove-ArubaSWVlansPorts {
 
     <#
         .SYNOPSIS
-        Remove a Vlan Ports  on ArubaOS Switch (Provision)
+        Remove a Vlan Ports on ArubaOS Switch (Provision)
 
         .DESCRIPTION
         Remove vlan ports on the switch
 
         .EXAMPLE
-        $vlanports = Get-ArubaSWVlansPorts -id 85 -port_id 8
-        PS C:\>$vlanports | Remove-ArubaSWVlans
+        $vlanport = Get-ArubaSWVlansPorts -vlan_id 85 -port_id 8
+        PS C:\>$vlanport | Remove-ArubaSWVlansPorts
 
-        Remove vlan 85 on ports 8
+        Remove vlan 85 on port 8
 
         .EXAMPLE
-        Remove-ArubaSWVlans -id 85 -port_id 8 -noconfirm
+        Remove-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -noconfirm
 
         Remove vlan id 85 on port 8 with no confirmation
     #>
