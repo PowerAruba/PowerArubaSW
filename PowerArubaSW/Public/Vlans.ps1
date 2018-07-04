@@ -185,13 +185,16 @@ function Set-ArubaSWVlans {
         if($vlan){
             $id = $vlan.vlan_id
         }
-        $url = "rest/v3/vlans/${id}"
+        $url = "rest/v4/vlans/${id}"
 
         $_vlan = new-Object -TypeName PSObject
+
+        $_vlan | add-member -name "vlan_id" -membertype NoteProperty -Value $id
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
             $_vlan | add-member -name "name" -membertype NoteProperty -Value $name
         }
+
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
                 $_vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $True
