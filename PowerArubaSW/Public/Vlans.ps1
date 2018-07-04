@@ -38,7 +38,7 @@ function Add-ArubaSWVlans {
 
     Process {
 
-        $url = "rest/v3/vlans"
+        $url = "rest/v4/vlans"
 
         $vlan = new-Object -TypeName PSObject
 
@@ -46,7 +46,10 @@ function Add-ArubaSWVlans {
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
             $vlan | add-member -name "name" -membertype NoteProperty -Value $name
+        } else { #with APIv4, name is mandatory ... Set VLAN with number id
+            $vlan | add-member -name "name" -membertype NoteProperty -Value "VLAN$($id)"
         }
+
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
                 $vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $True
@@ -182,13 +185,16 @@ function Set-ArubaSWVlans {
         if($vlan){
             $id = $vlan.vlan_id
         }
-        $url = "rest/v3/vlans/${id}"
+        $url = "rest/v4/vlans/${id}"
 
         $_vlan = new-Object -TypeName PSObject
+
+        $_vlan | add-member -name "vlan_id" -membertype NoteProperty -Value $id
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
             $_vlan | add-member -name "name" -membertype NoteProperty -Value $name
         }
+
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
                 $_vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $True
