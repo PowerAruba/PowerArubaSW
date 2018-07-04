@@ -1,4 +1,4 @@
-
+﻿
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
 # Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
@@ -64,8 +64,8 @@ function Set-ArubaSWRestSessionTimeout {
     #>
 
     Param(
-    [Parameter (Mandatory=$true, Position=1)]
-    [int]$timeout
+        [Parameter (Mandatory=$true, Position=1)]
+        [int]$timeout
     )
 
     Begin {
@@ -75,17 +75,24 @@ function Set-ArubaSWRestSessionTimeout {
 
         $url = "rest/v4/session-idle-timeout"
 
-        $timeout = new-Object -TypeName PSObject
+        $time = new-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('timeout') )
         {
-            $timeout | add-member -name "timeout" -membertype NoteProperty -Value $timeout
+            $time | add-member -name "timeout" -membertype NoteProperty -Value $timeout
         }
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $timeout -url $url
+        if (($timeout -lt 7200) -and ($timeout -gt 120))
+        {
+        $response = invoke-ArubaSWWebRequest -method "PUT" -body $time -url $url
 
         $run = ($response | convertfrom-json).timeout
 
         $run
+        }
+        else 
+        {
+        Write-Host "The value you entered ($timeout) is not between 120 and 7200. Please enter a value which is between 120 and 7200"
+        }
 
     }
 
