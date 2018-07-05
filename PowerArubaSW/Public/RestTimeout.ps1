@@ -9,14 +9,14 @@ function Get-ArubaSWRestSessionTimeout {
 
     <#
         .SYNOPSIS
-        Get Session Timeout when you connect to a switch
+        Get REST Session Timeout when you connect to a switch
 
         .DESCRIPTION
-        Get Session Timeout
+        Get REST Session Timeout
 
         .EXAMPLE
         Get-ArubaSWRestSessionTimeout
-        This function give you idle time before being disconnected
+        This function give you idle time (in seconds) before being disconnected
     #>
 
     Begin {
@@ -44,18 +44,18 @@ function Set-ArubaSWRestSessionTimeout {
 
     <#
         .SYNOPSIS
-        Set Session Timeout when you connect to a switch
+        Set REST Session Timeout when you connect to a switch
 
         .DESCRIPTION
-        Set Session Timeout
+        Set REST Session Timeout
 
         .EXAMPLE
-        Set-ArubaSWRestSessionTimeout <seconds>
-        This function allow you to set idle time before being disconnected, if the value is in the validate range (120-7200).
+        Set-ArubaSWRestSessionTimeout 1200
+        This function allow you to set idle time (in seconds) before being disconnected.
 
         .EXAMPLE
-        Set-ArubaSWRestSessionTimeout -timeout <seconds>
-        This function allow you to set idle time before being disconnected with the parameter "timeout", if the value is in the validate range (120-7200).
+        Set-ArubaSWRestSessionTimeout -timeout 120
+        This function allow you to set idle time (in seconds) before being disconnected with the parameter timeout.
     #>
 
     Param(
