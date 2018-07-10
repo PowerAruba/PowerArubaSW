@@ -6,10 +6,12 @@ Last release: [![GitHub version](https://badge.fury.io/gh/alagoutte%2Fpoweraruba
 
 This is a Powershell module for configure a ArubaOS Switch.
 
-With this module (version 0.3.0) you can manage:
+With this module (version 0.4.0) you can manage:
 
-- System (Name, Location, Contact)
+- System (Name, Location, Contact) & Switch Status (Product and Hardware info)
 - Vlans (Add/Configure/Remove)
+- Vlans Ports (Add/Configure/Remove a vlan (tagged/untagged/forbidden) to a interface)
+- REST (Get API Version / Get|Set Rest Timeout)
 
 More functionality will be added later.
 
