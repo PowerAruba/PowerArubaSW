@@ -50,12 +50,17 @@ function Invoke-ArubaSWWebRequest(){
                 $result = $_.Exception.Response.GetResponseStream()
                 $reader = New-Object System.IO.StreamReader($result)
                 $responseBody = $reader.ReadToEnd()
+
                 $responseJson =  $responseBody | ConvertFrom-Json
                 
                 Write-Host "The Switch API sends an error message:" -foreground yellow
                 Write-Host
                 Write-Host "Error description (code): $($_.Exception.Response.StatusDescription) ($($_.Exception.Response.StatusCode.Value__))" -foreground yellow
-                Write-Host "Error details: $($responseJson.message)" -foreground yellow
+                if($responseJson.message) {
+                    Write-Host "Error details: $($responseJson.message)" -foreground yellow
+                } else {
+                    Write-Host "Error details: $($responseBody)" -foreground yellow
+                }
                 Write-Host
             }
             throw "Unable to use switch API"
