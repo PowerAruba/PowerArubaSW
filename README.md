@@ -99,6 +99,33 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
     Disconnect-ArubaSW
 ```
 
+# List of available command
+'''
+Add-ArubaSWVlans
+Add-ArubaSWVlansPorts
+Connect-ArubaSW
+Disconnect-ArubaSW
+Get-ArubaSWRestSessionTimeout
+Get-ArubaSWRestVersion
+Get-ArubaSWSystem
+Get-ArubaSWSystemStatus
+Get-ArubaSWSystemStatusCpu
+Get-ArubaSWSystemStatusMemory
+Get-ArubaSWSystemStatusStorage
+Get-ArubaSWSystemStatusSwitch
+Get-ArubaSWSystemStatusTime
+Get-ArubaSWVlans
+Get-ArubaSWVlansPorts
+Invoke-ArubaSWWebRequest
+Remove-ArubaSWVlans
+Remove-ArubaSWVlansPorts
+Set-ArubaSWRestSessionTimeout
+Set-ArubaSWSystem
+Set-ArubaSWVlans
+Set-ArubaSWVlansPorts
+Set-Cookie
+'''
+
 # Author
 
 **Alexis La Goutte**
