@@ -76,8 +76,8 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
     name              : PowerArubaSW
     status            : VS_PORT_BASED
     type              : VT_STATIC
-    is_voice_enabled  : False
-    is_jumbo_enabled  : True
+    is_voice_enabled  : True
+    is_jumbo_enabled  : False
     is_dsnoop_enabled : False
 
 
@@ -86,7 +86,7 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
 
     uri       vlan_id name         status        type      is_voice_enabled is_jumbo_enabled is_dsnoop_enabled is_management_vlan
     ---       ------- ----         ------        ----      ---------------- ---------------- ----------------- ------------------
-    /vlans/85      85 PowerArubaSW VS_PORT_BASED VT_STATIC            False             True             False              False
+    /vlans/85      85 PowerArubaSW VS_PORT_BASED VT_STATIC            True             False             False              False
 
 
 # Remove a vlan
