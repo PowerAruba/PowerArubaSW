@@ -102,7 +102,7 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
 ```
 
 # List of available command
-'''
+```
 Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
@@ -126,7 +126,7 @@ Set-ArubaSWSystem
 Set-ArubaSWVlans
 Set-ArubaSWVlansPorts
 Set-Cookie
-'''
+```
 
 # Author
 
