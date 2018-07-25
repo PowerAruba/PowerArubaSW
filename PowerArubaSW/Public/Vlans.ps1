@@ -189,10 +189,13 @@ function Set-ArubaSWVlans {
 
         $_vlan = new-Object -TypeName PSObject
 
+        #with APIv4, vlan_id is mandatory...
         $_vlan | add-member -name "vlan_id" -membertype NoteProperty -Value $id
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
             $_vlan | add-member -name "name" -membertype NoteProperty -Value $name
+        } else { #with APIv4, name is also mandatory... (why ?!!) use already configured name.
+            $_vlan | add-member -name "name" -membertype NoteProperty -Value $vlan.name
         }
 
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
