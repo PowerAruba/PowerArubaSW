@@ -59,7 +59,7 @@ function Set-ArubaSWRestSessionTimeout {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)] 
+        [Parameter (Mandatory=$true, Position=1)]
             [ValidateRange(120,7200)]
             [int]$timeout
     )
