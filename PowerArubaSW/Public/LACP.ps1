@@ -30,15 +30,7 @@ function Get-ArubaSWLACP {
 
         $run = ($response | convertfrom-json).lacp_element
 
-        foreach ($run in $run)
-        {
-            $status = [pscustomobject]@{
-            LocalPort  = $run.port_id
-            TrunkGroup = $run.trunk_group
-            }
-
-            $status
-        }
+        $run
     }
 
     End {
@@ -52,31 +44,31 @@ function Add-ArubaSWLACP {
         Add ports into a lacp configuration on ArubaOS Switch.
 
         .DESCRIPTION
-        Add ports in a lacp interface.
+        Add ports in a lacp trunk group.
 
         .EXAMPLE
-        Add-ArubaSWLACP <port> <interface>
+        Add-ArubaSWLACP <port> <trunk_group>
         This function allow you to add port in a lacp configuration with the name of the lacp interface and the name of the port.
 
         .EXAMPLE
-        Add-ArubaSWLACP -port [X] -interface [trkY]
-        This function allow you to add port in a lacp interface with the parameter "interface" for the name of the lacp interface (examples : trk1, trk2 ....)
-        and "port" for the name of the port that you want to add to this lacp interface.
+        Add-ArubaSWLACP -port [X] -trunk_groupe [trkY]
+        This function allow you to add port in a lacp trunk group with the parameter "trunk_group" for the name of the lacp trunkgroup (examples : trk1, trk2 ....)
+        and "port" for the name of the port that you want to add to this lacp trunk group.
 
         .EXAMPLE
-        If you want to configure ports 3 and 5 in trunk group 6 :
-        Add-ArubaSWLACP -port 3 -interface trk6
-        Add-ArubaSWLACP -port 5 -interface trk6
+        Add-ArubaSWLACP -trunk_group trk6 -port 3
+        PS C:>Add-ArubaSWLACP -trunk_group trk6 -port 5
         OR
-        Add-ArubaSWLACP 3 trk6
-        Add-ArubaSWLACP 5 trk6
+        Add-ArubaSWLACP trk6 3
+        PS C:>Add-ArubaSWLACP trk6 5
+        If you want to configure ports 3 and 5 in trunk group 6
     #>
 
     Param(
     [Parameter (Mandatory=$true, Position=1)]
     [string]$port,
     [Parameter (Mandatory=$true, Position=2)]
-    [string]$interface
+    [string]$trunk_group
     )
 
     Begin {
@@ -90,7 +82,7 @@ function Add-ArubaSWLACP {
 
         $lacp | add-member -name "port_id" -membertype NoteProperty -Value $port
 
-        $lacp | add-member -name "trunk_group" -membertype NoteProperty -Value $interface
+        $lacp | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
         $response = invoke-ArubaSWWebRequest -method "POST" -body $lacp -url $url
 
@@ -113,29 +105,29 @@ function Remove-ArubaSWLACP {
 
     <#
         .SYNOPSIS
-        Remove a port from a lacp interface on ArubaOS Switch
+        Remove a port from a lacp trunk group on ArubaOS Switch
 
         .DESCRIPTION
-        Remove port of the lacp interface
+        Remove port of the lacp trunk group
 
         .EXAMPLE
-        Remove-ArubaSWLACP -port [X] -interface [trkY]
-        Remove port X of the lacp interface trkY.
+        Remove-ArubaSWLACP -trunk_group [trkY] -port [X]
+        Remove port X of the lacp trunk group trkY.
 
         .EXAMPLE
         If you want to remove ports 3 and 5 in trunk group 6 :
-        Remove-ArubaSWLACP -port 3 -interface trk6
-        Remove-ArubaSWLACP -port 5 -interface trk6
+        Remove-ArubaSWLACP -trunk_group trk6 -port 3
+        PS C:>Remove-ArubaSWLACP -trunk_group trk6 -port 5
         OR
-        Remove-ArubaSWLACP 3 trk6
-        Remove-ArubaSWLACP 5 trk6
+        Remove-ArubaSWLACP trk6 3
+        PS C:>Remove-ArubaSWLACP trk6 5
     #>
 
     Param(
         [Parameter (Mandatory=$true, Position=1)]
         [string]$port,
         [Parameter (Mandatory=$true, Position=2)]
-        [string]$interface
+        [string]$trunk_group
     )
 
     Begin {
@@ -147,14 +139,27 @@ function Remove-ArubaSWLACP {
 
         $lacp | add-member -name "port_id" -membertype NoteProperty -Value $port
 
-        $lacp | add-member -name "trunk_group" -membertype NoteProperty -Value $interface
+        $lacp | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
         $id = $lacp.port_id
 
         $url = "rest/v4/lacp/port/${id}"
 
-        invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -url $url
+        if ( -not ( $Noconfirm )) {
+            $message  = "Remove LACP on switch"
+            $question = "Proceed with removal of lacp ${id} ?"
+            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 
+            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+        }
+        else { $decision = 0 }
+        if ($decision -eq 0) {
+            Write-Progress -activity "Remove LACP"
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -url $url
+            Write-Progress -activity "Remove LACP" -completed
+        }
     }
 
     End {
