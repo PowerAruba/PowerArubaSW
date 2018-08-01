@@ -30,31 +30,24 @@ function Get-ArubaSWLLDPRemote {
 
         $run = ($response | convertfrom-json).lldp_remote_device_element
 
-        $lldp = [pscustomobject]@{
-        LocalPort  = $run.local_port 
-        RemotePort = $run.port_id 
-        SystemName = $run.system_name
-        PortDescription = $run.port_description
-        }
-
-        $lldp
+        $run
     }
 
     End {
     }
 }
 
-function Get-ArubaSWLLDPStatus {
+function Get-ArubaSWLLDPGlobalStatus {
 
     <#
         .SYNOPSIS
-        Get information about LLDP global staus
+        Get information about LLDP global status
 
         .DESCRIPTION
         Get lldp informations 
 
         .EXAMPLE
-        Get-ArubaSWLLDPStatus
+        Get-ArubaSWLLDPGlobalStatus
         This function give you all the informations about the global status of LLDP 
     #>
 
@@ -68,50 +61,36 @@ function Get-ArubaSWLLDPStatus {
         $response = invoke-ArubaSWWebRequest -method "GET" -url $url
 
         $run = $response | convertfrom-json
-        
-        if ($run.admin_status = "LLAS_ENABLED")
-        {
-            $run.admin_status = "Enable"
-        }
-        else
-        {
-            $run.admin_status = "Disable"
-        }
 
-        $status = [pscustomobject]@{
-        Status  = $run.admin_status
-        TransmitInterval = $run.transmit_interval
-        HoldTimeMultiplier = $run.hold_time_multiplier
-        FastStartCount = $run.fast_start_count
-        ReinitInterval = $run.reinit_interval
-        NotificationInterval = $run.notification_interval
-        }
-        
-        $status
+        $run
     }
 
     End {
     }
 }
 
-function Set-ArubaSWLLDPStatus {
+function Set-ArubaSWLLDPGlobalStatus {
 
     <#
         .SYNOPSIS
         Set global configuration about LLDP
 
         .DESCRIPTION
-        Set lldp global parameters 
+        Set lldp global parameters
 
         .EXAMPLE
-        Set-ArubaSWLLDPStatus [-transmit <5-32768>] [-holdtime <2-10>] [-faststart <1-10>]
-        This function set the global parameters of LLDP : -enable set the LLDP active or not, -transmit set the value of transmit interval, 
+        Set-ArubaLLDPGlobalStatus -transmit 400
+        Set the transmit interval to 400.
+
+        .EXAMPLE
+        Set-ArubaSWLLDPGlobalStatus [-transmit <5-32768>] [-holdtime <2-10>] [-faststart <1-10>]
+        Set the global parameters of LLDP : -enable set the LLDP active or not, -transmit set the value of transmit interval, 
         -holdtime set the value of the hold time multiplier, and -faststart set the value of the LLDP fast start count. 
     #>
 
     Param(
     [Parameter (Mandatory=$false)]
-    [ValidateRange (5,32768)]
+    [ValidateRange (8,32768)]
     [int]$transmit,
     [Parameter (Mandatory=$false)]
     [ValidateRange (2,10)]
@@ -128,12 +107,14 @@ function Set-ArubaSWLLDPStatus {
 
         $url = "rest/v4/lldp"
 
-        Write-Host "The transmit interval must be greater than or equal to 8"
-
         $conf = new-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('transmit') )
         {
+            if ($transmit -lt 8 -or $transmit -gt 32768)
+            {
+                Write-Host "The transmit interval must be greater than 7 and less than 32768"
+            }
             $conf | add-member -name "transmit_interval" -membertype NoteProperty -Value $transmit
         }
 
@@ -151,15 +132,7 @@ function Set-ArubaSWLLDPStatus {
 
         $run = $response | convertfrom-json
 
-        $status = [pscustomobject]@{
-        TransmitInterval = $run.transmit_interval
-        HoldTimeMultiplier = $run.hold_time_multiplier
-        FastStartCount = $run.fast_start_count
-        ReinitInterval = $run.reinit_interval
-        NotificationInterval = $run.notification_interval
-        }
-
-        $status
+        $run
 
     }
 
