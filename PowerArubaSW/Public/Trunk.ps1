@@ -30,15 +30,7 @@ function Get-ArubaSWTrunk {
 
         $run = ($response | convertfrom-json).trunk_element
 
-        foreach ($run in $run)
-        {
-            $status = [pscustomobject]@{
-            LocalPort  = $run.port_id
-            TrunkGroup = $run.trunk_group
-            }
-
-            $status
-        }
+        $run
 
     }
 
@@ -53,31 +45,31 @@ function Add-ArubaSWTrunk {
         Add ports into a trunk configuration on ArubaOS Switch.
 
         .DESCRIPTION
-        Add ports in a trunk interface.
+        Add ports in a trunk group.
 
         .EXAMPLE
-        Add-ArubaSWTrunk <port> <interface>
-        This function allow you to add port in a trunk configuration with the name of the trunk interface and the name of the port.
+        Add-ArubaSWTrunk <port> <trunk_group>
+        Add port in a trunk configuration with the name of the trunk group and the name of the port.
 
         .EXAMPLE
-        Add-ArubaSWTrunk -port [X] -interface [trkY]
-        This function allow you to add port in a trunk interface with the parameter "interface" for the name of the trunk interface (examples : trk1, trk2 ....)
-        and "port" for the name of the port that you want to add to this trunk interface.
+        Add-ArubaSWTrunk -trunk_group [trkY] -port [X]
+        Add port in a trunk group with the parameter "trunk_group" for the name of the trunk group (examples : trk1, trk2 ....)
+        and "port" for the name of the port that you want to add to this trunk group.
 
         .EXAMPLE
-        If you want to configure ports 3 and 5 in trunk group 6 :
-        Add-ArubaSWTrunk -port 3 -interface trk6
-        Add-ArubaSWTrunk -port 5 -interface trk6
+        Add-ArubaSWTrunk -trunk_group trk6 -port 3
+        PS C:>Add-ArubaSWTrunk -trunk_group trk6 -port 5
         OR
-        Add-ArubaSWTrunk 3 trk6
-        Add-ArubaSWTrunk 5 trk6
+        Add-ArubaSWTrunk trk6 3
+        PS C:>Add-ArubaSWTrunk trk6 5
+        If you want to configure ports 3 and 5 in trunk group 6
     #>
 
     Param(
     [Parameter (Mandatory=$true, Position=1)]
     [string]$port,
     [Parameter (Mandatory=$true, Position=2)]
-    [string]$interface
+    [string]$trunk_group
     )
 
     Begin {
@@ -97,12 +89,7 @@ function Add-ArubaSWTrunk {
 
         $run = $response | convertfrom-json
 
-        $status = [pscustomobject]@{
-        LocalPort  = $run.port_id
-        TrunkGroup = $run.trunk_group
-        }
-
-        $status
+        $run
 
     }
 
@@ -114,29 +101,32 @@ function Remove-ArubaSWTrunk {
 
     <#
         .SYNOPSIS
-        Remove a port from a trunk interface on ArubaOS Switch
+        Remove a port from a trunk group on ArubaOS Switch
 
         .DESCRIPTION
-        Remove port of the trunk interface
+        Remove port of the trunk group
 
         .EXAMPLE
-        Remove-ArubaSWTrunk -port [X] -interface [trkY]
-        Remove port X of the trunk interface trkY.
+        Remove-ArubaSWTrunk -port [X] -trunk_group [trkY]
+        Remove port X of the trunk group trkY.
 
         .EXAMPLE
-        If you want to remove ports 3 and 5 in trunk group 6 :
-        Remove-ArubaSWTrunk -port 3 -interface trk6
-        Remove-ArubaSWTrunk -port 5 -interface trk6
+        
+        Remove-ArubaSWTrunk -port 3 -trunk_group trk6 -noconfirm
+        PS C:>Remove-ArubaSWTrunk -port 5 -trunk_group trk6 -noconfirm
         OR
-        Remove-ArubaSWTrunk 3 trk6
-        Remove-ArubaSWTrunk 5 trk6
+        Remove-ArubaSWTrunk 3 trk6 -noconfirm
+        PS C:>Remove-ArubaSWTrunk 5 trk6 -noconfirm
+        If you want to remove ports 3 and 5 in trunk group 6 without confirm
     #>
 
     Param(
         [Parameter (Mandatory=$true, Position=1)]
         [string]$port,
         [Parameter (Mandatory=$true, Position=2)]
-        [string]$interface
+        [string]$trunk_group,
+        [Parameter(Mandatory = $false)]
+        [switch]$noconfirm
     )
 
     Begin {
@@ -154,10 +144,21 @@ function Remove-ArubaSWTrunk {
 
         $url = "rest/v4/trunk/port/${id}"
 
-        $response = invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -url $url
+        if ( -not ( $Noconfirm )) {
+            $message  = "Remove trunk group on switch"
+            $question = "Proceed with removal of trunk group ${id} ?"
+            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 
-        Write-Host "The port $port has been removed from the trunk group $interface !"
-
+            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+        }
+        else { $decision = 0 }
+        if ($decision -eq 0) {
+            Write-Progress -activity "Remove trunk group"
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -url $url
+            Write-Progress -activity "Remove trunk group" -completed
+        }
     }
 
     End {
