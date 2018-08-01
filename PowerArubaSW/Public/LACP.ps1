@@ -127,7 +127,9 @@ function Remove-ArubaSWLACP {
         [Parameter (Mandatory=$true, Position=1)]
         [string]$port,
         [Parameter (Mandatory=$true, Position=2)]
-        [string]$trunk_group
+        [string]$trunk_group,
+        [Parameter(Mandatory = $false)]
+        [switch]$noconfirm
     )
 
     Begin {
