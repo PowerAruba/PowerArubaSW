@@ -43,7 +43,9 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [PSCredential]$Credentials,
         [Parameter(Mandatory = $false)]
-        [switch]$noverbose=$false
+        [switch]$noverbose=$false,
+        [Parameter(Mandatory = $false)]
+        [switch]$httpOnly=$false
     )
 
     Begin {
@@ -51,7 +53,7 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server="";session="";cookie=""}
+        $connection = @{server="";session="";cookie="";httpOnly=$false}
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -64,7 +66,15 @@ function Connect-ArubaSW {
         }
 
         $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
-        $url = "http://${Server}:80/rest/v3/login-sessions"
+        if($httpOnly) {
+            $connection.httpOnly = $true
+            $url = "http://${Server}:80/rest/v3/login-sessions"
+        } else {
+            #Disable SSL chain trust...
+            Set-ArubaSWuntrustedSSL
+            $url = "https://${Server}:443/rest/v3/login-sessions"
+        }
+
         try {
             $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw
         }
