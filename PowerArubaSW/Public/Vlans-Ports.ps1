@@ -146,7 +146,7 @@ function Set-ArubaSWVlansPorts {
         [int]$vlan_id,
         [Parameter (Mandatory=$true, ParameterSetName="id")]
         [string]$port_id,
-        [Parameter (Mandatory=$true,ValueFromPipeline=$true,Position=1,ParameterSetName="vlan")]
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlanports,
         [Parameter (Mandatory=$true, Position=3)]
@@ -209,11 +209,11 @@ function Remove-ArubaSWVlansPorts {
     #>
 
     Param(
-        [Parameter (Mandatory=$true,ParameterSetName="id")]
+        [Parameter (Mandatory=$true, ParameterSetName="id")]
         [int]$vlan_id,
-        [Parameter (Mandatory=$true,ParameterSetName="id")]
+        [Parameter (Mandatory=$true, ParameterSetName="id")]
         [string]$port_id,
-        [Parameter (Mandatory=$true,ValueFromPipeline=$true,Position=1,ParameterSetName="vlan")]
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlanport,
         [Parameter(Mandatory = $false)]
