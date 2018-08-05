@@ -18,7 +18,17 @@ function Get-ArubaSWLed {
         Get-ArubaSWLed
 
         Get Led locator information (Status, Duration, When, Remaning)
+
+        .EXAMPLE
+        Get-ArubaSWLed -member_id 3
+
+        Get Led locator information of member 3 (Stacked switch)
     #>
+
+    Param(
+        [Parameter (Mandatory=$false)]
+        [int]$member_id
+    )
 
     Begin {
     }
@@ -31,7 +41,11 @@ function Get-ArubaSWLed {
 
         $run = ($response | convertfrom-json).locator_led_info
 
-        $run
+        if ( $member_id ) {
+            $run | where-object { $_.member_id -match $member_id}
+        } else {
+            $run
+        }
 
     }
 
