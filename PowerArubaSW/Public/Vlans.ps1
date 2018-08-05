@@ -163,7 +163,7 @@ function Set-ArubaSWVlans {
     Param(
         [Parameter (Mandatory=$true, ParameterSetName="id")]
         [int]$id,
-        [Parameter (Mandatory=$true,ValueFromPipeline=$true,Position=1,ParameterSetName="vlan")]
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
         [Parameter (Mandatory=$false)]
@@ -251,9 +251,9 @@ function Remove-ArubaSWVlans {
     #>
 
     Param(
-        [Parameter (Mandatory=$true,ParameterSetName="id")]
+        [Parameter (Mandatory=$true, ParameterSetName="id")]
         [int]$id,
-        [Parameter (Mandatory=$true,ValueFromPipeline=$true,Position=1,ParameterSetName="vlan")]
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
         [Parameter(Mandatory = $false)]
