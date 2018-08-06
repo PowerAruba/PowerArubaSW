@@ -152,3 +152,104 @@ function Set-ArubaSWLLDPGlobalStatus {
     End {
     }
 }
+
+function Get-ArubaSWLLDPRemote {
+
+    <#
+        .SYNOPSIS
+        Get LLDP information about remote devices connected to the switch you are log on
+
+        .DESCRIPTION
+        Get lldp informations about the remote devices
+
+        .EXAMPLE
+        Get-ArubaSWLLDPRemote
+        This function give you all the informations about the remote devices connected to the ports of the switch you are log on 
+    #>
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/lldp/remote-device"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $run = ($response | convertfrom-json).lldp_remote_device_element
+
+        $run
+    }
+
+    End {
+    }
+}
+
+function Get-ArubaSWLLDPNeighbourStats {
+
+    <#
+        .SYNOPSIS
+        Get information about LLDP neighbour stats
+
+        .DESCRIPTION
+        Get lldp neighbour stats informations 
+
+        .EXAMPLE
+        Get-ArubaSWLLDPNeighbourStats
+        This function give you all the informations about the neighbour stats
+    #>
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/lldp/stats/device"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $run = $response | convertfrom-json
+
+        $run
+    }
+
+    End {
+    }
+}
+
+function Get-ArubaSWLLDPPortStats {
+
+    <#
+        .SYNOPSIS
+        Get information about LLDP port stats
+
+        .DESCRIPTION
+        Get lldp port stats informations 
+
+        .EXAMPLE
+        Get-ArubaSWLLDPPPortStats -port 5
+        This function give you all the LLDP informations about the port 5
+    #>
+
+    Param(
+        [Parameter (Mandatory=$true, Position=1)]
+        [string]$port
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/lldp/stats/ports/${port}"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $run = $response | convertfrom-json
+
+        $run
+    }
+
+    End {
+    }
+}
