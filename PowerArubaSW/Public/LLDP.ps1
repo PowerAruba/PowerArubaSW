@@ -84,7 +84,7 @@ function Set-ArubaSWLLDPGlobalStatus {
 
         .EXAMPLE
         Set-ArubaSWLLDPGlobalStatus [-transmit <5-32768>] [-holdtime <2-10>] [-faststart <1-10>]
-        Set the global parameters of LLDP : -enable set the LLDP active or not, -transmit set the value of transmit interval, 
+        Set the global parameters of LLDP : -transmit set the value of transmit interval, 
         -holdtime set the value of the hold time multiplier, and -faststart set the value of the LLDP fast start count. 
     #>
 
@@ -111,10 +111,6 @@ function Set-ArubaSWLLDPGlobalStatus {
 
         if ( $PsBoundParameters.ContainsKey('transmit') )
         {
-            if ($transmit -lt 8 -or $transmit -gt 32768)
-            {
-                Write-Host "The transmit interval must be greater than 7 and less than 32769"
-            }
             $conf | add-member -name "transmit_interval" -membertype NoteProperty -Value $transmit
         }
 
