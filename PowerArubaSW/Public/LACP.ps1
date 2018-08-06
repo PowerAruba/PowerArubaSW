@@ -47,11 +47,11 @@ function Add-ArubaSWLACP {
         Add ports in a lacp trunk group.
 
         .EXAMPLE
-        Add-ArubaSWLACP 3 trk2
+        Add-ArubaSWLACP trk2 3
         Add port 3 in trunk group trk2.
 
         .EXAMPLE
-        Add-ArubaSWLACP -port 5 -trunk_groupe trk3
+        Add-ArubaSWLACP -trunk_groupe trk3 -port 5
         Add port 5 in lacp trunk group trk3.
 
         .EXAMPLE
