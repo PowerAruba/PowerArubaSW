@@ -89,15 +89,18 @@ function Set-ArubaSWLLDPGlobalStatus {
     #>
 
     Param(
-    [Parameter (Mandatory=$false)]
-    [ValidateRange (8,32768)]
-    [int]$transmit,
-    [Parameter (Mandatory=$false)]
-    [ValidateRange (2,10)]
-    [int]$holdtime,
-    [Parameter (Mandatory=$false)]
-    [ValidateRange (1,10)]
-    [int]$faststart
+        [Parameter (Mandatory=$false)]
+        [ValidateSet ("On", "Off")]
+        [string]$enable,
+        [Parameter (Mandatory=$false)]
+        [ValidateRange (8,32768)]
+        [int]$transmit,
+        [Parameter (Mandatory=$false)]
+        [ValidateRange (2,10)]
+        [int]$holdtime,
+        [Parameter (Mandatory=$false)]
+        [ValidateRange (1,10)]
+        [int]$faststart
     )
 
     Begin {
@@ -108,6 +111,20 @@ function Set-ArubaSWLLDPGlobalStatus {
         $url = "rest/v4/lldp"
 
         $conf = new-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('enable') )
+        {
+            switch( $enable ) {
+                ON {
+                    $enable_status = "LLAS_ENABLED"
+                }
+                OFF {
+                    $enable_status = "LLAS_DISABLED"
+                }
+            }
+
+            $conf | add-member -name "admin_status" -membertype NoteProperty -Value $enable_status
+        }
 
         if ( $PsBoundParameters.ContainsKey('transmit') )
         {
