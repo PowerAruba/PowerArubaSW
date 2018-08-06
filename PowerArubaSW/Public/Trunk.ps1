@@ -48,28 +48,25 @@ function Add-ArubaSWTrunk {
         Add ports in a trunk group.
 
         .EXAMPLE
-        Add-ArubaSWTrunk <port> <trunk_group>
-        Add port in a trunk configuration with the name of the trunk group and the name of the port.
+        Add-ArubaSWTrunk trk5 4
+        Add port 4 in trunk group trk5
 
         .EXAMPLE
-        Add-ArubaSWTrunk -trunk_group [trkY] -port [X]
-        Add port in a trunk group with the parameter "trunk_group" for the name of the trunk group (examples : trk1, trk2 ....)
-        and "port" for the name of the port that you want to add to this trunk group.
+        Add-ArubaSWTrunk -trunk_group trk4 -port 6
+        Add port 6 in trunk group trk4.
 
         .EXAMPLE
         Add-ArubaSWTrunk -trunk_group trk6 -port 3
         PS C:>Add-ArubaSWTrunk -trunk_group trk6 -port 5
-        OR
-        Add-ArubaSWTrunk trk6 3
-        PS C:>Add-ArubaSWTrunk trk6 5
-        If you want to configure ports 3 and 5 in trunk group 6
+        If you want to configure ports 3 and 5 in trunk group 6.
     #>
 
     Param(
-    [Parameter (Mandatory=$true, Position=1)]
-    [string]$port,
-    [Parameter (Mandatory=$true, Position=2)]
-    [string]$trunk_group
+        [Parameter (Mandatory=$true, Position=1)]
+        [string]$trunk_group,
+        [Parameter (Mandatory=$true, Position=2)]
+        [string]$port
+    
     )
 
     Begin {
@@ -107,24 +104,21 @@ function Remove-ArubaSWTrunk {
         Remove port of the trunk group
 
         .EXAMPLE
-        Remove-ArubaSWTrunk -port [X] -trunk_group [trkY]
-        Remove port X of the trunk group trkY.
+        Remove-ArubaSWTrunk -trunk_group trk4 -port 5 
+        Remove port 5 of the trunk group trk4.
 
         .EXAMPLE
         
-        Remove-ArubaSWTrunk -port 3 -trunk_group trk6 -noconfirm
-        PS C:>Remove-ArubaSWTrunk -port 5 -trunk_group trk6 -noconfirm
-        OR
-        Remove-ArubaSWTrunk 3 trk6 -noconfirm
-        PS C:>Remove-ArubaSWTrunk 5 trk6 -noconfirm
+        Remove-ArubaSWTrunk -trunk_group -port 3 trk6 -noconfirm
+        PS C:>Remove-ArubaSWTrunk -trunk_group trk6 -port 5 -noconfirm
         If you want to remove ports 3 and 5 in trunk group 6 without confirm
     #>
 
     Param(
         [Parameter (Mandatory=$true, Position=1)]
-        [string]$port,
-        [Parameter (Mandatory=$true, Position=2)]
         [string]$trunk_group,
+        [Parameter (Mandatory=$true, Position=2)]
+        [string]$port,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
     )
