@@ -113,7 +113,7 @@ function Set-ArubaSWLLDPGlobalStatus {
         {
             if ($transmit -lt 8 -or $transmit -gt 32768)
             {
-                Write-Host "The transmit interval must be greater than 7 and less than 32768"
+                Write-Host "The transmit interval must be greater than 7 and less than 32769"
             }
             $conf | add-member -name "transmit_interval" -membertype NoteProperty -Value $transmit
         }
