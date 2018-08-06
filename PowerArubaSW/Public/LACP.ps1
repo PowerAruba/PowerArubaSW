@@ -47,28 +47,24 @@ function Add-ArubaSWLACP {
         Add ports in a lacp trunk group.
 
         .EXAMPLE
-        Add-ArubaSWLACP <port> <trunk_group>
-        This function allow you to add port in a lacp configuration with the name of the lacp interface and the name of the port.
+        Add-ArubaSWLACP 3 trk2
+        Add port 3 in trunk group trk2.
 
         .EXAMPLE
-        Add-ArubaSWLACP -port [X] -trunk_groupe [trkY]
-        This function allow you to add port in a lacp trunk group with the parameter "trunk_group" for the name of the lacp trunkgroup (examples : trk1, trk2 ....)
-        and "port" for the name of the port that you want to add to this lacp trunk group.
+        Add-ArubaSWLACP -port 5 -trunk_groupe trk3
+        Add port 5 in lacp trunk group trk3.
 
         .EXAMPLE
         Add-ArubaSWLACP -trunk_group trk6 -port 3
         PS C:>Add-ArubaSWLACP -trunk_group trk6 -port 5
-        OR
-        Add-ArubaSWLACP trk6 3
-        PS C:>Add-ArubaSWLACP trk6 5
         If you want to configure ports 3 and 5 in trunk group 6
     #>
 
     Param(
-    [Parameter (Mandatory=$true, Position=1)]
-    [string]$port,
-    [Parameter (Mandatory=$true, Position=2)]
-    [string]$trunk_group
+        [Parameter (Mandatory=$true, Position=1)]
+        [string]$trunk_group,
+        [Parameter (Mandatory=$true, Position=2)]
+        [string]$port
     )
 
     Begin {
@@ -111,23 +107,20 @@ function Remove-ArubaSWLACP {
         Remove port of the lacp trunk group
 
         .EXAMPLE
-        Remove-ArubaSWLACP -trunk_group [trkY] -port [X]
-        Remove port X of the lacp trunk group trkY.
+        Remove-ArubaSWLACP -trunk_group trk4 -port 4
+        Remove port 4 of the lacp trunk group trk4.
 
         .EXAMPLE
         If you want to remove ports 3 and 5 in trunk group 6 :
         Remove-ArubaSWLACP -trunk_group trk6 -port 3
         PS C:>Remove-ArubaSWLACP -trunk_group trk6 -port 5
-        OR
-        Remove-ArubaSWLACP trk6 3
-        PS C:>Remove-ArubaSWLACP trk6 5
     #>
 
     Param(
         [Parameter (Mandatory=$true, Position=1)]
-        [string]$port,
-        [Parameter (Mandatory=$true, Position=2)]
         [string]$trunk_group,
+        [Parameter (Mandatory=$true, Position=2)]
+        [string]$port,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
     )
