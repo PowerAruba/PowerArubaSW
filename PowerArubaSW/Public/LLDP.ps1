@@ -193,11 +193,11 @@ function Get-ArubaSWLLDPPortStats {
         Get lldp port stats informations
 
         .EXAMPLE
-        Get-ArubaSWLLDPPPortStats 
+        Get-ArubaSWLLDPPortStats 
         Gat all the LLDP stats informations about all the ports.
 
         .EXAMPLE
-        Get-ArubaSWLLDPPPortStats -port 5
+        Get-ArubaSWLLDPPortStats -port 5
         Get all the LLDP stats informations about the port 5
     #>
 
