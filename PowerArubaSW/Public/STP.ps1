@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
-# Copyright 2018, C�dric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -48,7 +48,7 @@ function Get-ArubaSWSTPPortStatus {
 
         .EXAMPLE
         Get-ArubaSWSTPPortStatus
-        This function give you the spanning-tree configuration of all the ports. 
+        Get the spanning-tree configuration of all the ports. 
     #>
 
     Begin {
@@ -79,11 +79,11 @@ function Set-ArubaSWSTPGlobal {
         Set spanning-tree configuration.
 
         .EXAMPLE
-        Set-ArubaSWSTPGlobal -enable True -priority 7 -mode mstp
+        Set-ArubaSWSTPGlobal -enable on -priority 7 -mode mstp
         Set the spanning-tree protocol on, the priority to 7 and the mode to MSTP
 
         .EXAMPLE
-        Set-ArubaSWSTPGlobal False 4 rpvst
+        Set-ArubaSWSTPGlobal off 4 rpvst
         Set the spanning-tree protocol off, the priority to 4 and the mode to RPVST
     #>
 
