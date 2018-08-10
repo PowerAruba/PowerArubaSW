@@ -79,19 +79,17 @@ function Set-ArubaSWLLDPGlobalStatus {
         Set lldp global parameters
 
         .EXAMPLE
-        Set-ArubaLLDPGlobalStatus -transmit 400
+        Set-ArubaSWLLDPGlobalStatus -transmit 400
         Set the transmit interval to 400.
 
         .EXAMPLE
-        Set-ArubaSWLLDPGlobalStatus -enable [true/false] [-transmit <5-32768>] [-holdtime <2-10>] [-faststart <1-10>]
-        Set the global parameters of LLDP : -enable enable or not LLDP, -transmit set the value of transmit interval, 
-        -holdtime set the value of the hold time multiplier, and -faststart set the value of the LLDP fast start count. 
+        Set-ArubaSWLLDPGlobalStatus -enable:$false -holdtime 10 -faststart 1
+        Set LLDP disable and configure holdtime to 10 and faststart to 1
     #>
 
     Param(
         [Parameter (Mandatory=$true)]
-        [ValidateSet ("On", "Off")]
-        [string]$enable,
+        [switch]$enable,
         [Parameter (Mandatory=$false)]
         [ValidateRange (8,32768)]
         [int]$transmit,
@@ -114,13 +112,13 @@ function Set-ArubaSWLLDPGlobalStatus {
 
         if ( $PsBoundParameters.ContainsKey('enable') )
         {
-            switch( $enable ) {
-                ON {
-                    $enable_status = "LLAS_ENABLED"
-                }
-                OFF {
-                    $enable_status = "LLAS_DISABLED"
-                }
+            if ( $enable )
+            {
+                $enable_status = "LLAS_ENABLED"
+            }
+            else
+            {
+                $enable_status = "LLAS_DISABLED"
             }
 
             $conf | add-member -name "admin_status" -membertype NoteProperty -Value $enable_status
@@ -164,7 +162,7 @@ function Get-ArubaSWLLDPNeighborStats {
 
         .EXAMPLE
         Get-ArubaSWLLDPNeighborStats
-        This function give you all the informations about the neighbor stats
+        Get all the informations about the neighbor stats
     #>
 
     Begin {
