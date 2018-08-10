@@ -9,14 +9,14 @@ function Get-ArubaSWLLDPRemote {
 
     <#
         .SYNOPSIS
-        Get LLDP information about remote devices connected to the switch you are log on
+        Get LLDP information about remote devices connected to the switch you are log on.
 
         .DESCRIPTION
-        Get lldp informations about the remote devices
+        Get lldp informations about the remote devices.
 
         .EXAMPLE
         Get-ArubaSWLLDPRemote
-        This function give you all the informations about the remote devices connected to the ports of the switch you are log on 
+        Get all the informations about the remote devices connected to the ports of the switch you are log on.
     #>
 
     Begin {
@@ -41,14 +41,14 @@ function Get-ArubaSWLLDPGlobalStatus {
 
     <#
         .SYNOPSIS
-        Get information about LLDP global status
+        Get information about LLDP global status.
 
         .DESCRIPTION
-        Get lldp informations 
+        Get lldp informations. 
 
         .EXAMPLE
         Get-ArubaSWLLDPGlobalStatus
-        This function give you all the informations about the global status of LLDP 
+        Get all the informations about the global status of LLDP.
     #>
 
     Begin {
@@ -83,13 +83,13 @@ function Set-ArubaSWLLDPGlobalStatus {
         Set the transmit interval to 400.
 
         .EXAMPLE
-        Set-ArubaSWLLDPGlobalStatus [-transmit <5-32768>] [-holdtime <2-10>] [-faststart <1-10>]
-        Set the global parameters of LLDP : -transmit set the value of transmit interval, 
+        Set-ArubaSWLLDPGlobalStatus -enable [true/false] [-transmit <5-32768>] [-holdtime <2-10>] [-faststart <1-10>]
+        Set the global parameters of LLDP : -enable enable or not LLDP, -transmit set the value of transmit interval, 
         -holdtime set the value of the hold time multiplier, and -faststart set the value of the LLDP fast start count. 
     #>
 
     Param(
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory=$true)]
         [ValidateSet ("On", "Off")]
         [string]$enable,
         [Parameter (Mandatory=$false)]
@@ -153,50 +153,18 @@ function Set-ArubaSWLLDPGlobalStatus {
     }
 }
 
-function Get-ArubaSWLLDPRemote {
+function Get-ArubaSWLLDPNeighborStats {
 
     <#
         .SYNOPSIS
-        Get LLDP information about remote devices connected to the switch you are log on
+        Get information about LLDP neighbor stats
 
         .DESCRIPTION
-        Get lldp informations about the remote devices
+        Get lldp neighbor stats informations 
 
         .EXAMPLE
-        Get-ArubaSWLLDPRemote
-        This function give you all the informations about the remote devices connected to the ports of the switch you are log on 
-    #>
-
-    Begin {
-    }
-
-    Process {
-
-        $url = "rest/v4/lldp/remote-device"
-
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
-
-        $run = ($response | convertfrom-json).lldp_remote_device_element
-
-        $run
-    }
-
-    End {
-    }
-}
-
-function Get-ArubaSWLLDPNeighbourStats {
-
-    <#
-        .SYNOPSIS
-        Get information about LLDP neighbour stats
-
-        .DESCRIPTION
-        Get lldp neighbour stats informations 
-
-        .EXAMPLE
-        Get-ArubaSWLLDPNeighbourStats
-        This function give you all the informations about the neighbour stats
+        Get-ArubaSWLLDPNeighborStats
+        This function give you all the informations about the neighbor stats
     #>
 
     Begin {
@@ -224,15 +192,19 @@ function Get-ArubaSWLLDPPortStats {
         Get information about LLDP port stats
 
         .DESCRIPTION
-        Get lldp port stats informations 
+        Get lldp port stats informations
+
+        .EXAMPLE
+        Get-ArubaSWLLDPPPortStats 
+        Gat all the LLDP stats informations about all the ports.
 
         .EXAMPLE
         Get-ArubaSWLLDPPPortStats -port 5
-        This function give you all the LLDP informations about the port 5
+        Get all the LLDP stats informations about the port 5
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory=$false, ParameterSetName="port")]
         [string]$port
     )
 
@@ -241,13 +213,16 @@ function Get-ArubaSWLLDPPortStats {
 
     Process {
 
-        $url = "rest/v4/lldp/stats/ports/${port}"
+        $url = "rest/v4/lldp/stats/ports"
 
         $response = invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = $response | convertfrom-json
+        $run = ($response | convertfrom-json).lldp_port_stats_element
 
-        $run
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "port" { $run  | where-object {$_.port_name -match $port}}
+            default { $run }
+        }
     }
 
     End {
