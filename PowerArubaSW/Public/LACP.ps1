@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
-# Copyright 2018, C�dric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -16,7 +16,8 @@ function Get-ArubaSWLACP {
 
         .EXAMPLE
         Get-ArubaSWLACP
-        This function give you the list of ports in a lacp configuration with the link aggregation interface and the name of ports in this interface.
+
+        Get the list of ports in a lacp configuration with the link aggregation interface and the name of ports in this interface.
     #>
 
     Begin {
@@ -48,15 +49,18 @@ function Add-ArubaSWLACP {
 
         .EXAMPLE
         Add-ArubaSWLACP trk2 3
+
         Add port 3 in trunk group trk2.
 
         .EXAMPLE
-        Add-ArubaSWLACP -trunk_groupe trk3 -port 5
+        Add-ArubaSWLACP -trunk_group trk3 -port 5
+
         Add port 5 in lacp trunk group trk3.
 
         .EXAMPLE
         Add-ArubaSWLACP -trunk_group trk6 -port 3
-        PS C:>Add-ArubaSWLACP -trunk_group trk6 -port 5
+        PS C:\>Add-ArubaSWLACP -trunk_group trk6 -port 5
+
         Configure ports 3 and 5 in trunk group 6
     #>
 
@@ -96,19 +100,21 @@ function Remove-ArubaSWLACP {
 
     <#
         .SYNOPSIS
-        Remove a port from a lacp trunk group on ArubaOS Switch
+        Remove a port from a lacp trunk group on ArubaOS Switch.
 
         .DESCRIPTION
-        Remove port of the lacp trunk group
+        Remove port of the lacp trunk group.
 
         .EXAMPLE
-        Remove-ArubaSWLACP -trunk_group trk4 -port 4
-        Remove port 4 of the lacp trunk group trk4.
-
-        .EXAMPLE
-        If you want to remove ports 3 and 5 in trunk group 6 :
         Remove-ArubaSWLACP -trunk_group trk6 -port 3
-        PS C:>Remove-ArubaSWLACP -trunk_group trk6 -port 5
+
+        Remove port 3 of the lacp trunk group trk6.
+
+        .EXAMPLE
+        Remove-ArubaSWLACP -trunk_group trk6 -port 3 -noconfirm
+        PS C:\>Remove-ArubaSWLACP -trunk_group trk6 -port 5 -noconfirm
+
+        Remove ports 3 and 5 in trunk group 6 without confirmation.
     #>
 
     Param(
@@ -137,7 +143,7 @@ function Remove-ArubaSWLACP {
 
         if ( -not ( $Noconfirm )) {
             $message  = "Remove LACP on switch"
-            $question = "Proceed with removal of lacp ${id} ?"
+            $question = "Proceed with removal of LACP ${id} ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
