@@ -57,7 +57,7 @@ function Add-ArubaSWLACP {
         .EXAMPLE
         Add-ArubaSWLACP -trunk_group trk6 -port 3
         PS C:>Add-ArubaSWLACP -trunk_group trk6 -port 5
-        If you want to configure ports 3 and 5 in trunk group 6
+        Configure ports 3 and 5 in trunk group 6
     #>
 
     Param(
@@ -84,12 +84,7 @@ function Add-ArubaSWLACP {
 
         $run = $response | convertfrom-json
 
-        $status = [pscustomobject]@{
-        LocalPort  = $run.port_id
-        TrunkGroup = $run.trunk_group
-        }
-
-        $status
+        $run
 
     }
 
