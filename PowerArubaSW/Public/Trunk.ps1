@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
-# Copyright 2018, C�dric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -16,7 +16,7 @@ function Get-ArubaSWTrunk {
 
         .EXAMPLE
         Get-ArubaSWTrunk
-        This function give you the list of ports in a trunk configuration with the link aggregation interface and the name of ports in this interface.
+        Get the list of ports in a trunk configuration with the link aggregation interface and the name of ports in this interface.
     #>
 
     Begin {
@@ -58,7 +58,8 @@ function Add-ArubaSWTrunk {
         .EXAMPLE
         Add-ArubaSWTrunk -trunk_group trk6 -port 3
         PS C:>Add-ArubaSWTrunk -trunk_group trk6 -port 5
-        If you want to configure ports 3 and 5 in trunk group 6.
+
+        Configure ports 3 and 5 in trunk group 6.
     #>
 
     Param(
@@ -108,10 +109,10 @@ function Remove-ArubaSWTrunk {
         Remove port 5 of the trunk group trk4.
 
         .EXAMPLE
-        
         Remove-ArubaSWTrunk -trunk_group -port 3 trk6 -noconfirm
         PS C:>Remove-ArubaSWTrunk -trunk_group trk6 -port 5 -noconfirm
-        If you want to remove ports 3 and 5 in trunk group 6 without confirm
+
+        Remove ports 3 and 5 in trunk group 6 without confirm
     #>
 
     Param(
