@@ -88,7 +88,7 @@ function Set-ArubaSWLLDPGlobalStatus {
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory=$false)]
         [switch]$enable,
         [Parameter (Mandatory=$false)]
         [ValidateRange (8,32768)]
