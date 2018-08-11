@@ -24,8 +24,14 @@ function Invoke-ArubaSWWebRequest(){
     Process {
 
         $Server = ${DefaultArubaSWConnection}.Server
-        $fullurl = "http://${Server}:80/${url}"
+        $httpOnly = ${DefaultArubaSWConnection}.httpOnly
+        $port = ${DefaultArubaSWConnection}.port
 
+        if($httpOnly) {
+            $fullurl = "http://${Server}:${port}/${url}"
+        } else {
+            $fullurl = "https://${Server}:${port}/${url}"
+        }
 
         if( -Not $PsBoundParameters.ContainsKey('sessionvariable') ){
             $sessionvariable = $DefaultArubaSWConnection.session

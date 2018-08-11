@@ -13,12 +13,22 @@ function Connect-ArubaSW {
 
       .DESCRIPTION
       Connect to a ArubaOS Switches
-      Actually only support to use HTTP
+      Support connection to HTTPS (default) or HTTP
 
       .EXAMPLE
       Connect-ArubaSW -Server 192.0.2.1
 
-      Connect to a ArubaOS Switch with IP 192.0.2.1 using (Get-)credential
+      Connect to a ArubaOS Switch using HTTPS with IP 192.0.2.1 using (Get-)credential
+
+      .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1 -httpOnly
+
+      Connect to a ArubaOS Switch using HTTP (unsecure !) with IP 192.0.2.1 using (Get-)credential
+
+      .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1 -port 4443
+
+      Connect to a ArubaOS Switch using HTTPS (with port 4443) with IP 192.0.2.1 using (Get-)credential
 
       .EXAMPLE
       $cred = get-credential
@@ -43,7 +53,12 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [PSCredential]$Credentials,
         [Parameter(Mandatory = $false)]
-        [switch]$noverbose=$false
+        [switch]$noverbose=$false,
+        [Parameter(Mandatory = $false)]
+        [switch]$httpOnly=$false,
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 65535)]
+        [int]$port
     )
 
     Begin {
@@ -51,7 +66,7 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server="";session="";cookie=""}
+        $connection = @{server="";session="";cookie="";httpOnly=$false;port=""}
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -64,7 +79,21 @@ function Connect-ArubaSW {
         }
 
         $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
-        $url = "http://${Server}:80/rest/v3/login-sessions"
+        if($httpOnly) {
+            if(!$port){
+                $port = 80
+            }
+            $connection.httpOnly = $true
+            $url = "http://${Server}:${port}/rest/v3/login-sessions"
+        } else {
+            if(!$port){
+                $port = 443
+            }
+            #Disable SSL chain trust...
+            Set-ArubaSWuntrustedSSL
+            $url = "https://${Server}:${port}/rest/v3/login-sessions"
+        }
+
         try {
             $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw
         }
@@ -79,6 +108,7 @@ function Connect-ArubaSW {
         $connection.server = $server
         $connection.cookie = $cookie
         $connection.session = $arubasw
+        $connection.port = $port
 
         set-variable -name DefaultArubaSWConnection -value $connection -scope Global
 

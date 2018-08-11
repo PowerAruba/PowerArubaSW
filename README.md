@@ -15,7 +15,7 @@ With this module (version 0.4.0) you can manage:
 
 More functionality will be added later.
 
-Actually only support connection use (unsecure) HTTP (HTTPS support will be coming after !)
+Connection can use HTTPS (default) or HTTP
 Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware)
 
 # Usage
@@ -31,7 +31,7 @@ For example, you can manage Vlans with the following commands:
 # Requirements
 
 - Powershell 5 (If possible get the latest version)
-- An Aruba OS Switch (with firmware 16.x) and REST API enable
+- An Aruba OS Switch (with firmware 16.x), REST API enable and HTTPS enable (recommended)
 
 # Instructions
 ### Install the module
@@ -52,7 +52,7 @@ For example, you can manage Vlans with the following commands:
 # Examples
 ### Connecting to the Aruba Switch
 
-The first thing to do is to connect to a Aruba Switch with the command `Connect-ArubaSW`:
+The first thing to do is to connect to a Aruba Switch with the command `Connect-ArubaSW` :
 
 ```powershell
 # Connect to the Aruba Switch
@@ -60,7 +60,7 @@ The first thing to do is to connect to a Aruba Switch with the command `Connect-
 
 #we get a prompt for credential
 ```
-We can only connnect using http (for moment...)
+if you get a warning about `Unable to connect` Look [Issue](#Issue)
 
 
 ### Vlans Management
@@ -100,6 +100,36 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
 # Disconnect from the ArubaOS Switch
     Disconnect-ArubaSW
 ```
+
+# Issue
+
+## Unable to connect
+if you use `Connect-ArubaSW` and get `Unable to Connect`
+
+Check if the HTTPS is enable on the switch
+
+```code
+PowerArubaSW# show web-management
+
+ Web Management - Server Configuration
+
+  HTTP Access    : Enabled
+  HTTPS Access   : Enabled
+  SSL Port       : 443
+  Idle Timeout   : 600 seconds
+  Management URL : http://h17007.www1.hpe.com/device_help
+  Support URL    : http://www.arubanetworks.com/products/networking/
+  User Interface : Improved
+```
+if it is not enabled you can enable using
+
+```code
+(config)# crypto pki enroll-self-signed certificate-name PowerArubaSW subject common-name PowerArubaSW country FR locality PowerArubaSW org PowerArubaSW org-unit PowerArubaSW
+(config)# web-management ssl
+```
+
+or using `Connect-ArubaSW -httpOnly`
+
 
 # List of available command
 ```
