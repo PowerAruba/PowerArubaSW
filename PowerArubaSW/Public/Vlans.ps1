@@ -184,7 +184,7 @@ function Set-ArubaSWVlans {
         #get vlan id from vlan ps object
         if($vlan){
             $id = $vlan.vlan_id
-            $name = $vlan.name
+            $oldname = $vlan.name
         }
         $url = "rest/v4/vlans/${id}"
 
@@ -196,11 +196,13 @@ function Set-ArubaSWVlans {
         if ( $PsBoundParameters.ContainsKey('name') ) {
             $_vlan | add-member -name "name" -membertype NoteProperty -Value $name
         } else { #with APIv4, name is also mandatory... (why ?!!) use already configured name.
-            if (!$name) { #if you don't pipelining (and use -id), need to get vlan name...
-                $name = (Get-ArubaSWVlans -id $id).name
+            if (!$oldname) { #if you don't pipelining (and use -id), need to get vlan name...
+                $oldname = (Get-ArubaSWVlans -id $id).name
             }
-            $_vlan | add-member -name "name" -membertype NoteProperty -Value $name
+
+            $_vlan | add-member -name "name" -membertype NoteProperty -Value $oldname
         }
+        $name
 
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
