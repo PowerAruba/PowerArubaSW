@@ -50,11 +50,16 @@ function Invoke-ArubaSWWebRequest(){
                 Write-Host "The Switch API sends an error message:" -foreground yellow
                 Write-Host
                 Write-Host "Error description (code): $($_.Exception.Response.StatusDescription) ($($_.Exception.Response.StatusCode.Value__))" -foreground yellow
-                if($responseJson.message) {
-                    Write-Host "Error details: $($responseJson.message)" -foreground yellow
-                } else {
-                    Write-Host "Error details: $($responseBody)" -foreground yellow
+                if($responseBody){
+                    if($responseJson.message) {
+                        Write-Host "Error details: $($responseJson.message)" -foreground yellow
+                    } else {
+                        Write-Host "Error details: $($responseBody)" -foreground yellow
+                    }
+                } elseif($_.ErrorDetails.Message) {
+                    Write-Host "Error details: $($_.ErrorDetails.Message)" -foreground yellow
                 }
+
                 Write-Host
             }
             throw "Unable to use switch API"
