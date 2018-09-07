@@ -115,7 +115,20 @@ function Connect-ArubaSW {
         if (-not $noverbose) {
             $switchsystem = Get-ArubaSwSystem
             $switchstatus = Get-ArubaSWSystemStatusSwitch
-            write-host "Welcome on"$switchsystem.name"-"$switchstatus.product_name
+
+            if ($switchstatus.switch_type -eq "ST_STACKED") {
+                $product_name = $NULL;
+                foreach ($blades in $switchstatus.blades ){
+                    if ($product_name) {
+                        $product_name += ", "
+                    }
+                    $product_name += $blades.product_name
+                }
+            } else {
+                $product_name = $switchstatus.product_name
+            }
+            write-host "Welcome on"$switchsystem.name"-"$product_name
+
         }
     }
 
