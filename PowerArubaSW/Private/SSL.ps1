@@ -5,7 +5,7 @@
 #
 Function Set-ArubaSWuntrustedSSL {
 
-  # Hack for allowing untrusted SSL certs with https connexions
+  # Hack for allowing untrusted SSL certs with https connections
   Add-Type -TypeDefinition @"
     using System.Net;
     using System.Security.Cryptography.X509Certificates;
