@@ -6,12 +6,15 @@ Last release: [![GitHub version](https://badge.fury.io/gh/alagoutte%2Fpoweraruba
 
 This is a Powershell module for configure a ArubaOS Switch.
 
-With this module (version 0.4.0) you can manage:
+With this module (version 0.5.0) you can manage:
 
 - System (Name, Location, Contact) & Switch Status (Product and Hardware info)
 - Vlans (Add/Configure/Remove)
 - Vlans Ports (Add/Configure/Remove a vlan (tagged/untagged/forbidden) to a interface)
 - REST (Get API Version / Get|Set Rest Timeout)
+- LLDP (Get|Set GlobalStatus, Get ports/neighbor stats, Get Remote)
+- LACP (Add/Configure/Remove)
+- Led Locator (Get|Set Led indicator)
 
 More functionality will be added later.
 
@@ -133,10 +136,17 @@ or using `Connect-ArubaSW -httpOnly`
 
 # List of available command
 ```
+Add-ArubaSWLACP
 Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
 Disconnect-ArubaSW
+Get-ArubaSWLACP
+Get-ArubaSWLed
+Get-ArubaSWLLDPGlobalStatus
+Get-ArubaSWLLDPNeighborStats
+Get-ArubaSWLLDPPortStats
+Get-ArubaSWLLDPRemote
 Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSystem
@@ -149,10 +159,15 @@ Get-ArubaSWSystemStatusTime
 Get-ArubaSWVlans
 Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
+Remove-ArubaSWLACP
 Remove-ArubaSWVlans
 Remove-ArubaSWVlansPorts
+Set-ArubaSWCipherSSL
+Set-ArubaSWLed
+Set-ArubaSWLLDPGlobalStatus
 Set-ArubaSWRestSessionTimeout
 Set-ArubaSWSystem
+Set-ArubaSWuntrustedSSL
 Set-ArubaSWVlans
 Set-ArubaSWVlansPorts
 Set-Cookie
