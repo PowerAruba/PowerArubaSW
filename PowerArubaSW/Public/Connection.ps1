@@ -9,38 +9,38 @@ function Connect-ArubaSW {
 
   <#
       .SYNOPSIS
-      Connect to a ArubaOS Switches (Provision)
+      Connect to an ArubaOS Switches (Provision)
 
       .DESCRIPTION
-      Connect to a ArubaOS Switches
+      Connect to an ArubaOS Switches
       Support connection to HTTPS (default) or HTTP
 
       .EXAMPLE
       Connect-ArubaSW -Server 192.0.2.1
 
-      Connect to a ArubaOS Switch using HTTPS with IP 192.0.2.1 using (Get-)credential
+      Connect to an ArubaOS Switch using HTTPS with IP 192.0.2.1 using (Get-)credential
 
       .EXAMPLE
       Connect-ArubaSW -Server 192.0.2.1 -httpOnly
 
-      Connect to a ArubaOS Switch using HTTP (unsecure !) with IP 192.0.2.1 using (Get-)credential
+      Connect to an ArubaOS Switch using HTTP (unsecure !) with IP 192.0.2.1 using (Get-)credential
 
       .EXAMPLE
       Connect-ArubaSW -Server 192.0.2.1 -port 4443
 
-      Connect to a ArubaOS Switch using HTTPS (with port 4443) with IP 192.0.2.1 using (Get-)credential
+      Connect to an ArubaOS Switch using HTTPS (with port 4443) with IP 192.0.2.1 using (Get-)credential
 
       .EXAMPLE
       $cred = get-credential
       Connect-ArubaSW -Server 192.0.2.1 -credential $cred
 
-      Connect to a ArubaOS Switch with IP 192.0.2.1 and passing (Get-)credential
+      Connect to an ArubaOS Switch with IP 192.0.2.1 and passing (Get-)credential
 
       .EXAMPLE
       $mysecpassword = ConvertTo-SecureString aruba -AsPlainText -Force
       Connect-ArubaSW -Server 192.0.2.1 -Username manager -Password $mysecpassword
 
-      Connect to a ArubaOS Switch with IP 192.0.2.1 using Username and Password
+      Connect to an ArubaOS Switch with IP 192.0.2.1 using Username and Password
   #>
 
     Param(
@@ -140,7 +140,7 @@ function Disconnect-ArubaSW {
 
     <#
         .SYNOPSIS
-        Disconnect to a ArubaOS Switches (Provision)
+        Disconnect to an ArubaOS Switches (Provision)
 
         .DESCRIPTION
         Disconnect the connection on ArubaOS Switchs
