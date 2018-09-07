@@ -154,7 +154,7 @@ function Disconnect-ArubaSW {
 
     Process {
 
-        $url = "rest/v1/login-sessions"
+        $url = "rest/v3/login-sessions"
 
         if ( -not ( $Noconfirm )) {
             $message  = "Remove Aruba Switch connection."
