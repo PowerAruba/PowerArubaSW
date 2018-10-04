@@ -35,7 +35,7 @@ ExtractArubaSW.ps1
 
   .NOTES
 
-  Version:        1.0
+  Version:        1.1
   Author:         <Benjamin PERRIER>
   Creation Date:  <21/09/2018>
   Script Name: ExtractArubaSW
@@ -284,7 +284,8 @@ foreach ($port in $run) {
     $item | Add-Member -type NoteProperty -Name 'port_tagged' -Value $($tagged)
     $item | Add-Member -type NoteProperty -Name 'port_untagged' -Value $($untagged)
     $item | Add-Member -type NoteProperty -Name 'lacp_status' -Value $($port.lacp_status)
-      
+    $item | Add-Member -type NoteProperty -Name 'is_port_up' -Value $($port.is_port_up)
+     
     $resultarray += $item
 
 }
@@ -383,26 +384,30 @@ $Column++ # On passe à la colonne suivante
 
 $sheet.Cells.Item($row,$column)= 'port_id'
 $sheet.Cells.Item($row,$column).Font.Bold=$True
-$Column++ # On passe à la colonne suivante
+$Column++ 
 
 $sheet.Cells.Item($row,$column)= 'port_tagged'
 $sheet.Cells.Item($row,$column).Font.Bold=$True
-$Column++ # On passe à la colonne suivante
+$Column++ 
 
 $sheet.Cells.Item($row,$column)= 'port_untagged'
 $sheet.Cells.Item($row,$column).Font.Bold=$True
-$Column++ # On passe à la colonne suivante
+$Column++ 
 
 $sheet.Cells.Item($row,$column)= 'lacp_status'
 $sheet.Cells.Item($row,$column).Font.Bold=$True
-$Column++ # On passe à la colonne suivante
+$Column++ 
+
+$sheet.Cells.Item($row,$column)= 'is_port_up'
+$sheet.Cells.Item($row,$column).Font.Bold=$True
+$Column++ 
 
 
 $row = 9
 $Column = 1
 
 # Récupération des données
-$entries = $resultarray | Select -Property name,port_id,port_tagged,port_untagged,lacp_status
+$entries = $resultarray
 
 
 foreach ($entry in $entries)  {
@@ -422,6 +427,8 @@ foreach ($entry in $entries)  {
     $sheet.Cells.Item($row,$column) = $entry.lacp_status
     $column++
     
+    $sheet.Cells.Item($row,$column) = $entry.is_port_up
+    $column++
     
     $row++
     $column=1
