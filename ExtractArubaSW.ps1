@@ -261,7 +261,28 @@ foreach ($port in $run) {
     $v = $vlanports | Where-Object {$_.port_id -eq $port.id}
     $tagged=$null 
 
+    $countvlan = -1
+        
         foreach ($vlanp in $v) {
+            
+                $countvlan ++
+                
+                }
+
+        $comacountvlan = 0
+      
+        foreach ($vlanp in $v) {
+
+            
+            if ($comacountvlan -eq $countvlan) {
+
+                                                $coma = ''
+                                            
+                                                } else {
+                                            
+                                                $coma = ', '
+                                            
+                                                }
             
             if ($vlanp.port_mode -eq "POM_UNTAGGED") {
             
@@ -271,10 +292,12 @@ foreach ($port in $run) {
 
             if ($vlanp.port_mode -eq "POM_TAGGED_STATIC") {
 
-                    $tagged += "$($vlanp.vlan_id), "
+                    $tagged += "$($vlanp.vlan_id)$coma"
                     
                     }
 
+            $comacountvlan++
+      
         } 
 
   
