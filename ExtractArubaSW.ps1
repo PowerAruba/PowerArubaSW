@@ -35,7 +35,7 @@ ExtractArubaSW.ps1
 
   .NOTES
 
-  Version:        1.1
+  Version:        1.2
   Author:         <Benjamin PERRIER>
   Creation Date:  <21/09/2018>
   Script Name: ExtractArubaSW
@@ -313,125 +313,257 @@ $sheet.Activate() | Out-Null
 
 
 
-
-
 # On se positionne en A1 sur Excel (ligne=1/colonne=1)
 $row = 1
 $Column = 1
+$anum = 1
+$bnum = 1
+
+
 
 
 # Saisie des données dans Excel
-$sheet.Cells.Item($row,$column)= 'name'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
 
-$row++ 
+ function excelparamarray1  {
+                        $MergeCells = $sheet.Range("A$($anum):B$($bnum)")
+                        $MergeCells.Select() 
+                        $MergeCells.MergeCells = $true
+                        $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
+                        $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlRight
+                        $sheet.Cells.Item($row,$column).Font.Size = 14
+                        $sheet.Cells.Item($row,$column).Font.Bold=$True
+                        $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+                        $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
+                        $sheet.Cells.Item($row,$column).Font.ThemeColor = 4
+                        $sheet.Cells.Item($row,$column).Font.ColorIndex = 55
+                        $sheet.Cells.Item($row,$column).Font.Color = 8210719
+                        $sheet.Cells.Item($row,$column).Interior.ColorIndex = 15
+                     }
 
-$sheet.Cells.Item($row,$column)= 'serial_number'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
-$row++ 
 
-$sheet.Cells.Item($row,$column)= 'firmware_version'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
-$row++ 
 
-$sheet.Cells.Item($row,$column)= 'hardware_revision'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
-$row++ # On passe à la colonne suivante
+$sheet.Cells.Item($row,$column)= 'Name :'
+excelparamarray1
 
-$sheet.Cells.Item($row,$column)= 'product_model'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
-$row++ # On passe à la colonne suivante
+$row++
+$anum++
+$bnum++ 
+
+$sheet.Cells.Item($row,$column)= 'Serial Number :'
+excelparamarray1
+
+$row++
+$anum++
+$bnum++ 
+
+$sheet.Cells.Item($row,$column)= 'Firmware Version :'
+excelparamarray1
+
+$row++
+$anum++
+$bnum++ 
+
+$sheet.Cells.Item($row,$column)= 'Hardware Revision :'
+excelparamarray1
+
+$row++
+$anum++
+$bnum++ 
+
+$sheet.Cells.Item($row,$column)= 'Product Model :'
+excelparamarray1
+
+$row++
+$anum++
+$bnum++ 
 
 
 $row = 1
-$Column = 2
+$Column = 3
+$anum = 1
+$bnum = 1
 
 # Récupération des données
 $entries = $infoswitch | Select -Property name,serial_number,firmware_version,hardware_revision,product_model
 
 #
+function excelparam2array1 {
+                                $MergeCells = $sheet.Range("C$($anum):G$($bnum)")
+                                $MergeCells.Select() 
+                                $MergeCells.MergeCells = $true
+                                $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
+                                $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlLeft
+                                $sheet.Cells.Item($row,$column).Font.Size = 12
+                                $sheet.Cells.Item($row,$column).Font.Bold=$True
+                                $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+                            }
+
+
+
 foreach ($entry in $entries)  {
 
-    $sheet.Cells.Item($row,$column) = $entry.name
-    $row++
+    $sheet.Cells.Item($row,$column)= $entry.name
+    excelparam2array1
 
-    $sheet.Cells.Item($row,$column) = $entry.serial_number
     $row++
-    
-    $sheet.Cells.Item($row,$column) = $entry.firmware_version
-    $row++
+    $anum++
+    $bnum++ 
+        
+    $sheet.Cells.Item($row,$column)= $entry.serial_number
+    excelparam2array1
 
-    $sheet.Cells.Item($row,$column) = $entry.hardware_revision
     $row++
+    $anum++
+    $bnum++ 
 
-    $sheet.Cells.Item($row,$column) = $entry.product_model
-    $rown++
+    $sheet.Cells.Item($row,$column)= $entry.firmware_version
+    excelparam2array1
+
+    $row++
+    $anum++
+    $bnum++
+
+    $sheet.Cells.Item($row,$column)= $entry.hardware_revision
+    excelparam2array1
+
+    $row++
+    $anum++
+    $bnum++
+
+    $sheet.Cells.Item($row,$column)= $entry.product_model
+    excelparam2array1
     
-    
-    $row=1
-    $column++
 }
 
 
 
-$row = 8
+$row = 10
 $Column = 1
+$anum = 10
+$bnum = 10
+
+function excelparam1array2 {
+            $MergeCells.Select() 
+            $MergeCells.MergeCells = $true
+            $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
+            $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlCenter
+            $sheet.Cells.Item($row,$column).Font.Size = 14
+            $sheet.Cells.Item($row,$column).Font.Bold=$True
+            $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+            $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
+            $sheet.Cells.Item($row,$column).Font.ThemeColor = 4
+            $sheet.Cells.Item($row,$column).Font.ColorIndex = 55
+            $sheet.Cells.Item($row,$column).Font.Color = 8210719
+            $sheet.Cells.Item($row,$column).Interior.ColorIndex = 15
+         }
 
 # Saisie des données dans Excel
-$sheet.Cells.Item($row,$column)= 'name'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
-$Column++ # On passe à la colonne suivante
 
-$sheet.Cells.Item($row,$column)= 'port_id'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
+$sheet.Cells.Item($row,$column)= 'Name'
+$MergeCells = $sheet.Range("A$($anum):B$($bnum)")
+excelparam1array2
+
+$Column++
+$Column++  
+
+$sheet.Cells.Item($row,$column)= 'Port ID'
+$MergeCells = $sheet.Range("C$($anum):D$($bnum)")
+excelparam1array2
+
+$Column++ 
 $Column++ 
 
-$sheet.Cells.Item($row,$column)= 'port_tagged'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
+$sheet.Cells.Item($row,$column)= 'Port Tagged'
+$MergeCells = $sheet.Range("E$($anum):F$($bnum)")
+excelparam1array2
+
+$Column++ 
 $Column++ 
 
-$sheet.Cells.Item($row,$column)= 'port_untagged'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
+$sheet.Cells.Item($row,$column)= 'Port Untagged'
+$MergeCells = $sheet.Range("G$($anum):H$($bnum)")
+excelparam1array2
+
+$Column++ 
 $Column++ 
 
-$sheet.Cells.Item($row,$column)= 'lacp_status'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
+$sheet.Cells.Item($row,$column)= 'LACP Status'
+$MergeCells = $sheet.Range("I$($anum):J$($bnum)")
+excelparam1array2
+
+$Column++ 
 $Column++ 
 
-$sheet.Cells.Item($row,$column)= 'is_port_up'
-$sheet.Cells.Item($row,$column).Font.Bold=$True
-$Column++ 
+$sheet.Cells.Item($row,$column)= 'Is Port UP'
+$MergeCells = $sheet.Range("K$($anum):L$($bnum)")
+excelparam1array2
 
 
-$row = 9
+$row = 11
 $Column = 1
+$anum = 11
+$bnum = 11
 
 # Récupération des données
 $entries = $resultarray
 
 
+function excelparam2array2 {
+    $MergeCells.Select() 
+    $MergeCells.MergeCells = $true
+    $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
+    $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlCenter
+    $sheet.Cells.Item($row,$column).Font.Size = 12
+    $sheet.Cells.Item($row,$column).Font.Bold=$True
+    $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+         }
+
+
 foreach ($entry in $entries)  {
 
-    $sheet.Cells.Item($row,$column) = $entry.name
-    $column++
+    $sheet.Cells.Item($row,$column)= $entry.name
+    $MergeCells = $sheet.Range("A$($anum):B$($bnum)")
+    excelparam2array2
 
-    $sheet.Cells.Item($row,$column) = $entry.port_id
-    $column++
+    $Column++ 
+    $Column++
+
+    $sheet.Cells.Item($row,$column)= $entry.port_id
+    $MergeCells = $sheet.Range("C$($anum):D$($bnum)")
+    excelparam2array2
+
+    $Column++ 
+    $Column++
+
+    $sheet.Cells.Item($row,$column)= $entry.port_tagged
+    $MergeCells = $sheet.Range("E$($anum):F$($bnum)")
+    excelparam2array2
+
+    $Column++ 
+    $Column++
     
-    $sheet.Cells.Item($row,$column) = $entry.port_tagged
-    $column++
+    $sheet.Cells.Item($row,$column)= $entry.port_untagged
+    $MergeCells = $sheet.Range("G$($anum):H$($bnum)")
+    excelparam2array2
 
-    $sheet.Cells.Item($row,$column) = $entry.port_untagged
-    $column++
+    $Column++ 
+    $Column++
 
-    $sheet.Cells.Item($row,$column) = $entry.lacp_status
-    $column++
+    $sheet.Cells.Item($row,$column)= $entry.lacp_status
+    $MergeCells = $sheet.Range("I$($anum):J$($bnum)")
+    excelparam2array2
+
+    $Column++ 
+    $Column++
     
-    $sheet.Cells.Item($row,$column) = $entry.is_port_up
-    $column++
+    $sheet.Cells.Item($row,$column)= $entry.is_port_up
+    $MergeCells = $sheet.Range("K$($anum):L$($bnum)")
+    excelparam2array2
     
     $row++
     $column=1
+    $anum ++
+    $bnum ++
     
     }
 
