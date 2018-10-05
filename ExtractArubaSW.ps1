@@ -35,7 +35,7 @@ ExtractArubaSW.ps1
 
   .NOTES
 
-  Version:        1.2
+  Version:        1.4
   Author:         <Benjamin PERRIER>
   Creation Date:  <21/09/2018>
   Script Name: ExtractArubaSW
@@ -384,6 +384,9 @@ $bnum = 1
                         $sheet.Cells.Item($row,$column).Font.ColorIndex = 55
                         $sheet.Cells.Item($row,$column).Font.Color = 8210719
                         $sheet.Cells.Item($row,$column).Interior.ColorIndex = 15
+                        $sheet.Cells.Range("A$($anum):B$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
+                        $sheet.Cells.Range("A$($anum):B$($bnum)").Borders.Weight = 3
+
                      }
 
 
@@ -442,6 +445,10 @@ function excelparam2array1 {
                                 $sheet.Cells.Item($row,$column).Font.Size = 10
                                 $sheet.Cells.Item($row,$column).Font.Bold=$True
                                 $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+                                $sheet.Cells.Item($row,$column).Interior.ColorIndex = 19
+                                $sheet.Cells.Range("C$($anum):G$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
+                                $sheet.Cells.Range("C$($anum):G$($bnum)").Borders.Weight = 3
+                          
                             }
 
 
@@ -489,6 +496,7 @@ $anum = 10
 $bnum = 10
 
 function excelparam1array2 {
+            $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
             $MergeCells.Select() 
             $MergeCells.MergeCells = $true
             $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
@@ -501,61 +509,71 @@ function excelparam1array2 {
             $sheet.Cells.Item($row,$column).Font.ColorIndex = 55
             $sheet.Cells.Item($row,$column).Font.Color = 8210719
             $sheet.Cells.Item($row,$column).Interior.ColorIndex = 15
+            $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
+            $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
          }
 
 # Saisie des données dans Excel
-
+$letter1 = 'A'
+$letter2 = 'B'
 $sheet.Cells.Item($row,$column)= 'Name'
-$MergeCells = $sheet.Range("A$($anum):B$($bnum)")
 excelparam1array2
+
 
 $Column++
 $Column++  
 
+$letter1 = 'C'
+$letter2 = 'D'
 $sheet.Cells.Item($row,$column)= 'Port ID'
-$MergeCells = $sheet.Range("C$($anum):D$($bnum)")
 excelparam1array2
 
 $Column++ 
 $Column++ 
 
+$letter1 = 'E'
+$letter2 = 'F'
 $sheet.Cells.Item($row,$column)= 'Port Tagged'
-$MergeCells = $sheet.Range("E$($anum):F$($bnum)")
 excelparam1array2
 
 $Column++ 
 $Column++ 
 
+$letter1 = 'G'
+$letter2 = 'H'
 $sheet.Cells.Item($row,$column)= 'Port Untagged'
-$MergeCells = $sheet.Range("G$($anum):H$($bnum)")
 excelparam1array2
 
 $Column++ 
 $Column++ 
 
+$letter1 = 'I'
+$letter2 = 'J'
 $sheet.Cells.Item($row,$column)= 'LACP Status'
-$MergeCells = $sheet.Range("I$($anum):J$($bnum)")
 excelparam1array2
 
 $Column++ 
 $Column++ 
 
+$letter1 = 'K'
+$letter2 = 'L'
 $sheet.Cells.Item($row,$column)= 'Is Port UP'
-$MergeCells = $sheet.Range("K$($anum):L$($bnum)")
 excelparam1array2
 
 $Column++ 
 $Column++ 
 
+$letter1 = 'M'
+$letter2 = 'N'
 $sheet.Cells.Item($row,$column)= 'LLDP Port ID'
-$MergeCells = $sheet.Range("M$($anum):N$($bnum)")
 excelparam1array2
 
 $Column++ 
 $Column++ 
 
+$letter1 = 'O'
+$letter2 = 'P'
 $sheet.Cells.Item($row,$column)= 'LLDP Port Description'
-$MergeCells = $sheet.Range("O$($anum):P$($bnum)")
 excelparam1array2
 
 
@@ -570,6 +588,7 @@ $entries = $resultarray2
 
 
 function excelparam2array2 {
+    $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
     $MergeCells.Select() 
     $MergeCells.MergeCells = $true
     $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
@@ -577,62 +596,74 @@ function excelparam2array2 {
     $sheet.Cells.Item($row,$column).Font.Size = 10
     $sheet.Cells.Item($row,$column).Font.Bold=$True
     $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+    $sheet.Cells.Item($row,$column).Interior.ColorIndex = 19
+    $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
+    $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
          }
 
 
 foreach ($entry in $entries)  {
 
+    $letter1 = 'A'
+    $letter2 = 'B'
     $sheet.Cells.Item($row,$column)= $entry.name
-    $MergeCells = $sheet.Range("A$($anum):B$($bnum)")
+    
     excelparam2array2
 
     $Column++ 
     $Column++
 
+    $letter1 = 'C'
+    $letter2 = 'D'
     $sheet.Cells.Item($row,$column)= $entry.port_id
-    $MergeCells = $sheet.Range("C$($anum):D$($bnum)")
     excelparam2array2
 
     $Column++ 
     $Column++
 
+    $letter1 = 'E'
+    $letter2 = 'F'
     $sheet.Cells.Item($row,$column)= $entry.port_tagged
-    $MergeCells = $sheet.Range("E$($anum):F$($bnum)")
     excelparam2array2
 
     $Column++ 
     $Column++
-    
+
+    $letter1 = 'G'
+    $letter2 = 'H'    
     $sheet.Cells.Item($row,$column)= $entry.port_untagged
-    $MergeCells = $sheet.Range("G$($anum):H$($bnum)")
     excelparam2array2
 
     $Column++ 
     $Column++
 
+    $letter1 = 'I'
+    $letter2 = 'J'
     $sheet.Cells.Item($row,$column)= $entry.lacp_status
-    $MergeCells = $sheet.Range("I$($anum):J$($bnum)")
     excelparam2array2
 
     $Column++ 
     $Column++
-    
+
+    $letter1 = 'K'
+    $letter2 = 'L'    
     $sheet.Cells.Item($row,$column)= $entry.is_port_up
-    $MergeCells = $sheet.Range("K$($anum):L$($bnum)")
     excelparam2array2
 
     $Column++ 
     $Column++    
 
+    $letter1 = 'M'
+    $letter2 = 'N'
     $sheet.Cells.Item($row,$column)= $entry.lldp_port_id
-    $MergeCells = $sheet.Range("M$($anum):N$($bnum)")
     excelparam2array2
 
     $Column++ 
     $Column++  
 
+    $letter1 = 'O'
+    $letter2 = 'P'
     $sheet.Cells.Item($row,$column)= $entry.lldp_port_description
-    $MergeCells = $sheet.Range("O$($anum):P$($bnum)")
     excelparam2array2
 
     $row++
