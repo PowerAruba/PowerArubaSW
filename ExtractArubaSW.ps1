@@ -291,7 +291,30 @@ foreach ($port in $run) {
 }
 
 
+$lldpremote = get-arubaswlldpremote
 
+$resultarray2=@()
+
+foreach ($resultarra in $resultarray) {
+
+$w = $lldpremote | Where-Object {$lldpremote.local_port -eq $resultarra.port_id}
+
+
+#Write-Host "port_id $($resultarra.port_id) port_id $($w.port_id)"
+
+    $item = New-Object PSObject
+    $item | Add-Member -type NoteProperty -Name 'name' -Value $($resultarra.name)
+    $item | Add-Member -type NoteProperty -Name 'port_id' -Value $($resultarra.id)
+    $item | Add-Member -type NoteProperty -Name 'port_tagged' -Value $($resultarra.port_tagged)
+    $item | Add-Member -type NoteProperty -Name 'port_untagged' -Value $($resultarra.port_untagged)
+    $item | Add-Member -type NoteProperty -Name 'lacp_status' -Value $($resultarra.lacp_status)
+    $item | Add-Member -type NoteProperty -Name 'is_port_up' -Value $($resultarra.is_port_up)
+    $item | Add-Member -type NoteProperty -Name 'lldp_port_id' -Value $($w.port_id)
+    $item | Add-Member -type NoteProperty -Name 'lldp_port_description' -Value $($w.port_description)
+     
+    $resultarray2 += $item
+
+}
 
 # Creation du fichier Excel
 
@@ -330,7 +353,7 @@ $bnum = 1
                         $MergeCells.MergeCells = $true
                         $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
                         $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlRight
-                        $sheet.Cells.Item($row,$column).Font.Size = 14
+                        $sheet.Cells.Item($row,$column).Font.Size = 10
                         $sheet.Cells.Item($row,$column).Font.Bold=$True
                         $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
                         $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
@@ -393,7 +416,7 @@ function excelparam2array1 {
                                 $MergeCells.MergeCells = $true
                                 $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
                                 $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlLeft
-                                $sheet.Cells.Item($row,$column).Font.Size = 12
+                                $sheet.Cells.Item($row,$column).Font.Size = 10
                                 $sheet.Cells.Item($row,$column).Font.Bold=$True
                                 $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
                             }
@@ -447,7 +470,7 @@ function excelparam1array2 {
             $MergeCells.MergeCells = $true
             $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
             $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlCenter
-            $sheet.Cells.Item($row,$column).Font.Size = 14
+            $sheet.Cells.Item($row,$column).Font.Size = 10
             $sheet.Cells.Item($row,$column).Font.Bold=$True
             $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
             $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
@@ -498,6 +521,21 @@ $sheet.Cells.Item($row,$column)= 'Is Port UP'
 $MergeCells = $sheet.Range("K$($anum):L$($bnum)")
 excelparam1array2
 
+$Column++ 
+$Column++ 
+
+$sheet.Cells.Item($row,$column)= 'LLDP Port ID'
+$MergeCells = $sheet.Range("M$($anum):N$($bnum)")
+excelparam1array2
+
+$Column++ 
+$Column++ 
+
+$sheet.Cells.Item($row,$column)= 'LLDP Port Description'
+$MergeCells = $sheet.Range("O$($anum):P$($bnum)")
+excelparam1array2
+
+
 
 $row = 11
 $Column = 1
@@ -505,7 +543,7 @@ $anum = 11
 $bnum = 11
 
 # Récupération des données
-$entries = $resultarray
+$entries = $resultarray2
 
 
 function excelparam2array2 {
@@ -513,7 +551,7 @@ function excelparam2array2 {
     $MergeCells.MergeCells = $true
     $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
     $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlCenter
-    $sheet.Cells.Item($row,$column).Font.Size = 12
+    $sheet.Cells.Item($row,$column).Font.Size = 10
     $sheet.Cells.Item($row,$column).Font.Bold=$True
     $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
          }
@@ -559,7 +597,21 @@ foreach ($entry in $entries)  {
     $sheet.Cells.Item($row,$column)= $entry.is_port_up
     $MergeCells = $sheet.Range("K$($anum):L$($bnum)")
     excelparam2array2
-    
+
+    $Column++ 
+    $Column++    
+
+    $sheet.Cells.Item($row,$column)= $entry.lldp_port_id
+    $MergeCells = $sheet.Range("M$($anum):N$($bnum)")
+    excelparam2array2
+
+    $Column++ 
+    $Column++  
+
+    $sheet.Cells.Item($row,$column)= $entry.lldp_port_description
+    $MergeCells = $sheet.Range("O$($anum):P$($bnum)")
+    excelparam2array2
+
     $row++
     $column=1
     $anum ++
