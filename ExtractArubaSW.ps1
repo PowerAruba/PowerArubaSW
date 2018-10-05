@@ -304,7 +304,7 @@ $w = $lldpremote | Where-Object {$lldpremote.local_port -eq $resultarra.port_id}
 
     $item = New-Object PSObject
     $item | Add-Member -type NoteProperty -Name 'name' -Value $($resultarra.name)
-    $item | Add-Member -type NoteProperty -Name 'port_id' -Value $($resultarra.id)
+    $item | Add-Member -type NoteProperty -Name 'port_id' -Value $($resultarra.port_id)
     $item | Add-Member -type NoteProperty -Name 'port_tagged' -Value $($resultarra.port_tagged)
     $item | Add-Member -type NoteProperty -Name 'port_untagged' -Value $($resultarra.port_untagged)
     $item | Add-Member -type NoteProperty -Name 'lacp_status' -Value $($resultarra.lacp_status)
@@ -626,3 +626,4 @@ foreach ($entry in $entries)  {
 $workbook.SaveAs("$env:USERPROFILE\Desktop\$($date)_$($clientname)_$($ipswitch).xlsx")
 
 break
+
