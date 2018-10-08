@@ -1,35 +1,43 @@
 ﻿
  <#
   .SYNOPSIS
-  Ce script permet d'extraire des données d'un switch Aruba et de classer ces informations d'un tableau Excel
+This script is used to extract data from an Aruba switch and to classify this information in an Excel sheet.
   .DESCRIPTION
-  Le fichier Excel comportera : -Nom du switch
-                                -Numéro de série
+
+The Excel file contains :       -Name of the switch
+                                -Serial Number
                                 -Firmware
-                                -Revision matérielle
-                                -Modèle du switch
+                                -Hardware Revision
+                                -Product Model
 
-                                -Nom du port
-                                -Identifiant du port
-                                -Vlan ports taguer
-                                -Vlan ports non taguer
-                                -Statut LACP
 
-Ce script nécessite au le module PowerArubaSW soit installé. Plus d'information sur https://github.com/alagoutte/PowerArubaSW
-Ce script utilise Microsoft Excel, le logiciel devra être installer sur l'ordinateur sur lequel le script s'exécute.
+                                -Name of the port
+                                -ID of the port
+                                -Tagged ports vlan
+                                -Untagged ports vlan
+                                -LACP Status
+                                -Is port UP
+                                -LLDP Port ID
+                                -LLDP PORT Description
+
+
+This script requires the PowerArubaSW module to be installed. More information at https://github.com/PowerAruba/PowerArubaSW
+This script uses Microsoft Excel, the software will need to be installed on the computer on which the script is running.
 
   .EXAMPLE
-Le script peut être exécuté avec la liste d'arguments suivant 
 
-ExtractArubaSW.ps1 -ClientName <nom du client> -IpSwitch <ip du switch> -LoginSwitch <login du switch> -MdpSwitch <mot de passe switch>
+The script can be executed with the following argument list
+
+ExtractArubaSW.ps1 -CompanyName <company name> -IPSwitch <switch ip> -LoginSwitch <switch login> -PassSwitch <switch password>
   
   .EXAMPLE
-Le script peut être exécuté sans préciser le type d'argument du moment que l'ordre des arguments <nom du client> <ip du switch> <login du switch> <mot de passe switch> est respecté
+The script can be executed without specifying the type of argument as long as the order of the arguments <company name> <switch ip> <switch login> <switch password> is respected
 
-ExtractArubaSW.ps1 <nom du client> <ip du switch> <login du switch> <mot de passe switch>
+ExtractArubaSW.ps1 <company name> <switch ip> <switch login> <switch password>
 
   .EXAMPLE
-Le script peut être exécuté sans argument, des questions seront posées à l'utilisateur au cours de celui-ci.
+
+The script can be executed without arguments, questions will be asked to the user during this one.
 
 ExtractArubaSW.ps1 
 
@@ -44,15 +52,15 @@ ExtractArubaSW.ps1
 
 
 Param(
-  [string]$ClientName,
+  [string]$CompanyName,
   [string]$IPSwitch,
   [string]$LoginSwitch,
-  [string]$MDPSwitch,
+  [string]$PassSwitch,
   [String]$Targets = "Help" )
 
 
 
-#TEST DE LA PRESENCE DU MODULE POWERARUBASW
+#TESTING THE PRESENCE OF THE POWERARUBASW MODULE
 
 if (Get-Module -ListAvailable -Name PowerArubaSW) {
 
@@ -62,24 +70,24 @@ if (Get-Module -ListAvailable -Name PowerArubaSW) {
 } else {
 
         cls
-        echo ""
-        echo "############################################################"
-        echo ""
-        echo ""
-        echo ""
-        echo "    !!! LE MODULE POWERARUBASW N'EST PAS INSTALLER !!!"
-        echo ""
-        echo "         Afin d'installer ce module tapez la commande"
-        echo "                Install-Module PowerArubaSW"
-        echo ""
-        echo "            Puis relancez de nouveau ce script."
-        echo ""
-        echo ""
-        echo ""
-        echo "############################################################"
-        echo ""
-        echo ""
-        $exitquit = Read-Host "Appuyez sur n'importe quelle touche pour quitter."
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "    !!! THE POWERARUBASW MODULE IS NOT INSTALLING !!!"
+        Write-Host ""
+        Write-Host "         In order to install this module type the command"
+        Write-Host "                Install-Module PowerArubaSW"
+        Write-Host ""
+        Write-Host "            Then restart that script again."
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        $exitquit = Read-Host "Press any key to exit"
         break
        
         }
@@ -88,85 +96,85 @@ if (Get-Module -ListAvailable -Name PowerArubaSW) {
 
 
 
-# Demande du nom client si pas renseigné en argument
+# Company name request if not given as an argument
 
-if ([string]::IsNullOrEmpty($clientname)) {
+if ([string]::IsNullOrEmpty($CompanyName)) {
 
-        #Information nom client
+
         cls
-        echo ""
-        echo "############################################################"
-        echo ""
-        echo ""
-        echo ""
-        echo "                 Quel est le nom du client ?"
-        echo ""
-        echo ""
-        echo ""
-        echo "############################################################"
-        echo ""
-        echo ""
-        $clientname = Read-Host "Veuillez saisir le nom du client"
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "                What is the name of the company?"
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        $CompanyName = Read-Host "Please enter the name of the company"
         cls
 
         }
 
 
-#Enregistrement de la date au format day/month/year dans la variable date
+#Save the date as day / month / year in the date variable
 $date = Get-Date -format "dd-MM-yyyy"
 
 
 
 
-#Demande ip switch si pas renseigné en argument
+#Request ip switch if not specified in argument
 
 if ([string]::IsNullOrEmpty($ipswitch)) {
 
     cls
-    echo ""
-    echo "############################################################"
-    echo ""
-    echo ""
-    echo ""
-    echo "             Quelle est l'adresse IP du switch ?"
-    echo ""
-    echo ""
-    echo ""
-    echo "############################################################"
-    echo ""
-    echo ""
-    $ipswitch = Read-Host "Veuillez saisir l'addresse IP du switch ?"
+    Write-Host ""
+    Write-Host "############################################################"
+    Write-Host ""
+    Write-Host ""
+    Write-Host ""
+    Write-Host "             What is the IP address of the switch?"
+    Write-Host ""
+    Write-Host ""
+    Write-Host ""
+    Write-Host "############################################################"
+    Write-Host ""
+    Write-Host ""
+    $ipswitch = Read-Host "Please enter the IP address of the switch?"
     cls
 
     }
 
 
-# Affichage du nom du fichier généré et de son emplacement
+# View the name of the generated file and its location
 
 cls
-echo ""
-echo "#######################################################################"
-echo ""
-echo "       Un fichier excel sera automatiquement créé"
-echo ""
-echo "       Il sera stocké dans $env:USERPROFILE\Desktop\"
-echo ""
-echo "       et sera nommé $($date)_$($clientname)_$($ipswitch).xlsx"
-echo ""
-echo "#######################################################################"
-echo ""
-echo ""
+Write-Host ""
+Write-Host "#######################################################################"
+Write-Host ""
+Write-Host "       An excel file will be automatically created"
+Write-Host ""
+Write-Host "        It will be stored in $env:USERPROFILE\Desktop\"
+Write-Host ""
+Write-Host "       and will be named $($date)_$($CompanyName)_$($ipswitch).xlsx"
+Write-Host ""
+Write-Host "#######################################################################"
+Write-Host ""
+Write-Host ""
 
 
 
-# Verification des variables loginswitch et mdpswitch
+#Verification of loginswitch and passswitch variables
 
-if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEmpty($mdpswitch))) { 
-
-
+if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEmpty($PassSwitch))) { 
 
 
-        $mysecpassword = ConvertTo-SecureString $mdpswitch -AsPlainText -Force
+
+
+        $mysecpassword = ConvertTo-SecureString $PassSwitch -AsPlainText -Force
 
 
 
@@ -179,24 +187,24 @@ if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEm
         Catch { 
 
                 cls
-                echo ""
-                echo "############################################################"
-                echo ""
-                echo ""
-                echo ""
-                echo "       !!! IMPOSSIBLE DE SE CONNECTER AU SWITCH !!!"
-                echo ""
-                echo "         Verrifier que le login et le mot de passe"
-                echo "                      soit valide"
-                echo ""
-                echo "           Puis relancez de nouveau ce script."
-                echo ""
-                echo ""
-                echo ""
-                echo "############################################################"
-                echo ""
-                echo ""
-                $exitquit = Read-Host "Appuyez sur n'importe quelle touche pour quitter."
+                Write-Host ""
+                Write-Host "############################################################"
+                Write-Host ""
+                Write-Host ""
+                Write-Host ""
+                Write-Host "              !!! CAN NOT CONNECT TO SWITCH !!!"
+                Write-Host ""
+                Write-Host "       Check that the IP or login and password is valid."
+                Write-Host ""
+                Write-Host ""
+                Write-Host "              Then restart that script again."
+                Write-Host ""
+                Write-Host ""
+                Write-Host ""
+                Write-Host "############################################################"
+                Write-Host ""
+                Write-Host ""
+                $exitquit = Read-Host "Press any key to exit"
                 break
 
                 }
@@ -214,24 +222,24 @@ if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEm
         Catch { 
 
                 cls
-                echo ""
-                echo "############################################################"
-                echo ""
-                echo ""
-                echo ""
-                echo "       !!! IMPOSSIBLE DE SE CONNECTER AU SWITCH !!!"
-                echo ""
-                echo "         Verrifier que le login et le mot de passe"
-                echo "                      soit valide"
-                echo ""
-                echo "           Puis relancez de nouveau ce script."
-                echo ""
-                echo ""
-                echo ""
-                echo "############################################################"
-                echo ""
-                echo ""
-                $exitquit = Read-Host "Appuyez sur n'importe quelle touche pour quitter."
+                Write-Host ""
+                Write-Host "############################################################"
+                Write-Host ""
+                Write-Host ""
+                Write-Host ""
+                Write-Host "              !!! CAN NOT CONNECT TO SWITCH !!!"
+                Write-Host ""
+                Write-Host "       Check that the IP or login and password is valid."
+                Write-Host ""
+                Write-Host ""
+                Write-Host "              Then restart that script again."
+                Write-Host ""
+                Write-Host ""
+                Write-Host ""
+                Write-Host "############################################################"
+                Write-Host ""
+                Write-Host ""
+                $exitquit = Read-Host "Press any key to exit"
                 break
 
                 }
@@ -243,23 +251,25 @@ if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEm
 
 
 
-# Creation de la variable run
+# Creation of the run variable
 
 $url = "rest/v4/ports"
 $response = invoke-ArubaSWWebRequest -method "GET" -url $url
 $run = ($response | convertfrom-json).port_element
 
-# Creation de la variable vlanports
+# Creation of the vlanports variable
 $vlanports = Get-ArubaSWVlansPorts
+$lldpremote = get-arubaswlldpremote
 
 $resultarray=@()
 
-# Croisement des informations de la variable run par rapport à la variable vlanports
+# Crossing the information of the run variable against the vlanports variable
 
 foreach ($port in $run) {
  
     $v = $vlanports | Where-Object {$_.port_id -eq $port.id}
-    $tagged=$null 
+    $tagged=$null
+    $w = $lldpremote | Where-Object {$lldpremote.local_port -eq $port.id} 
 
     $countvlan = -1
         
@@ -308,58 +318,36 @@ foreach ($port in $run) {
     $item | Add-Member -type NoteProperty -Name 'port_untagged' -Value $($untagged)
     $item | Add-Member -type NoteProperty -Name 'lacp_status' -Value $($port.lacp_status)
     $item | Add-Member -type NoteProperty -Name 'is_port_up' -Value $($port.is_port_up)
+    $item | Add-Member -type NoteProperty -Name 'lldp_port_id' -Value $($w.port_id)
+    $item | Add-Member -type NoteProperty -Name 'lldp_port_description' -Value $($w.port_description)
      
     $resultarray += $item
 
 }
 
 
-$lldpremote = get-arubaswlldpremote
 
-$resultarray2=@()
-
-foreach ($resultarra in $resultarray) {
-
-$w = $lldpremote | Where-Object {$lldpremote.local_port -eq $resultarra.port_id}
+# Creation of Excel file
 
 
-#Write-Host "port_id $($resultarra.port_id) port_id $($w.port_id)"
-
-    $item = New-Object PSObject
-    $item | Add-Member -type NoteProperty -Name 'name' -Value $($resultarra.name)
-    $item | Add-Member -type NoteProperty -Name 'port_id' -Value $($resultarra.port_id)
-    $item | Add-Member -type NoteProperty -Name 'port_tagged' -Value $($resultarra.port_tagged)
-    $item | Add-Member -type NoteProperty -Name 'port_untagged' -Value $($resultarra.port_untagged)
-    $item | Add-Member -type NoteProperty -Name 'lacp_status' -Value $($resultarra.lacp_status)
-    $item | Add-Member -type NoteProperty -Name 'is_port_up' -Value $($resultarra.is_port_up)
-    $item | Add-Member -type NoteProperty -Name 'lldp_port_id' -Value $($w.port_id)
-    $item | Add-Member -type NoteProperty -Name 'lldp_port_description' -Value $($w.port_description)
-     
-    $resultarray2 += $item
-
-}
-
-# Creation du fichier Excel
-
-
-$infoswitch = Get-ArubaSWSystemStatus | Select -Property name,serial_number,firmware_version,hardware_revision,product_model
+$infoswitch = Get-ArubaSWSystemStatus
 
 
 
 
-# Lancement d'une instance de MS Excel
+# Launching an instance of MS Excel
 $excel = New-Object -ComObject "Excel.Application"            
 $excel.Visible = $True
 $excel.DisplayAlerts = $False
 
-# Création d'une feuille Excel + activation de la feuille en cours   
+# Creating an Excel sheet + activating the current sheet   
 $workbook = $excel.Workbooks.Add()
 $sheet = $workbook.Worksheets.Item(1)
 $sheet.Activate() | Out-Null
 
 
 
-# On se positionne en A1 sur Excel (ligne=1/colonne=1)
+# We position ourselves in A1 on Excel (line = 1 / column = 1)
 $row = 1
 $Column = 1
 $anum = 1
@@ -368,63 +356,72 @@ $bnum = 1
 
 
 
-# Saisie des données dans Excel
+# Entering data in Excel
 
- function excelparamarray1  {
-                        $MergeCells = $sheet.Range("A$($anum):B$($bnum)")
-                        $MergeCells.Select() 
+ function ExcelFormatArray  {
+ Param ([string]$name,
+        [string]$letter1,
+        [string]$letter2,
+        [string]$emplacementtxt,
+        [string]$fontcolorindex,
+        [string]$fontsize,
+        [string]$interiorcolorindex)
+
+                        $sheet.Cells.Item($row,$column)= $name
+                        $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
+                        #$MergeCells.Select() 
                         $MergeCells.MergeCells = $true
                         $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
-                        $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlRight
-                        $sheet.Cells.Item($row,$column).Font.Size = 10
+                        $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::$emplacementtxt
+                        $sheet.Cells.Item($row,$column).Font.Size = $fontsize
                         $sheet.Cells.Item($row,$column).Font.Bold=$True
                         $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
                         $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
                         $sheet.Cells.Item($row,$column).Font.ThemeColor = 4
-                        $sheet.Cells.Item($row,$column).Font.ColorIndex = 55
-                        $sheet.Cells.Item($row,$column).Font.Color = 8210719
-                        $sheet.Cells.Item($row,$column).Interior.ColorIndex = 15
-                        $sheet.Cells.Range("A$($anum):B$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
-                        $sheet.Cells.Range("A$($anum):B$($bnum)").Borders.Weight = 3
+                        $sheet.Cells.Item($row,$column).Font.ColorIndex = $fontcolorindex
+                        $sheet.Cells.Item($row,$column).Interior.ColorIndex = $interiorcolorindex
+                        $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
+                        $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
 
                      }
 
 
 
-$sheet.Cells.Item($row,$column)= 'Name :'
-excelparamarray1
+
+
+
+ExcelFormatArray -name 'Name :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $row++
 $anum++
 $bnum++ 
 
-$sheet.Cells.Item($row,$column)= 'Serial Number :'
-excelparamarray1
+
+ExcelFormatArray -name 'Serial Number :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $row++
 $anum++
 $bnum++ 
 
-$sheet.Cells.Item($row,$column)= 'Firmware Version :'
-excelparamarray1
+
+ExcelFormatArray -name 'Firmware Version :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+
 
 $row++
 $anum++
 $bnum++ 
 
-$sheet.Cells.Item($row,$column)= 'Hardware Revision :'
-excelparamarray1
+ExcelFormatArray -name 'Hardware Revision :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+
+
 
 $row++
 $anum++
 $bnum++ 
 
-$sheet.Cells.Item($row,$column)= 'Product Model :'
-excelparamarray1
 
-$row++
-$anum++
-$bnum++ 
+ExcelFormatArray -name 'Product Model :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+
 
 
 $row = 1
@@ -432,61 +429,39 @@ $Column = 3
 $anum = 1
 $bnum = 1
 
-# Récupération des données
-$entries = $infoswitch | Select -Property name,serial_number,firmware_version,hardware_revision,product_model
 
-#
-function excelparam2array1 {
-                                $MergeCells = $sheet.Range("C$($anum):G$($bnum)")
-                                $MergeCells.Select() 
-                                $MergeCells.MergeCells = $true
-                                $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
-                                $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlLeft
-                                $sheet.Cells.Item($row,$column).Font.Size = 10
-                                $sheet.Cells.Item($row,$column).Font.Bold=$True
-                                $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
-                                $sheet.Cells.Item($row,$column).Interior.ColorIndex = 19
-                                $sheet.Cells.Range("C$($anum):G$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
-                                $sheet.Cells.Range("C$($anum):G$($bnum)").Borders.Weight = 3
-                          
-                            }
-
-
-
-foreach ($entry in $entries)  {
-
-    $sheet.Cells.Item($row,$column)= $entry.name
-    excelparam2array1
+    ExcelFormatArray -name $infoswitch.name -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $anum++
     $bnum++ 
         
-    $sheet.Cells.Item($row,$column)= $entry.serial_number
-    excelparam2array1
+
+    ExcelFormatArray -name $infoswitch.serial_number -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+
 
     $row++
     $anum++
     $bnum++ 
 
-    $sheet.Cells.Item($row,$column)= $entry.firmware_version
-    excelparam2array1
+
+    ExcelFormatArray -name $infoswitch.firmware_version -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $anum++
     $bnum++
 
-    $sheet.Cells.Item($row,$column)= $entry.hardware_revision
-    excelparam2array1
+
+    ExcelFormatArray -name $infoswitch.hardware_revision -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $anum++
     $bnum++
 
-    $sheet.Cells.Item($row,$column)= $entry.product_model
-    excelparam2array1
+
+    ExcelFormatArray -name $infoswitch.product_model -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
     
-}
+
 
 
 
@@ -495,87 +470,48 @@ $Column = 1
 $anum = 10
 $bnum = 10
 
-function excelparam1array2 {
-            $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
-            $MergeCells.Select() 
-            $MergeCells.MergeCells = $true
-            $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
-            $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlCenter
-            $sheet.Cells.Item($row,$column).Font.Size = 10
-            $sheet.Cells.Item($row,$column).Font.Bold=$True
-            $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
-            $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
-            $sheet.Cells.Item($row,$column).Font.ThemeColor = 4
-            $sheet.Cells.Item($row,$column).Font.ColorIndex = 55
-            $sheet.Cells.Item($row,$column).Font.Color = 8210719
-            $sheet.Cells.Item($row,$column).Interior.ColorIndex = 15
-            $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
-            $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
-         }
 
-# Saisie des données dans Excel
-$letter1 = 'A'
-$letter2 = 'B'
-$sheet.Cells.Item($row,$column)= 'Name'
-excelparam1array2
+
+
+ExcelFormatArray -name 'Name' -letter1 A -letter2 B -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 $Column++
 $Column++  
 
-$letter1 = 'C'
-$letter2 = 'D'
-$sheet.Cells.Item($row,$column)= 'Port ID'
-excelparam1array2
+ExcelFormatArray -name 'Port ID' -letter1 C -letter2 D -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-$letter1 = 'E'
-$letter2 = 'F'
-$sheet.Cells.Item($row,$column)= 'Port Tagged'
-excelparam1array2
+
+ExcelFormatArray -name 'Port Tagged' -letter1 E -letter2 F -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-$letter1 = 'G'
-$letter2 = 'H'
-$sheet.Cells.Item($row,$column)= 'Port Untagged'
-excelparam1array2
+ExcelFormatArray -name 'Port Untagged' -letter1 G -letter2 H -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-$letter1 = 'I'
-$letter2 = 'J'
-$sheet.Cells.Item($row,$column)= 'LACP Status'
-excelparam1array2
+ExcelFormatArray -name 'LACP Status' -letter1 I -letter2 J -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-$letter1 = 'K'
-$letter2 = 'L'
-$sheet.Cells.Item($row,$column)= 'Is Port UP'
-excelparam1array2
+ExcelFormatArray -name 'Is Port UP' -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-$letter1 = 'M'
-$letter2 = 'N'
-$sheet.Cells.Item($row,$column)= 'LLDP Port ID'
-excelparam1array2
+
+ExcelFormatArray -name 'LLDP Port ID' -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-$letter1 = 'O'
-$letter2 = 'P'
-$sheet.Cells.Item($row,$column)= 'LLDP Port Description'
-excelparam1array2
-
+ExcelFormatArray -name 'LLDP Port Description' -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 $row = 11
@@ -583,88 +519,53 @@ $Column = 1
 $anum = 11
 $bnum = 11
 
-# Récupération des données
-$entries = $resultarray2
+# Data recovery
+$entries = $resultarray
 
 
-function excelparam2array2 {
-    $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
-    $MergeCells.Select() 
-    $MergeCells.MergeCells = $true
-    $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
-    $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::xlCenter
-    $sheet.Cells.Item($row,$column).Font.Size = 10
-    $sheet.Cells.Item($row,$column).Font.Bold=$True
-    $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
-    $sheet.Cells.Item($row,$column).Interior.ColorIndex = 19
-    $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
-    $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
-         }
+
 
 
 foreach ($entry in $entries)  {
 
-    $letter1 = 'A'
-    $letter2 = 'B'
-    $sheet.Cells.Item($row,$column)= $entry.name
-    
-    excelparam2array2
+    ExcelFormatArray -name $entry.name -letter1 A -letter2 B -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+
 
     $Column++ 
     $Column++
 
-    $letter1 = 'C'
-    $letter2 = 'D'
-    $sheet.Cells.Item($row,$column)= $entry.port_id
-    excelparam2array2
+
+    ExcelFormatArray -name $entry.port_id -letter1 C -letter2 D -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    $letter1 = 'E'
-    $letter2 = 'F'
-    $sheet.Cells.Item($row,$column)= $entry.port_tagged
-    excelparam2array2
+    ExcelFormatArray -name $entry.port_tagged -letter1 E -letter2 F -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    $letter1 = 'G'
-    $letter2 = 'H'    
-    $sheet.Cells.Item($row,$column)= $entry.port_untagged
-    excelparam2array2
+    ExcelFormatArray -name $entry.port_untagged -letter1 G -letter2 H -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    $letter1 = 'I'
-    $letter2 = 'J'
-    $sheet.Cells.Item($row,$column)= $entry.lacp_status
-    excelparam2array2
+    ExcelFormatArray -name $entry.lacp_status -letter1 I -letter2 J -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    $letter1 = 'K'
-    $letter2 = 'L'    
-    $sheet.Cells.Item($row,$column)= $entry.is_port_up
-    excelparam2array2
+    ExcelFormatArray -name $entry.is_port_up -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++    
 
-    $letter1 = 'M'
-    $letter2 = 'N'
-    $sheet.Cells.Item($row,$column)= $entry.lldp_port_id
-    excelparam2array2
+    ExcelFormatArray -name $entry.lldp_port_id -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++  
 
-    $letter1 = 'O'
-    $letter2 = 'P'
-    $sheet.Cells.Item($row,$column)= $entry.lldp_port_description
-    excelparam2array2
+    ExcelFormatArray -name $entry.lldp_port_description -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $column=1
@@ -676,8 +577,8 @@ foreach ($entry in $entries)  {
 
 
 
-# Sauvegarde du fichier excel:
-$workbook.SaveAs("$env:USERPROFILE\Desktop\$($date)_$($clientname)_$($ipswitch).xlsx")
+# Saving the excel file:
+$workbook.SaveAs("$env:USERPROFILE\Desktop\$($date)_$($CompanyName)_$($ipswitch).xlsx")
 
 break
 
