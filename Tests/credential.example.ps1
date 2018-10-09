@@ -9,3 +9,4 @@
 $ipaddress = "10.44.23.213"
 $login = "admin"
 $password = "enable"
+$httpOnly = $false

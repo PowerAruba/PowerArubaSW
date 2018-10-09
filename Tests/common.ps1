@@ -29,4 +29,8 @@ If ($module) {
 }
 
 $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
+if($httpOnly){
+    Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
+} else {
+    Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
+}
