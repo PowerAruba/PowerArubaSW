@@ -63,12 +63,12 @@ function Set-ArubaSWPort {
 
         .EXAMPLE
         $port = Get-ArubaSWPort -port_id 3
-        PS C:\>$port | Set-ArubaSWPort -is_port_enable -name PowerArubaSW-Port
+        PS C:\>$port | Set-ArubaSWPort -is_port_enabled -name PowerArubaSW-Port
 
         Enable the port 3 and set name/description to PowerArubaSW-Port
 
         .EXAMPLE
-        Set-ArubaSWPort -port_id 3 -is_flow_control_enable:$false -is_dsnoop_port_trusted:$false
+        Set-ArubaSWPort -port_id 3 -is_flow_control_enabled:$false -is_dsnoop_port_trusted:$false
 
         Disable the flow control and DHCP Snooping Port Trusted on port_id 3
 
@@ -76,7 +76,7 @@ function Set-ArubaSWPort {
         $port = Get-ArubaSWPort -port_id 3
         PS C:\>$port | Set-ArubaSWPort -config_mode PCM_100HDX
 
-        Configure port 3 to 100 HDX
+        Configure port 3 to Mode 100 HDX
     #>
 
     Param(
