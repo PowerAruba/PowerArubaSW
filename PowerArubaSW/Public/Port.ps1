@@ -41,7 +41,7 @@ function Get-ArubaSWPort {
         $run = ($response | convertfrom-json).port_element
 
         if ( $port_id ) {
-            $run | where-object { $_.id -match $port_id}
+            $run | where-object { $_.id -eq $port_id}
         } else {
             $run
         }
