@@ -52,6 +52,18 @@ Describe  "Configure Port" {
             $PORT.name | should be "PowerArubaSW-Port"
         }
 
+        It "Configure disable Port" {
+            Set-ArubaSWPort -port_id 3 -is_port_enabled:$false
+            $PORT = Get-ArubaSWPort -port_id 3
+            $PORT.is_port_enabled | Should Be $false
+        }
+
+        It "Configure enable Port" {
+            Set-ArubaSWPort -port_id 3 -is_port_enabled
+            $PORT = Get-ArubaSWPort -port_id 3
+            $PORT.is_port_enabled | Should Be $true
+        }
+
         It "Configure Port option (enable flow control/dsnoop port trusted)" {
             Set-ArubaSWPort -port_id 3 -is_flow_control_enabled -is_dsnoop_port_trusted
             $PORT = Get-ArubaSWPort -port_id 3
@@ -89,6 +101,20 @@ Describe  "Configure Port" {
             $PORT | Set-ArubaSWPort -name "PowerArubaSW-Port"
             $PORT = Get-ArubaSWPort -port_id 3
             $PORT.name | should be "PowerArubaSW-Port"
+        }
+
+        It "Configure disable Port" {
+            $PORT = Get-ArubaSWPort -port_id 3
+            $PORT | Set-ArubaSWPort -is_port_enabled:$false
+            $PORT = Get-ArubaSWPort -port_id 3
+            $PORT.is_port_enabled | Should Be $false
+        }
+
+        It "Configure enable Port" {
+            $PORT = Get-ArubaSWPort -port_id 3
+            $PORT | Set-ArubaSWPort -is_port_enabled
+            $PORT = Get-ArubaSWPort -port_id 3
+            $PORT.is_port_enabled | Should Be $true
         }
 
         It "Configure Port option (enable flow control/dsnoop port trusted)" {
