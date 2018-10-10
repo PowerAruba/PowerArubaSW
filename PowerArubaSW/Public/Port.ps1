@@ -52,6 +52,54 @@ function Get-ArubaSWPort {
     }
 }
 
+function Get-ArubaSWPortStatistics {
+
+    <#
+        .SYNOPSIS
+        Get Port Sstatisticsof the Switch
+
+        .DESCRIPTION
+        Get Portinformation
+
+        .EXAMPLE
+        Get-ArubaSWPortStatistics
+
+        Get Port statistics (name, packets/bytes/throughtput/error TX or RX, )
+
+        .EXAMPLE
+        Get-ArubaSWPortStatistics -port_id 3
+
+        Get Port statistics of port_id 3
+    #>
+
+    Param(
+        [Parameter (Mandatory=$false)]
+        [string]$port_id
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/port-statistics"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $run = ($response | convertfrom-json).port_statistics_element
+
+        if ( $port_id ) {
+            $run | where-object { $_.id -eq $port_id}
+        } else {
+            $run
+        }
+
+    }
+
+    End {
+    }
+}
+
 function Set-ArubaSWPort {
 
     <#
