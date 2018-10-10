@@ -149,4 +149,33 @@ Describe  "Configure Port" {
     }
 }
 
+Describe  "Get Port Statistics" {
+
+    It "Get Port Does not throw an error" {
+        {
+            Get-ArubaSWPortStatistics
+        } | Should Not Throw
+    }
+
+    It "Get ALL Port Stastistics" {
+            $PORTS = Get-ArubaSWPortStatistics
+            $PORTS.count | Should not be $NULL
+    }
+
+    It "Get the Port Stastistics (3)" {
+        $PORT = Get-ArubaSWPortStatistics -port_id 3
+        $PORT.id | Should be 3
+        $PORT.name | Should -Not -BeNullOrEmpty
+        $PORT.packets_tx | Should -Not -BeNullOrEmpty
+        $PORT.packets_rx | Should -Not -BeNullOrEmpty
+        $PORT.bytes_tx | Should -Not -BeNullOrEmpty
+        $PORT.bytes_rx | Should -Not -BeNullOrEmpty
+        $PORT.throughput_tx_bps | Should -Not -BeNullOrEmpty
+        $PORT.throughput_rx_bps | Should -Not -BeNullOrEmpty
+        $PORT.error_tx | Should -Not -BeNullOrEmpty
+        $PORT.error_rx | Should -Not -BeNullOrEmpty
+        $PORT.drop_tx | Should -Not -BeNullOrEmpty
+        $PORT.port_speed_mbps | Should -Not -BeNullOrEmpty
+    }
+}
 Disconnect-ArubaSW -noconfirm
