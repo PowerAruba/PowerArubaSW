@@ -16,7 +16,7 @@ Describe  "Get Port" {
     It "Get Port Does not throw an error" {
         {
             Get-ArubaSWPort
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get ALL Port" {
