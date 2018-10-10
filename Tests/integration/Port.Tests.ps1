@@ -6,9 +6,6 @@
 . ../common.ps1
 #TODO: Add check if no ipaddress/login/password info...
 
-$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
-
 Describe  "Get Port" {
     BeforeAll {
         #Always set name to DEFAULT_PORT (no way to remove Port name/description...)
