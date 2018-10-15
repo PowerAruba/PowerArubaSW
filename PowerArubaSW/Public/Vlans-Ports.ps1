@@ -109,10 +109,10 @@ function Get-ArubaSWVlansPorts {
         $vlansports = ($response.Content | convertfrom-json).vlan_port_element
 
         if ($PsBoundParameters.ContainsKey('vlan_id')){
-            $vlansports = $vlansports | where-object {$_.vlan_id -match $vlan_id}
+            $vlansports = $vlansports | where-object {$_.vlan_id -eq $vlan_id}
         }
         if ($PsBoundParameters.ContainsKey('port_id')){
-            $vlansports = $vlansports | where-object {$_.port_id -match $port_id}
+            $vlansports = $vlansports | where-object {$_.port_id -eq $port_id}
         }
         $vlansports
     }
