@@ -358,7 +358,7 @@ $bnum = 1
 
 # Entering data in Excel
 
- function ExcelFormatArray  {
+ function Add-ExcelFormatArray {
  Param ([string]$name,
         [string]$letter1,
         [string]$letter2,
@@ -390,28 +390,28 @@ $bnum = 1
 
 
 
-ExcelFormatArray -name 'Name :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Name :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $row++
 $anum++
 $bnum++ 
 
 
-ExcelFormatArray -name 'Serial Number :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Serial Number :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $row++
 $anum++
 $bnum++ 
 
 
-ExcelFormatArray -name 'Firmware Version :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Firmware Version :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 $row++
 $anum++
 $bnum++ 
 
-ExcelFormatArray -name 'Hardware Revision :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Hardware Revision :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 
@@ -420,7 +420,7 @@ $anum++
 $bnum++ 
 
 
-ExcelFormatArray -name 'Product Model :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Product Model :' -letter1 A -letter2 B -emplacementtxt xlRight -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 
@@ -430,14 +430,14 @@ $anum = 1
 $bnum = 1
 
 
-    ExcelFormatArray -name $infoswitch.name -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $infoswitch.name -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $anum++
     $bnum++ 
         
 
-    ExcelFormatArray -name $infoswitch.serial_number -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $infoswitch.serial_number -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
 
     $row++
@@ -445,21 +445,21 @@ $bnum = 1
     $bnum++ 
 
 
-    ExcelFormatArray -name $infoswitch.firmware_version -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $infoswitch.firmware_version -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $anum++
     $bnum++
 
 
-    ExcelFormatArray -name $infoswitch.hardware_revision -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $infoswitch.hardware_revision -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $anum++
     $bnum++
 
 
-    ExcelFormatArray -name $infoswitch.product_model -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $infoswitch.product_model -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
     
 
 
@@ -473,45 +473,45 @@ $bnum = 10
 
 
 
-ExcelFormatArray -name 'Name' -letter1 A -letter2 B -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Name' -letter1 A -letter2 B -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 $Column++
 $Column++  
 
-ExcelFormatArray -name 'Port ID' -letter1 C -letter2 D -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Port ID' -letter1 C -letter2 D -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
 
-ExcelFormatArray -name 'Port Tagged' -letter1 E -letter2 F -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Port Tagged' -letter1 E -letter2 F -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-ExcelFormatArray -name 'Port Untagged' -letter1 G -letter2 H -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Port Untagged' -letter1 G -letter2 H -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-ExcelFormatArray -name 'LACP Status' -letter1 I -letter2 J -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'LACP Status' -letter1 I -letter2 J -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-ExcelFormatArray -name 'Is Port UP' -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'Is Port UP' -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
 
-ExcelFormatArray -name 'LLDP Port ID' -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'LLDP Port ID' -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 $Column++ 
 $Column++ 
 
-ExcelFormatArray -name 'LLDP Port Description' -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
+Add-ExcelFormatArray -name 'LLDP Port Description' -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 55 -fontsize 10 -interiorcolorindex 15
 
 
 $row = 11
@@ -528,44 +528,44 @@ $entries = $resultarray
 
 foreach ($entry in $entries)  {
 
-    ExcelFormatArray -name $entry.name -letter1 A -letter2 B -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.name -letter1 A -letter2 B -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
 
     $Column++ 
     $Column++
 
 
-    ExcelFormatArray -name $entry.port_id -letter1 C -letter2 D -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.port_id -letter1 C -letter2 D -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    ExcelFormatArray -name $entry.port_tagged -letter1 E -letter2 F -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.port_tagged -letter1 E -letter2 F -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    ExcelFormatArray -name $entry.port_untagged -letter1 G -letter2 H -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.port_untagged -letter1 G -letter2 H -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    ExcelFormatArray -name $entry.lacp_status -letter1 I -letter2 J -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.lacp_status -letter1 I -letter2 J -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++
 
-    ExcelFormatArray -name $entry.is_port_up -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.is_port_up -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++    
 
-    ExcelFormatArray -name $entry.lldp_port_id -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.lldp_port_id -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++ 
     $Column++  
 
-    ExcelFormatArray -name $entry.lldp_port_description -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+    Add-ExcelFormatArray -name $entry.lldp_port_description -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $row++
     $column=1
