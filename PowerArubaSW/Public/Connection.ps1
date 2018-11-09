@@ -119,10 +119,12 @@ function Connect-ArubaSW {
             if ($switchstatus.switch_type -eq "ST_STACKED") {
                 $product_name = $NULL;
                 foreach ($blades in $switchstatus.blades ){
-                    if ($product_name) {
-                        $product_name += ", "
+                    if($blades.product_name) {
+                        if ($product_name) {
+                            $product_name += ", "
+                        }
+                        $product_name += $blades.product_name
                     }
-                    $product_name += $blades.product_name
                 }
             } else {
                 $product_name = $switchstatus.product_name
