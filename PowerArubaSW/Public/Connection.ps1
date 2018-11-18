@@ -95,7 +95,7 @@ function Connect-ArubaSW {
         }
 
         try {
-            $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw -DisableKeepAlive
+            $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw -DisableKeepAlive -UseBasicParsing
         }
         catch {
             #$_
