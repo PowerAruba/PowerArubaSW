@@ -136,7 +136,7 @@ or using `Connect-ArubaSW -httpOnly`
 
 
 # List of available command
-```
+```powershell
 Add-ArubaSWLACP
 Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
