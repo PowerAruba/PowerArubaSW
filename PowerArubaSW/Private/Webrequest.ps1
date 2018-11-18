@@ -61,7 +61,7 @@ function Invoke-ArubaSWWebRequest(){
         if( -Not $PsBoundParameters.ContainsKey('sessionvariable') ){
             $sessionvariable = $DefaultArubaSWConnection.session
         }
-        
+
         try {
             if($body){
                 $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable -DisableKeepAlive -UseBasicParsing
