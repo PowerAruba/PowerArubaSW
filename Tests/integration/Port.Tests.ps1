@@ -7,12 +7,14 @@
 #TODO: Add check if no ipaddress/login/password info...
 
 Describe  "Get Port" {
+
     BeforeAll {
         #Always set name to DEFAULT_PORT (no way to remove Port name/description...)
         Set-ArubaSWPort -port_id 3 -name DEFAULT_PORT
         #Always enable the port (disabled on WorkBench...)
         Set-ArubaSWPort -port_id 3 -is_port_enable
     }
+
     It "Get Port Does not throw an error" {
         {
             Get-ArubaSWPort
@@ -20,8 +22,8 @@ Describe  "Get Port" {
     }
 
     It "Get ALL Port" {
-            $PORTS = Get-ArubaSWPort
-            $PORTS.count | Should not be $NULL
+        $PORTS = Get-ArubaSWPort
+        $PORTS.count | Should not be $NULL
     }
 
     It "Get the Port ID (3)" {
@@ -157,9 +159,9 @@ Describe  "Get Port Statistics" {
         } | Should Not Throw
     }
 
-    It "Get ALL Port Stastistics" {
-            $PORTS = Get-ArubaSWPortStatistics
-            $PORTS.count | Should not be $NULL
+    It "Get ALL Ports Stastistics" {
+        $PORTS = Get-ArubaSWPortStatistics
+        $PORTS.count | Should not be $NULL
     }
 
     It "Get the Port Stastistics (3)" {
@@ -177,5 +179,7 @@ Describe  "Get Port Statistics" {
         $PORT.drop_tx | Should -Not -BeNullOrEmpty
         $PORT.port_speed_mbps | Should -Not -BeNullOrEmpty
     }
+
 }
+
 Disconnect-ArubaSW -noconfirm

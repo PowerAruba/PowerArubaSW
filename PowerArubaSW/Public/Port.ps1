@@ -11,7 +11,7 @@ function Get-ArubaSWPort {
         Get Port of the Switch
 
         .DESCRIPTION
-        Get Portinformation
+        Get Port information
 
         .EXAMPLE
         Get-ArubaSWPort
@@ -56,15 +56,15 @@ function Get-ArubaSWPortStatistics {
 
     <#
         .SYNOPSIS
-        Get Port Sstatisticsof the Switch
+        Get Port Statistics of the Switch
 
         .DESCRIPTION
-        Get Portinformation
+        Get Port Statistics
 
         .EXAMPLE
         Get-ArubaSWPortStatistics
 
-        Get Port statistics (name, packets/bytes/throughtput/error TX or RX, )
+        Get Port statistics (name, packets/bytes/throughtput/error TX or RX...)
 
         .EXAMPLE
         Get-ArubaSWPortStatistics -port_id 3
@@ -196,6 +196,7 @@ function Set-ArubaSWPort {
                 $_port | add-member -name "is_dsnoop_port_trusted" -membertype NoteProperty -Value $false
             }
         }
+
         $response = invoke-ArubaSWWebRequest -method "PUT" -body $_port -url $url
 
         $response | convertfrom-json
