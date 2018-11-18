@@ -39,9 +39,9 @@ function Invoke-ArubaSWWebRequest(){
         
         try {
             if($body){
-                $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable -DisableKeepAlive
+                $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable -DisableKeepAlive -UseBasicParsing
             } else {
-                $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable -DisableKeepAlive
+                $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable -DisableKeepAlive -UseBasicParsing
             }
         }
         catch {
