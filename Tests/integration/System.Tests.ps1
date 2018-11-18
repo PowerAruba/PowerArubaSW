@@ -10,7 +10,7 @@ Describe  "Get System" {
     It "Get System Does not throw an error" {
         {
             Get-ArubaSWSystem
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get System (info)" {
@@ -65,7 +65,7 @@ Describe  "Get System Status" {
     It "Get System Does not throw an error" {
         {
             Get-ArubaSWSystemStatus
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get SystemStatus (info)" {
