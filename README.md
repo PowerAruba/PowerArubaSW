@@ -15,6 +15,7 @@ With this module (version 0.5.0) you can manage:
 - LLDP (Get|Set GlobalStatus, Get ports/neighbor stats, Get Remote)
 - LACP (Add/Configure/Remove)
 - Led Locator (Get|Set Led indicator)
+- Ports (Information (name, status, config_mode...) and Statistics)
 
 More functionality will be added later.
 
@@ -147,6 +148,8 @@ Get-ArubaSWLLDPGlobalStatus
 Get-ArubaSWLLDPNeighborStats
 Get-ArubaSWLLDPPortStats
 Get-ArubaSWLLDPRemote
+Get-ArubaSWPort
+Get-ArubaSWPortStatistics
 Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSystem
@@ -165,6 +168,7 @@ Remove-ArubaSWVlansPorts
 Set-ArubaSWCipherSSL
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
+Set-ArubaSWPort
 Set-ArubaSWRestSessionTimeout
 Set-ArubaSWSystem
 Set-ArubaSWuntrustedSSL
