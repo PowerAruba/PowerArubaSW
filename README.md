@@ -154,11 +154,6 @@ Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSystem
 Get-ArubaSWSystemStatus
-Get-ArubaSWSystemStatusCpu
-Get-ArubaSWSystemStatusMemory
-Get-ArubaSWSystemStatusStorage
-Get-ArubaSWSystemStatusSwitch
-Get-ArubaSWSystemStatusTime
 Get-ArubaSWVlans
 Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
