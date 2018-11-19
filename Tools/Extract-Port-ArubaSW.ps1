@@ -28,25 +28,25 @@ This script uses Microsoft Excel, the software will need to be installed on the 
 
 The script can be executed with the following argument list
 
-Extract-Port-ArubSW.ps1 -CompanyName <company name> -IPSwitch <switch ip> -LoginSwitch <switch login> -PassSwitch <switch password>
+Extract-Port-ArubaSW.ps1 -CompanyName <company name> -IPSwitch <switch ip> -LoginSwitch <switch login> -PassSwitch <switch password>
   
   .EXAMPLE
 The script can be executed without specifying the type of argument as long as the order of the arguments <company name> <switch ip> <switch login> <switch password> is respected
 
-Extract-Port-ArubSW.ps1 <company name> <switch ip> <switch login> <switch password>
+Extract-Port-ArubaSW.ps1 <company name> <switch ip> <switch login> <switch password>
 
   .EXAMPLE
 
 The script can be executed without arguments, questions will be asked to the user during this one.
 
-Extract-Port-ArubSW.ps1 
+Extract-Port-ArubaSW.ps1 
 
   .NOTES
 
   Version:        1.5
   Author:         <Benjamin PERRIER>
   Creation Date:  <21/09/2018>
-  Script Name: Extract-Port-ArubSW
+  Script Name: Extract-Port-ArubaSW
 
   #>
   
