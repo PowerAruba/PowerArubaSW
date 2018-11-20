@@ -246,11 +246,9 @@ if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEm
         }
     }
 
-# Creation of the run variable
+# Creation of the ports variable
 
-$url = "rest/v4/ports"
-$response = invoke-ArubaSWWebRequest -method "GET" -url $url
-$run = ($response | convertfrom-json).port_element
+$ports = Get-ArubaSWPort
 
 # Creation of the vlanports variable
 $vlanports = Get-ArubaSWVlansPorts
@@ -259,7 +257,7 @@ $lldpremote = Get-ArubaSWLLDPRemote
 $resultarray=@()
 
 # Crossing the information of the run variable against the vlanports variable
-foreach ($port in $run) {
+foreach ($port in $ports) {
 
     $v = $vlanports | Where-Object {$_.port_id -eq $port.id}
     $tagged=$null
