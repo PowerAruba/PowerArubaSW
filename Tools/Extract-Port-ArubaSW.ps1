@@ -5,20 +5,20 @@ This script is used to extract data from an Aruba switch and to classify this in
   .DESCRIPTION
 
 The Excel file contains :       -Name of the switch
-                                -Serial Number
-                                -Firmware
-                                -Hardware Revision
-                                -Product Model
+                -Serial Number
+                -Firmware
+                -Hardware Revision
+                -Product Model
 
 
-                                -Name of the port
-                                -ID of the port
-                                -Tagged ports vlan
-                                -Untagged ports vlan
-                                -LACP Status
-                                -Is port UP
-                                -LLDP Port ID
-                                -LLDP PORT Description
+                -Name of the port
+                -ID of the port
+                -Tagged ports vlan
+                -Untagged ports vlan
+                -LACP Status
+                -Is port UP
+                -LLDP Port ID
+                -LLDP PORT Description
 
 
 This script requires the PowerArubaSW module to be installed. More information at https://github.com/PowerAruba/PowerArubaSW
@@ -29,7 +29,7 @@ This script uses Microsoft Excel, the software will need to be installed on the 
 The script can be executed with the following argument list
 
 Extract-Port-ArubaSW.ps1 -CompanyName <company name> -IPSwitch <switch ip> -LoginSwitch <switch login> -PassSwitch <switch password>
- 
+
   .EXAMPLE
 The script can be executed without specifying the type of argument as long as the order of the arguments <company name> <switch ip> <switch login> <switch password> is respected
 
@@ -43,13 +43,13 @@ Extract-Port-ArubaSW.ps1
 
   .NOTES
 
-  Version:        1.5
-  Author:         <Benjamin PERRIER>
+  Version:    1.5
+  Author:     <Benjamin PERRIER>
   Creation Date:  <21/09/2018>
   Script Name: Extract-Port-ArubaSW
 
   #>
- 
+
 # Parameters :
 Param(
   [string]$CompanyName,
@@ -61,82 +61,82 @@ Param(
 # Functions :
  function Add-ExcelFormatArray {
  Param ([string]$name,
-        [string]$letter1,
-        [string]$letter2,
-        [string]$emplacementtxt,
-        [string]$fontcolorindex,
-        [string]$fontsize,
-        [string]$interiorcolorindex)
+    [string]$letter1,
+    [string]$letter2,
+    [string]$emplacementtxt,
+    [string]$fontcolorindex,
+    [string]$fontsize,
+    [string]$interiorcolorindex)
 
-                        $sheet.Cells.Item($row,$column)= $name
-                        $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
-                        $MergeCells.MergeCells = $true
-                        $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
-                        $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::$emplacementtxt
-                        $sheet.Cells.Item($row,$column).Font.Size = $fontsize
-                        $sheet.Cells.Item($row,$column).Font.Bold=$True
-                        $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
-                        $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
-                        $sheet.Cells.Item($row,$column).Font.ThemeColor = 4
-                        $sheet.Cells.Item($row,$column).Font.ColorIndex = $fontcolorindex
-                        $sheet.Cells.Item($row,$column).Interior.ColorIndex = $interiorcolorindex
-                        $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
-                        $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
+        $sheet.Cells.Item($row,$column)= $name
+        $MergeCells = $sheet.Range("$letter1$($anum):$letter2$($bnum)")
+        $MergeCells.MergeCells = $true
+        $xlConstants = "microsoft.office.interop.excel.Constants" -as [type]
+        $sheet.Cells($row,$column).HorizontalAlignment = $xlConstants::$emplacementtxt
+        $sheet.Cells.Item($row,$column).Font.Size = $fontsize
+        $sheet.Cells.Item($row,$column).Font.Bold=$True
+        $sheet.Cells.Item($row,$column).Font.Name = "Cambria"
+        $sheet.Cells.Item($row,$column).Font.ThemeFont = 1
+        $sheet.Cells.Item($row,$column).Font.ThemeColor = 4
+        $sheet.Cells.Item($row,$column).Font.ColorIndex = $fontcolorindex
+        $sheet.Cells.Item($row,$column).Interior.ColorIndex = $interiorcolorindex
+        $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.LineStyle = [Microsoft.Office.Interop.Excel.XlLineStyle]::xlContinuous
+        $sheet.Cells.Range("$letter1$($anum):$letter2$($bnum)").Borders.Weight = 3
 
-                     }
+        }
 
 #TESTING THE PRESENCE OF THE POWERARUBASW MODULE
 if (Get-Module -ListAvailable -Name PowerArubaSW) {
 
-        Import-Module PowerArubaSW
-        Clear-Host
+    Import-Module PowerArubaSW
+    Clear-Host
 
 } else {
 
-        Clear-Host
-        Write-Host ""
-        Write-Host "############################################################"
-        Write-Host ""
-        Write-Host ""
-        Write-Host ""
-        Write-Host "    !!! THE POWERARUBASW MODULE IS NOT INSTALLING !!!"
-        Write-Host ""
-        Write-Host "         In order to install this module type the command"
-        Write-Host "                Install-Module PowerArubaSW"
-        Write-Host ""
-        Write-Host "            Then restart that script again."
-        Write-Host ""
-        Write-Host ""
-        Write-Host ""
-        Write-Host "############################################################"
-        Write-Host ""
-        Write-Host ""
-        $exitquit = Read-Host "Press any key to exit"
-        break
-      
-        }
+    Clear-Host
+    Write-Host ""
+    Write-Host "############################################################"
+    Write-Host ""
+    Write-Host ""
+    Write-Host ""
+    Write-Host "    !!! THE POWERARUBASW MODULE IS NOT INSTALLING !!!"
+    Write-Host ""
+    Write-Host "     In order to install this module type the command"
+    Write-Host "        Install-Module PowerArubaSW"
+    Write-Host ""
+    Write-Host "        Then restart that script again."
+    Write-Host ""
+    Write-Host ""
+    Write-Host ""
+    Write-Host "############################################################"
+    Write-Host ""
+    Write-Host ""
+    $exitquit = Read-Host "Press any key to exit"
+    break
+
+    }
 
 # Company name request if not given as an argument
 if ([string]::IsNullOrEmpty($CompanyName)) {
 
 
-        Clear-Host
-        Write-Host ""
-        Write-Host "############################################################"
-        Write-Host ""
-        Write-Host ""
-        Write-Host ""
-        Write-Host "                What is the name of the company?"
-        Write-Host ""
-        Write-Host ""
-        Write-Host ""
-        Write-Host "############################################################"
-        Write-Host ""
-        Write-Host ""
-        $CompanyName = Read-Host "Please enter the name of the company"
-        Clear-Host
+    Clear-Host
+    Write-Host ""
+    Write-Host "############################################################"
+    Write-Host ""
+    Write-Host ""
+    Write-Host ""
+    Write-Host "        What is the name of the company?"
+    Write-Host ""
+    Write-Host ""
+    Write-Host ""
+    Write-Host "############################################################"
+    Write-Host ""
+    Write-Host ""
+    $CompanyName = Read-Host "Please enter the name of the company"
+    Clear-Host
 
-        }
+    }
 
 #Save the date as day / month / year in the date variable
 $date = Get-Date -format "dd-MM-yyyy"
@@ -150,7 +150,7 @@ if ([string]::IsNullOrEmpty($ipswitch)) {
     Write-Host ""
     Write-Host ""
     Write-Host ""
-    Write-Host "             What is the IP address of the switch?"
+    Write-Host "         What is the IP address of the switch?"
     Write-Host ""
     Write-Host ""
     Write-Host ""
@@ -169,7 +169,7 @@ Write-Host "####################################################################
 Write-Host ""
 Write-Host "       An excel file will be automatically created"
 Write-Host ""
-Write-Host "        It will be stored in $env:USERPROFILE\Desktop\"
+Write-Host "    It will be stored in $env:USERPROFILE\Desktop\"
 Write-Host ""
 Write-Host "       and will be named $($date)_$($CompanyName)_$($ipswitch).xlsx"
 Write-Host ""
@@ -180,73 +180,71 @@ Write-Host ""
 #Verification of loginswitch and passswitch variables
 if ((-not [string]::IsNullOrEmpty($loginswitch)) -and (-not [string]::IsNullOrEmpty($PassSwitch))) {
 
-        $mysecpassword = ConvertTo-SecureString $PassSwitch -AsPlainText -Force
+    $mysecpassword = ConvertTo-SecureString $PassSwitch -AsPlainText -Force
 
-        try {
+    try {
 
-                Connect-ArubaSW -Server $ipswitch -Username $loginswitch -Password $mysecpassword
-               
-                }
+        Connect-ArubaSW -Server $ipswitch -Username $loginswitch -Password $mysecpassword
 
-        Catch {
+        }
 
-                Clear-Host
-                Write-Host ""
-                Write-Host "############################################################"
-                Write-Host ""
-                Write-Host ""
-                Write-Host ""
-                Write-Host "              !!! CAN NOT CONNECT TO SWITCH !!!"
-                Write-Host ""
-                Write-Host "       Check that the IP or login and password is valid."
-                Write-Host ""
-                Write-Host ""
-                Write-Host "              Then restart that script again."
-                Write-Host ""
-                Write-Host ""
-                Write-Host ""
-                Write-Host "############################################################"
-                Write-Host ""
-                Write-Host ""
-                $exitquit = Read-Host "Press any key to exit"
-                break
+    Catch {
 
-                }       
-      
+        Clear-Host
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "          !!! CAN NOT CONNECT TO SWITCH !!!"
+        Write-Host ""
+        Write-Host "       Check that the IP or login and password is valid."
+        Write-Host ""
+        Write-Host ""
+        Write-Host "          Then restart that script again."
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        $exitquit = Read-Host "Press any key to exit"
+        break
+
+    }
+
 } else {
 
-        try {
+    try {
 
-                Connect-ArubaSW -Server $ipswitch
-               
-                }
-
-        Catch {
-
-                Clear-Host
-                Write-Host ""
-                Write-Host "############################################################"
-                Write-Host ""
-                Write-Host ""
-                Write-Host ""
-                Write-Host "              !!! CAN NOT CONNECT TO SWITCH !!!"
-                Write-Host ""
-                Write-Host "       Check that the IP or login and password is valid."
-                Write-Host ""
-                Write-Host ""
-                Write-Host "              Then restart that script again."
-                Write-Host ""
-                Write-Host ""
-                Write-Host ""
-                Write-Host "############################################################"
-                Write-Host ""
-                Write-Host ""
-                $exitquit = Read-Host "Press any key to exit"
-                break
-
-                }
-       
+        Connect-ArubaSW -Server $ipswitch
         }
+
+    Catch {
+
+        Clear-Host
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "          !!! CAN NOT CONNECT TO SWITCH !!!"
+        Write-Host ""
+        Write-Host "       Check that the IP or login and password is valid."
+        Write-Host ""
+        Write-Host ""
+        Write-Host "          Then restart that script again."
+        Write-Host ""
+        Write-Host ""
+        Write-Host ""
+        Write-Host "############################################################"
+        Write-Host ""
+        Write-Host ""
+        $exitquit = Read-Host "Press any key to exit"
+        break
+
+        }
+    }
 
 # Creation of the run variable
 
@@ -268,42 +266,42 @@ foreach ($port in $run) {
     $w = $lldpremote | Where-Object {$lldpremote.local_port -eq $port.id}
 
     $countvlan = -1
-       
-        foreach ($vlanp in $v) {
-           
-                $countvlan ++
-               
-                }
 
-        $comacountvlan = 0
-     
-        foreach ($vlanp in $v) {
-           
-            if ($comacountvlan -eq $countvlan) {
+    foreach ($vlanp in $v) {
 
-                                                $coma = ''
-                                           
-                                                } else {
-                                           
-                                                $coma = ', '
-                                           
-                                                }
-
-            if ($vlanp.port_mode -eq "POM_UNTAGGED") {
-
-                    $untagged = $vlanp.vlan_id
-                   
-                    }
-
-            if ($vlanp.port_mode -eq "POM_TAGGED_STATIC") {
-
-                    $tagged += "$($vlanp.vlan_id)$coma"
-                   
-                    }
-
-            $comacountvlan++
+        $countvlan ++
 
         }
+
+    $comacountvlan = 0
+
+    foreach ($vlanp in $v) {
+
+        if ($comacountvlan -eq $countvlan) {
+
+                        $coma = ''
+
+                        } else {
+
+                        $coma = ', '
+
+                        }
+
+        if ($vlanp.port_mode -eq "POM_UNTAGGED") {
+
+            $untagged = $vlanp.vlan_id
+
+            }
+
+        if ($vlanp.port_mode -eq "POM_TAGGED_STATIC") {
+
+            $tagged += "$($vlanp.vlan_id)$coma"
+
+            }
+
+        $comacountvlan++
+
+    }
 
     $item = New-Object PSObject
     $item | Add-Member -type NoteProperty -Name 'name' -Value $($port.name)
@@ -322,11 +320,11 @@ foreach ($port in $run) {
 $infoswitch = Get-ArubaSWSystemStatus
 
 # Launching an instance of MS Excel
-$excel = New-Object -ComObject "Excel.Application"           
+$excel = New-Object -ComObject "Excel.Application"
 $excel.Visible = $True
 $excel.DisplayAlerts = $False
 
-# Creating an Excel sheet + activating the current sheet  
+# Creating an Excel sheet + activating the current sheet
 $workbook = $excel.Workbooks.Add()
 $sheet = $workbook.Worksheets.Item(1)
 $sheet.Activate() | Out-Null
@@ -369,31 +367,31 @@ $Column = 3
 $anum = 1
 $bnum = 1
 
-    Add-ExcelFormatArray -name $infoswitch.name -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+Add-ExcelFormatArray -name $infoswitch.name -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
-    $row++
-    $anum++
-    $bnum++
+$row++
+$anum++
+$bnum++
 
-    Add-ExcelFormatArray -name $infoswitch.serial_number -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+Add-ExcelFormatArray -name $infoswitch.serial_number -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
-    $row++
-    $anum++
-    $bnum++
+$row++
+$anum++
+$bnum++
 
-    Add-ExcelFormatArray -name $infoswitch.firmware_version -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+Add-ExcelFormatArray -name $infoswitch.firmware_version -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
-    $row++
-    $anum++
-    $bnum++
+$row++
+$anum++
+$bnum++
 
-    Add-ExcelFormatArray -name $infoswitch.hardware_revision -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+Add-ExcelFormatArray -name $infoswitch.hardware_revision -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
-    $row++
-    $anum++
-    $bnum++
+$row++
+$anum++
+$bnum++
 
-    Add-ExcelFormatArray -name $infoswitch.product_model -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
+Add-ExcelFormatArray -name $infoswitch.product_model -letter1 C -letter2 G -emplacementtxt xlLeft -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
 $row = 10
 $Column = 1
@@ -475,12 +473,12 @@ foreach ($entry in $entries)  {
     Add-ExcelFormatArray -name $entry.is_port_up -letter1 K -letter2 L -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++
-    $Column++   
+    $Column++
 
     Add-ExcelFormatArray -name $entry.lldp_port_id -letter1 M -letter2 N -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
     $Column++
-    $Column++ 
+    $Column++
 
     Add-ExcelFormatArray -name $entry.lldp_port_description -letter1 O -letter2 P -emplacementtxt xlCenter -fontcolorindex 1 -fontsize 10 -interiorcolorindex 19
 
@@ -488,7 +486,7 @@ foreach ($entry in $entries)  {
     $column=1
     $anum ++
     $bnum ++
-   
+
     }
 
 # Saving the excel file:
