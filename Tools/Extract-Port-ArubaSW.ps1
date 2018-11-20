@@ -254,7 +254,7 @@ $run = ($response | convertfrom-json).port_element
 
 # Creation of the vlanports variable
 $vlanports = Get-ArubaSWVlansPorts
-$lldpremote = get-arubaswlldpremote
+$lldpremote = Get-ArubaSWLLDPRemote
 
 $resultarray=@()
 
