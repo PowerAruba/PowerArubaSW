@@ -89,6 +89,8 @@ function Connect-ArubaSW {
             if(!$port){
                 $port = 443
             }
+            #Enable TLS 1.1 and 1.2
+            Set-ArubaSWCipherSSL
             #Disable SSL chain trust...
             Set-ArubaSWuntrustedSSL
             $url = "https://${Server}:${port}/rest/v3/login-sessions"
