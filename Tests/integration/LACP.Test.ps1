@@ -27,7 +27,7 @@ Describe  "Add ArubaSWLACP" {
 
     It "Change trunk group on a port without removing it before" {
         Add-ArubaSWLACP -trunk_group trk2 -port 5
-        { Add-ArubaSWLACP -trunk_group trk6 -port 5 } | Should Throw
+        { Add-ArubaSWLACP -trunk_group trk6 -port 5 3> $null } | Should Throw
         Remove-ArubaSWLACP -trunk_group trk2 -port 5 -noconfirm
     }
 
@@ -41,7 +41,7 @@ Describe  "Add ArubaSWLACP" {
 
 Describe  "Remove Aruba LACP" {
     It "Remove ArubaSWLACP does throw an error if trunk group doesn't exist on a port" {
-        { Remove-ArubaSWLACP -trunk_group trk2 -port 5 -noconfirm } | Should Throw 
+        { Remove-ArubaSWLACP -trunk_group trk2 -port 5 -noconfirm 3> $null } | Should Throw
     }
 
     It "Remove ArubaSWLACP does not throw an error if the trunk group exist on a port" {
