@@ -81,4 +81,20 @@ Describe  "Get System Status" {
     }
 }
 
+Describe  "Get System Status Switch" {
+    It "Get System Status SwitchDoes not throw an error" {
+        {
+            Get-ArubaSWSystemStatusSwitch
+        } | Should Not Throw
+    }
+
+    It "Get System Status Switch" {
+            $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
+            $SYSTEM_STATUS_SWITCH.switch_type | Should not be $NULL
+            $SYSTEM_STATUS_SWITCH.product_name | should not be $NULL
+            $SYSTEM_STATUS_SWITCH.product_number | should not be $NULL
+            $SYSTEM_STATUS_SWITCH.hardware_info | should not be $NULL
+            $SYSTEM_STATUS_SWITCH.blades | should not be $NULL
+    }
+}
 Disconnect-ArubaSW -noconfirm
