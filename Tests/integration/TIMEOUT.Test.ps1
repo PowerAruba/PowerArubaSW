@@ -38,10 +38,12 @@ Describe  "Set RestSessionTimeout" {
         $timeout | Should be "600"
     }
 
-    It "Check range of RestSessionTimeout value" {
+    It "Check range (min) of RestSessionTimeout value" {
         $change = 90
         {Set-ArubaSWRestSessionTimeout -timeout $change} | Should Throw
-        
+    }
+
+    It "Check range (max) of RestSessionTimeout value" {
         $change = 8500
         {Set-ArubaSWRestSessionTimeout -timeout $change} | Should Throw
     }
