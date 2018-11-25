@@ -20,9 +20,8 @@ Describe  "Get RestSessionTimeout" {
     }
 
     It "Get RestSessionTimeout equals 600" {
-        {
-            Get-ArubaSWRestSessionTimeout
-        } | Should be "600"
+        $timeout = Get-ArubaSWRestSessionTimeout
+        $timeout | Should be "600"
     }
 }
 
