@@ -124,38 +124,6 @@ function Get-ArubaSWSystemStatus {
     }
 }
 
-function Get-ArubaSWSystemStatusCpu {
-
-    <#
-        .SYNOPSIS
-        Get System Status CPU about ArubaOS Switch (Provision)
-
-        .DESCRIPTION
-        Get System Status CPU
-
-        .EXAMPLE
-        Get-ArubaSWSystemStatusCpu
-
-        Get System Status CPU
-
-    #>
-
-    Begin {
-    }
-
-    Process {
-
-        $url = "rest/v4/system/status/cpu"
-
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
-
-        $response.content | convertfrom-json
-    }
-
-    End {
-    }
-}
-
 function Get-ArubaSWSystemStatusSwitch {
 
     <#
