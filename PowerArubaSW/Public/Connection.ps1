@@ -73,7 +73,7 @@ function Connect-ArubaSW {
             $Credentials = New-Object System.Management.Automation.PSCredential($Username, $Password)
         }
         #Not Credentials (and no password)
-        if ($Credentials -eq $null)
+        if ($NULL -eq $Credentials)
         {
             $Credentials = Get-Credential -Message 'Please enter administrative credentials for your ArubaOS Switch'
         }
