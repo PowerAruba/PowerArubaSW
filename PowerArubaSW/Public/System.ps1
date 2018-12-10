@@ -151,3 +151,35 @@ function Get-ArubaSWSystemStatusSwitch {
     End {
     }
 }
+
+function Get-ArubaSWSystemStatusGlobal {
+
+    <#
+        .SYNOPSIS
+        Get System Status Global Info about ArubaOS Switch (Provision)
+
+        .DESCRIPTION
+        Get System Status Global Info (Only work on VSF Switch !)
+
+        .EXAMPLE
+        Get-ArubaSWSystemStatusGlobal
+
+        Get System Status Global Info (Name, Firmware...)
+
+    #>
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/system/status/global_info"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $response.content | convertfrom-json
+    }
+
+    End {
+    }
+}
