@@ -100,7 +100,7 @@ function Connect-ArubaSW {
             $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw -DisableKeepAlive -UseBasicParsing
         }
         catch {
-            Show-ArubaSWWebRequestException -Exception $_
+            Show-ArubaSWException -Exception $_
             throw "Unable to connect"
         }
         $cookie = ($response.content | ConvertFrom-Json).cookie
