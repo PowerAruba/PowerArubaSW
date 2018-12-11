@@ -89,10 +89,14 @@ function Connect-ArubaSW {
             if(!$port){
                 $port = 443
             }
-            #Enable TLS 1.1 and 1.2
-            Set-ArubaSWCipherSSL
-            #Disable SSL chain trust...
-            Set-ArubaSWuntrustedSSL
+
+            #for PowerShell (<=) 5 (Desktop), Enable TLS 1.1, 1.2 and Disable SSL chain trust
+            if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                #Enable TLS 1.1 and 1.2
+                Set-ArubaSWCipherSSL
+                #Disable SSL chain trust...
+                Set-ArubaSWuntrustedSSL
+            }
             $url = "https://${Server}:${port}/rest/v3/login-sessions"
         }
 
