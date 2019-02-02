@@ -25,6 +25,7 @@ function Invoke-ArubaSWWebRequest(){
         $Server = ${DefaultArubaSWConnection}.Server
         $httpOnly = ${DefaultArubaSWConnection}.httpOnly
         $port = ${DefaultArubaSWConnection}.port
+        $invokeParams = ${DefaultArubaSWConnection}.InvokeParams
 
         if($httpOnly) {
             $fullurl = "http://${Server}:${port}/${url}"
@@ -38,9 +39,9 @@ function Invoke-ArubaSWWebRequest(){
 
         try {
             if($body){
-                $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable -DisableKeepAlive -UseBasicParsing
+                $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable @invokeParams
             } else {
-                $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable -DisableKeepAlive -UseBasicParsing
+                $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable @invokeParams
             }
         }
         catch {

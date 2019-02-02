@@ -57,6 +57,8 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [switch]$httpOnly=$false,
         [Parameter(Mandatory = $false)]
+        [switch]$SkipCertificateCheck=$false,
+        [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
         [int]$port
     )
@@ -66,7 +68,7 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server="";session="";cookie="";httpOnly=$false;port=""}
+        $connection = @{server="";session="";cookie="";httpOnly=$false;port="";invokeParams=""}
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -79,6 +81,8 @@ function Connect-ArubaSW {
         }
 
         $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
+        $invokeParams = @{DisableKeepAlive = $true; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck}
+
         if($httpOnly) {
             if(!$port){
                 $port = 80
@@ -94,14 +98,16 @@ function Connect-ArubaSW {
             if ("Desktop" -eq $PSVersionTable.PsEdition) {
                 #Enable TLS 1.1 and 1.2
                 Set-ArubaSWCipherSSL
-                #Disable SSL chain trust...
-                Set-ArubaSWuntrustedSSL
+                if($SkipCertificateCheck) {
+                    #Disable SSL chain trust...
+                    Set-ArubaSWuntrustedSSL
+                }
             }
             $url = "https://${Server}:${port}/rest/v3/login-sessions"
         }
 
         try {
-            $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw -DisableKeepAlive -UseBasicParsing
+            $response = Invoke-WebRequest -uri $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw @invokeParams
         }
         catch {
             Show-ArubaSWException -Exception $_
@@ -115,6 +121,7 @@ function Connect-ArubaSW {
         $connection.cookie = $cookie
         $connection.session = $arubasw
         $connection.port = $port
+        $connection.invokeParams = $invokeParams
 
         set-variable -name DefaultArubaSWConnection -value $connection -scope Global
 
