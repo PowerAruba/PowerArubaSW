@@ -21,6 +21,11 @@ function Connect-ArubaSW {
       Connect to an ArubaOS Switch using HTTPS with IP 192.0.2.1 using (Get-)credential
 
       .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1 -SkipCertificateCheck
+
+      Connect to an ArubaOS Switch using HTTPS (without check certificate validation) with IP 192.0.2.1 using (Get-)credential
+
+      .EXAMPLE
       Connect-ArubaSW -Server 192.0.2.1 -httpOnly
 
       Connect to an ArubaOS Switch using HTTP (unsecure !) with IP 192.0.2.1 using (Get-)credential
