@@ -28,7 +28,6 @@ Describe  "Connect to a switch (using HTTP)" {
 
 Describe  "Connect to a switch (using HTTPS)" {
     #TODO Try change port => Need AnyCLI
-    #TODO Try to check invalid certificat
     It "Connect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
         Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -noverbose
         $DefaultArubaSWConnection | should Not BeNullOrEmpty
@@ -41,5 +40,8 @@ Describe  "Connect to a switch (using HTTPS)" {
     It "Disconnect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
         Disconnect-ArubaSW -noconfirm
         $DefaultArubaSWConnection | should be $null
+    }
+    It "Connect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly -And "Core" -eq $PSEdition) {
+        Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -noverbose | should throw
     }
 }
