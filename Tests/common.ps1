@@ -32,5 +32,5 @@ $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
 if($httpOnly){
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
 } else {
-    Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
+    Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck
 }

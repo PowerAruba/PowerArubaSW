@@ -29,7 +29,7 @@ Describe  "Connect to a switch (using HTTP)" {
 Describe  "Connect to a switch (using HTTPS)" {
     #TODO Try change port => Need AnyCLI
     It "Connect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
-        Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -noverbose
+        Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck -noverbose
         $DefaultArubaSWConnection | should Not BeNullOrEmpty
         $DefaultArubaSWConnection.server | should be $ipaddress
         $DefaultArubaSWConnection.cookie | should Not BeNullOrEmpty
