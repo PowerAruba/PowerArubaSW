@@ -107,6 +107,8 @@ function Connect-ArubaSW {
                     #Disable SSL chain trust...
                     Set-ArubaSWuntrustedSSL
                 }
+                #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
+                $invokeParams.remove("SkipCertificateCheck")
             }
             $url = "https://${Server}:${port}/rest/v3/login-sessions"
         }
