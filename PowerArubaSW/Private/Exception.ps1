@@ -15,9 +15,8 @@ function Show-ArubaSWException() {
             $result = $Exception.Exception.Response.GetResponseStream()
             $reader = New-Object System.IO.StreamReader($result)
             $responseBody = $reader.ReadToEnd()
+            $responseJson =  $responseBody | ConvertFrom-Json
         }
-
-        $responseJson =  $responseBody | ConvertFrom-Json
 
         Write-Warning "The Switch API sends an error message:"
         Write-Warning "Error description (code): $($Exception.Exception.Response.StatusDescription) ($($Exception.Exception.Response.StatusCode.Value__))"
