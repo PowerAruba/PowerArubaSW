@@ -16,6 +16,7 @@ function Show-ArubaSWException() {
         if ("AuthenticationException" -eq $exceptiontype.name) {
             Write-Warning "Invalid certificat (Untrusted, wrong date, invalid name...)"
             Write-Warning "Try to use Connect-ArubaSW -SkipCertificateCheck for connection"
+            throw "Unable to connect (certificate)"
         }
     }
 
