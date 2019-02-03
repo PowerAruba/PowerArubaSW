@@ -88,6 +88,14 @@ function Connect-ArubaSW {
         $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
         $invokeParams = @{DisableKeepAlive = $true; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck}
 
+        if ("Desktop" -eq $PSVersionTable.PsEdition) {
+            #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
+            $invokeParams.remove("SkipCertificateCheck")
+        } else { #Core Edition
+            #Remove -UseBasicParsing (Enable by default with PowerShell 6/Core)
+            $invokeParams.remove("UseBasicParsing")
+        }
+
         if($httpOnly) {
             if(!$port){
                 $port = 80
@@ -107,8 +115,6 @@ function Connect-ArubaSW {
                     #Disable SSL chain trust...
                     Set-ArubaSWuntrustedSSL
                 }
-                #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
-                $invokeParams.remove("SkipCertificateCheck")
             }
             $url = "https://${Server}:${port}/rest/v3/login-sessions"
         }
