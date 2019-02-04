@@ -260,7 +260,7 @@ function Remove-ArubaSWDns {
         {
             switch( $domain ) {
                 none {
-                    $dnsdomain = ""
+                    $dnsdomain = $null
                 }
             }
 
