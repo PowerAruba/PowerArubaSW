@@ -169,7 +169,7 @@ function Remove-ArubaSWDns {
         Remove dns server or domain name
 
         .EXAMPLE
-        Remove-ArubaSWDns -server1 none -server2 none -domain none
+        Remove-ArubaSWDns -mode Manual 
         This remove the ip of server 1 and server 2, and all the domain names
     #>
 
@@ -177,12 +177,6 @@ function Remove-ArubaSWDns {
         [Parameter (Mandatory=$true)]
         [ValidateSet ("DHCP", "Manual")]
         [string]$mode,
-        [Parameter (Mandatory=$false)]
-        [string]$server1,
-        [Parameter (Mandatory=$false)]
-        [string]$server2,
-        [Parameter (Mandatory=$false)]
-        [array]$domain,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
     )
@@ -194,8 +188,6 @@ function Remove-ArubaSWDns {
 
         $dns = new-Object -TypeName PSObject
 
-        $check = Get-ArubaSWDns
-
         switch( $mode ) {
             DHCP {
                 $mode_status = "DCM_DHCP"
@@ -205,71 +197,19 @@ function Remove-ArubaSWDns {
             }
         }
 
-            $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
+        $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
+                    
+        $dnsserver1 = $null
 
-        if ( $PsBoundParameters.ContainsKey('server1') -and $PsBoundParameters.ContainsKey('server2') )
-        {
-            switch( $server1 ) {
-                none {
-                    $dnsserver1 = $null
-                }
-            }
+        $dns | add-member -name "server_1" -membertype NoteProperty -Value $dnsserver1
 
-            $dns | add-member -name "server_1" -membertype NoteProperty -Value $dnsserver1
-        
-            switch( $server2 ) {
-                none {
-                    $dnsserver2 = $null
-                }
-            }
+        $dnsserver2 = $null
 
-            $dns | add-member -name "server_2" -membertype NoteProperty -Value $dnsserver2
+        $dns | add-member -name "server_2" -membertype NoteProperty -Value $dnsserver2
+                    
+        $dnsdomain = $null
 
-            Write-Warning "Remove both of the ip address of dns servers will remove all the domain names"
-        }
-        else 
-        {
-            if ($PsBoundParameters.ContainsKey('server1'))
-            {
-                switch( $server1 ) {
-                    none {
-                        $dnsserver1 = $null
-                    }
-                }
-
-                $dns | add-member -name "server_1" -membertype NoteProperty -Value $dnsserver1
-            }
-            else 
-            {
-                $dns | add-member -name "server_1" -membertype NoteProperty -Value $check.server_1
-            }
-
-            if ($PsBoundParameters.ContainsKey('server2'))
-            {
-                switch( $server2 ) {
-                    none {
-                        $dnsserver2 = $null
-                    }
-                }
-
-                $dns | add-member -name "server_2" -membertype NoteProperty -Value $dnsserver2
-            }
-            else 
-            {
-                $dns | add-member -name "server_2" -membertype NoteProperty -Value $check.server_2
-            }
-        } 
-
-        if ( $PsBoundParameters.ContainsKey('domain') )
-        {
-            switch( $domain ) {
-                none {
-                    $dnsdomain = $null
-                }
-            }
-
-            $dns | add-member -name "dns_domain_names" -membertype NoteProperty -Value $dnsdomain
-        }
+        $dns | add-member -name "dns_domain_names" -membertype NoteProperty -Value $dnsdomain
 
         $url = "rest/v4/dns"
 
