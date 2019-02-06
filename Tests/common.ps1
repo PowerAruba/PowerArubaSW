@@ -8,6 +8,9 @@
 # default settings for test...
 $pester_vlan = 85 #vlan id for Vlan test (and Port Test)
 $pester_vlanport = 8 #Port number of Vlan Port Test
+$pester_lacp_port = 5 #Port number of LACP test
+$pester_lacp_trk1 = "trk2" #Port trunk 1 name of LACP test
+$pester_lacp_trk2 = "trk6" #Port trunk 2 name of LACP test
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
