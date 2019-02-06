@@ -19,3 +19,4 @@ $httpOnly = $false
 #$pester_lacp_port = 5
 #$pester_lacp_trk1 = "trk2"
 #$pester_lacp_trk2 = "trk6"
+#$pester_port = 3
