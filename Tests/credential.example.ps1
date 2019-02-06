@@ -10,3 +10,8 @@ $ipaddress = "10.44.23.213"
 $login = "admin"
 $password = "enable"
 $httpOnly = $false
+
+#default settings use for test, can be override if needed...
+
+#$pester_vlan = 85
+#$pester_vlanport = 8
