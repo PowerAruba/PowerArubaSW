@@ -15,7 +15,7 @@ These are the required modules for the tests
 
 ## Executing Tests
 
-Assuming you have git cloned the PowerArubaSW repository. Go on tests folder and copy credentials.example.ps1 to credentials.ps1 and edit to set information about your switch (ipadress, login, password)
+Assuming you have git cloned the PowerArubaSW repository. Go on tests folder and copy credentials.example.ps1 to credentials.ps1 and edit to set information about your switch (ipaddress, login, password)
 
 Go after on integration folder and launch all tests via
 
