@@ -12,7 +12,7 @@ function Get-ArubaSWDns {
         Get DNS information.
 
         .DESCRIPTION
-        Get dns information about the device
+        Get DNS information about the device
 
         .EXAMPLE
         Get-ArubaSWDns
@@ -44,14 +44,19 @@ function Set-ArubaSWDns {
         Set global configuration about DNS
 
         .DESCRIPTION
-        Set Dns global parameters
+        Set DNS global parameters
 
         .EXAMPLE
         Set-ArubaSWDns -mode Manual
-        Set the dns mode to manual.
+        Set the dns mode to manual
 
         .EXAMPLE
-        Set-ArubaSWDns -mode Manual -server1 10.0.0.1 -server2 10.0.0.2 -domain powerarubasw.com
+        Set-ArubaSWDns -mode DHCP
+        Set the dns mode to DHCP
+
+        .EXAMPLE
+        Set-ArubaSWDns -mode Manual -server1 192.0.2.1 -server2 192.0.2.2 -domain example.org
+        This set DNS mode to manual with server 1 and server 2 and domain name to example.org
     #>
 
     Param(
@@ -63,7 +68,7 @@ function Set-ArubaSWDns {
         [Parameter (Mandatory=$false)]
         [string]$server2,
         [Parameter (Mandatory=$false)]
-        [array]$domain
+        [string[]]$domain
     )
 
     Begin {
@@ -73,7 +78,7 @@ function Set-ArubaSWDns {
 
         $url = "rest/v4/dns"
 
-        $conf = new-Object -TypeName PSObject
+        $conf = New-Object -TypeName PSObject
 
         $ip1 = New-Object -TypeName psobject
 
@@ -165,10 +170,7 @@ function Remove-ArubaSWDns {
 
         .EXAMPLE
         Remove-ArubaSWDns -server1 none -server2 none -domain none
-        Remove dns ip address and domain name
-
-        .EXAMPLE
-        Remove-ArubaSWDns -server1 none -server2 none -domain none
+        This remove the ip of server 1 and server 2, and all the domain names
     #>
 
     Param(
@@ -222,6 +224,8 @@ function Remove-ArubaSWDns {
             }
 
             $dns | add-member -name "server_2" -membertype NoteProperty -Value $dnsserver2
+
+            Write-Warning "Remove both of the ip address of dns servers will remove all the domain names"
         }
         else 
         {
