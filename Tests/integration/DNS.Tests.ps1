@@ -7,8 +7,8 @@
 
 ../common.ps1
 
-#$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-#Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
+$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
+Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
 
 Describe  "Get-ArubaSWDns" {
     It "Get-ArubaSWDns Does not throw an error" {
@@ -18,23 +18,25 @@ Describe  "Get-ArubaSWDns" {
 
 Describe  "Set-ArubaSWDns" {
     It "Set ArubaSWDns ip server 1" {
-        Set-ArubaSWDns -mode Manual -server1 10.44.1.1
+        Set-ArubaSWDns -mode Manual -server1 8.8.8.8
         $dns = Get-ArubaSWDns 
-        $dns.server_1.octets | Should be "10.44.1.1"
+        $dns.server_1.octets | Should be "8.8.8.8"
         Remove-ArubaSWDns -mode Manual -server1 none
     }
 
     It "Set ArubaSWDns ip server 2" {
-        Set-ArubaSWDns -mode Manual -server2 8.8.8.8
+        Set-ArubaSWDns -mode Manual -server2 8.8.4.4
         $dns = Get-ArubaSWDns 
-        $dns.server_2.octets | Should be "8.8.8.8"
+        $dns.server_2.octets | Should be "8.8.4.4"
         Remove-ArubaSWDns -mode Manual -server2 none
     }
 
     It "Set ArubaSWDns dns domain names" {
-        Set-ArubaSWDns -mode Manual -server1 10.44.1.1 -server2 8.8.8.8 -domain test,tttt
+        Set-ArubaSWDns -mode Manual -server1 8.8.4.4 -server2 8.8.8.8 -domain example.org
         $dns = Get-ArubaSWDns
-        $dns.dns_domain_names | Should be "test,tttt"
+        $dns.server_1.octets | Should be "8.8.4.4"
+        $dns.server_2.octets | Should be "8.8.8.8"
+        $dns.dns_domain_names | Should be "example.org"
         Remove-ArubaSWDns -mode Manual -server1 none -server2 none 
     }
 }
