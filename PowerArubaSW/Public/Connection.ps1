@@ -21,6 +21,11 @@ function Connect-ArubaSW {
       Connect to an ArubaOS Switch using HTTPS with IP 192.0.2.1 using (Get-)credential
 
       .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1 -SkipCertificateCheck
+
+      Connect to an ArubaOS Switch using HTTPS (without check certificate validation) with IP 192.0.2.1 using (Get-)credential
+
+      .EXAMPLE
       Connect-ArubaSW -Server 192.0.2.1 -httpOnly
 
       Connect to an ArubaOS Switch using HTTP (unsecure !) with IP 192.0.2.1 using (Get-)credential
@@ -57,6 +62,8 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [switch]$httpOnly=$false,
         [Parameter(Mandatory = $false)]
+        [switch]$SkipCertificateCheck=$false,
+        [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
         [int]$port
     )
@@ -66,7 +73,7 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server="";session="";cookie="";httpOnly=$false;port=""}
+        $connection = @{server="";session="";cookie="";httpOnly=$false;port="";invokeParams=""}
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -79,6 +86,16 @@ function Connect-ArubaSW {
         }
 
         $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
+        $invokeParams = @{DisableKeepAlive = $true; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck}
+
+        if ("Desktop" -eq $PSVersionTable.PsEdition) {
+            #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
+            $invokeParams.remove("SkipCertificateCheck")
+        } else { #Core Edition
+            #Remove -UseBasicParsing (Enable by default with PowerShell 6/Core)
+            $invokeParams.remove("UseBasicParsing")
+        }
+
         if($httpOnly) {
             if(!$port){
                 $port = 80
@@ -89,18 +106,24 @@ function Connect-ArubaSW {
             if(!$port){
                 $port = 443
             }
-            #Enable TLS 1.1 and 1.2
-            Set-ArubaSWCipherSSL
-            #Disable SSL chain trust...
-            Set-ArubaSWuntrustedSSL
+
+            #for PowerShell (<=) 5 (Desktop), Enable TLS 1.1, 1.2 and Disable SSL chain trust
+            if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                #Enable TLS 1.1 and 1.2
+                Set-ArubaSWCipherSSL
+                if($SkipCertificateCheck) {
+                    #Disable SSL chain trust...
+                    Set-ArubaSWuntrustedSSL
+                }
+            }
             $url = "https://${Server}:${port}/rest/v3/login-sessions"
         }
 
         try {
-            $response = Invoke-WebRequest $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw -DisableKeepAlive -UseBasicParsing
+            $response = Invoke-WebRequest -uri $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw @invokeParams
         }
         catch {
-            Show-ArubaSWWebRequestException -Exception $_
+            Show-ArubaSWException -Exception $_
             throw "Unable to connect"
         }
         $cookie = ($response.content | ConvertFrom-Json).cookie
@@ -111,6 +134,7 @@ function Connect-ArubaSW {
         $connection.cookie = $cookie
         $connection.session = $arubasw
         $connection.port = $port
+        $connection.invokeParams = $invokeParams
 
         set-variable -name DefaultArubaSWConnection -value $connection -scope Global
 

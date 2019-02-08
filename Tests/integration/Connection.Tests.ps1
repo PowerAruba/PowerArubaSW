@@ -28,9 +28,8 @@ Describe  "Connect to a switch (using HTTP)" {
 
 Describe  "Connect to a switch (using HTTPS)" {
     #TODO Try change port => Need AnyCLI
-    #TODO Try to check invalid certificat
-    It "Connect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
-        Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -noverbose
+    It "Connect to a switch (using HTTPS and -SkipCertificateCheck) and check global variable" -Skip:($httpOnly) {
+        Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck -noverbose
         $DefaultArubaSWConnection | should Not BeNullOrEmpty
         $DefaultArubaSWConnection.server | should be $ipaddress
         $DefaultArubaSWConnection.cookie | should Not BeNullOrEmpty
@@ -41,5 +40,10 @@ Describe  "Connect to a switch (using HTTPS)" {
     It "Disconnect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
         Disconnect-ArubaSW -noconfirm
         $DefaultArubaSWConnection | should be $null
+    }
+    #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
+    #This test will be fail, if there is valid certificate...
+    It "Connect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly -Or "Desktop" -eq $PSEdition) {
+        { Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -noverbose} | should throw "Unable to connect (certificate)"
     }
 }
