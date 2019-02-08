@@ -7,7 +7,7 @@
 
 Describe  "Get Vlans Ports" {
     BeforeAll {
-        Add-ArubaSWVlans -id 85
+        Add-ArubaSWVlans -id $pester_vlan
     }
     It "Get VLAN Ports Does not throw an error" {
         {
@@ -20,137 +20,137 @@ Describe  "Get Vlans Ports" {
             $VLANS_PORTS.count | Should not be $NULL
     }
 
-    It "Get the Vlan Port by port_id (8)" {
-        $VLANP = Get-ArubaSWVlansPorts -port_id 8
+    It "Get the Vlan Port by port_id ($pester_vlanport)" {
+        $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
         $VLANP.vlan_id | Should Be 1
-        $VLANP.port_id | Should be 8
+        $VLANP.port_id | Should be $pester_vlanport
         $VLANP.port_mode | should be "POM_UNTAGGED"
     }
 
-    It "Get the Vlan Port by vlan_id (85)" {
-        Add-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -port_mode Untagged
-        $VLANP = Get-ArubaSWVlansPorts -port_id 8
-        $VLANP.vlan_id | Should Be 85
-        $VLANP.port_id | Should be 8
+    It "Get the Vlan Port by vlan_id ($pester_vlan)" {
+        Add-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -port_mode Untagged
+        $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+        $VLANP.vlan_id | Should Be $pester_vlan
+        $VLANP.port_id | Should be $pester_vlanport
         $VLANP.port_mode | should be "POM_UNTAGGED"
     }
     
     AfterAll {
-        Remove-ArubaSWVlans -id 85 -noconfirm
+        Remove-ArubaSWVlans -id $pester_vlan -noconfirm
     }
 }
 
 Describe  "Configure (Add/Set/Remove) Vlans Ports" {
     BeforeAll {
-        Add-ArubaSWVlans -id 85
+        Add-ArubaSWVlans -id $pester_vlan
     }
 
     Context "Configure Vlan via port_id" {
-        It "Add vlan_id 85 on port_id 8 (untagged)" {
-            Add-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -port_mode Untagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+        It "Add vlan_id $pester_vlan on port_id $pester_vlanport (untagged)" {
+            Add-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -port_mode Untagged
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
 
-        It "Set vlan_id 85 on port_id 8 (tagged)" {
-            Set-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -port_mode tagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+        It "Set vlan_id $pester_vlan on port_id $pester_vlanport (tagged)" {
+            Set-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -port_mode tagged
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_TAGGED_STATIC"
         }
 
-        It "Remove vlan_id 85 on port_id 8" {
-            Remove-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -noconfirm
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
+        It "Remove vlan_id $pester_vlan on port_id 8" {
+            Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -noconfirm
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should Be 1
-            $VLANP.port_id | Should be 8
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
 
-        It "Add vlan_id 85 on port_id 8 (tagged)" {
-            Add-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -port_mode tagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8 -vlan_id 85
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+        It "Add vlan_id $pester_vlan on port_id $pester_vlanport (tagged)" {
+            Add-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -port_mode tagged
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_TAGGED_STATIC"
         }
 
-        It "Set vlan_id 85 on port_id 8 (untagged)" {
-            Set-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -port_mode untagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+        It "Set vlan_id $pester_vlan on port_id $pester_vlanport (untagged)" {
+            Set-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -port_mode untagged
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
 
-        It "Remove vlan_id 85 on port_id 8" {
-            Remove-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -noconfirm
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
+        It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
+            Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -noconfirm
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should Be 1
-            $VLANP.port_id | Should be 8
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
     }
 
     Context "Configure Vlan via pipeline (or position arg)" {
-        It "Add vlan_id 85 on port_id 8 (untagged)" {
-            Add-ArubaSWVlansPorts 85 8 Untagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+        It "Add vlan_id $pester_vlan on port_id $pester_vlanport (untagged)" {
+            Add-ArubaSWVlansPorts $pester_vlan $pester_vlanport Untagged
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
 
-        It "Set vlan_id 85 on port_id 8 (tagged)" {
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8 -vlan_id 85
+        It "Set vlan_id $pester_vlan on port_id $pester_vlanport (tagged)" {
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
             $VLANP | Set-ArubaSWVlansPorts -port_mode tagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_TAGGED_STATIC"
         }
 
-        It "Remove vlan_id 85 on port_id 8" {
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8 -vlan_id 85
+        It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
             $VLANP | Remove-ArubaSWVlansPorts -noconfirm
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should Be 1
-            $VLANP.port_id | Should be 8
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
 
-        It "Add vlan_id 85 on port_id 8 (tagged)" {
-            Add-ArubaSWVlansPorts 85 8 tagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8 -vlan_id 85
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+        It "Add vlan_id $pester_vlan on port_id $pester_vlanport (tagged)" {
+            Add-ArubaSWVlansPorts $pester_vlan $pester_vlanport tagged
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_TAGGED_STATIC"
         }
 
-        It "Set vlan_id 85 on port_id 8 (untagged)" {
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8 -vlan_id 85
+        It "Set vlan_id $pester_vlan on port_id $pester_vlanport (untagged)" {
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
             $VLANP | Set-ArubaSWVlansPorts -port_mode untagged
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
-            $VLANP.vlan_id | Should Be 85
-            $VLANP.port_id | Should be 8
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
+            $VLANP.vlan_id | Should Be $pester_vlan
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
 
-        It "Remove vlan_id 85 on port_id 8" {
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8 -vlan_id 85
+        It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
             $VLANP | Remove-ArubaSWVlansPorts -noconfirm
-            $VLANP = Get-ArubaSWVlansPorts -port_id 8
+            $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should Be 1
-            $VLANP.port_id | Should be 8
+            $VLANP.port_id | Should be $pester_vlanport
             $VLANP.port_mode | should be "POM_UNTAGGED"
         }
     }
 
     AfterAll {
-        Remove-ArubaSWVlans -id 85 -noconfirm
+        Remove-ArubaSWVlans -id $pester_vlan -noconfirm
     }
 }
 

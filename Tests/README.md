@@ -15,12 +15,20 @@ These are the required modules for the tests
 
 ## Executing Tests
 
-Assuming you have git cloned the PowerArubaSW repository. Go on tests folder and copy credentials.example.ps1 to credentials.ps1 and edit to set information about your switch (ipadress, login, password)
+Assuming you have git cloned the PowerArubaSW repository. Go on tests folder and copy credentials.example.ps1 to credentials.ps1 and edit to set information about your switch (ipaddress, login, password)
 
 Go after on integration folder and launch all tests via
 
 ```powershell
 Invoke-Pester *
+```
+
+It is possible to custom some settings when launch test (like vlan id use for vlan test or port used), you need to uncommented following line on credentials.ps1
+
+```powershell
+$pester_vlan = XX
+$pester_vlanport = XX
+...
 ```
 
 ## Executing Individual Tests

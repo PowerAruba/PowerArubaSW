@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 . ../common.ps1
-#TODO: Add check if no ipaddress/login/password info...
 
 Describe  "Get VLAN" {
     It "Get VLAN Does not throw an error" {
@@ -46,22 +45,22 @@ Describe  "Get VLAN" {
 Describe  "Add VLAN" {
 
     BeforeEach {
-        #Always remove vlan 85...
-        $VLAN = Get-ArubaSWVlans -id 85
+        #Always remove vlan $pester_vlan...
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
         if($VLAN) {
             if($VLAN.is_dsnoop_enabled) {
                 #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
-                Set-ArubaSWVlans -id 85 -name PowerArubaSW -is_dsnoop_enabled:$false
+                Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
             }
-            Remove-ArubaSWVlans -id 85 -noconfirm
+            Remove-ArubaSWVlans -id $pester_vlan -noconfirm
         }
     }
 
-    It "Add VLAN 85 (with only a id)" {
-        Add-ArubaSWVlans -id 85
-        $VLAN = Get-ArubaSWVlans -id 85
-        $VLAN.vlan_id | Should Be 85
-        $VLAN.name | Should be "VLAN85"
+    It "Add VLAN $pester_vlan (with only a id)" {
+        Add-ArubaSWVlans -id $pester_vlan
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
+        $VLAN.vlan_id | Should Be $pester_vlan
+        $VLAN.name | Should be "VLAN$pester_vlan"
         $VLAN.status | should be "VS_PORT_BASED"
         $VLAN.type | should be "VT_STATIC"
         $VLAN.is_voice_enabled | should be $false
@@ -70,10 +69,10 @@ Describe  "Add VLAN" {
         $VLAN.is_management_vlan | should be $false
     }
 
-    It "Add VLAN 85 (with only a id and name PowerArubaSW)" {
-        Add-ArubaSWVlans -id 85 -name PowerArubaSW
-        $VLAN = Get-ArubaSWVlans -id 85
-        $VLAN.vlan_id | Should Be 85
+    It "Add VLAN $pester_vlan (with only a id and name PowerArubaSW)" {
+        Add-ArubaSWVlans -id $pester_vlan -name PowerArubaSW
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
+        $VLAN.vlan_id | Should Be $pester_vlan
         $VLAN.name | Should be "PowerArubaSW"
         $VLAN.status | should be "VS_PORT_BASED"
         $VLAN.type | should be "VT_STATIC"
@@ -83,11 +82,11 @@ Describe  "Add VLAN" {
         $VLAN.is_management_vlan | should be $false
     }
 
-    It "Add VLAN 85 (with only a id and enable voice/jumbo/dhcp snoop)" {
-        Add-ArubaSWVlans -id 85 -is_voice_enabled -is_jumbo_enabled -is_dsnoop_enabled
-        $VLAN = Get-ArubaSWVlans -id 85
-        $VLAN.vlan_id | Should Be 85
-        $VLAN.name | Should be "VLAN85"
+    It "Add VLAN $pester_vlan (with only a id and enable voice/jumbo/dhcp snoop)" {
+        Add-ArubaSWVlans -id $pester_vlan -is_voice_enabled -is_jumbo_enabled -is_dsnoop_enabled
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
+        $VLAN.vlan_id | Should Be $pester_vlan
+        $VLAN.name | Should be "VLAN$pester_vlan"
         $VLAN.status | should be "VS_PORT_BASED"
         $VLAN.type | should be "VT_STATIC"
         $VLAN.is_voice_enabled | should be $true
@@ -97,14 +96,14 @@ Describe  "Add VLAN" {
     }
 
     AfterAll {
-        #Always remove vlan 85...
-        $VLAN = Get-ArubaSWVlans -id 85
+        #Always remove vlan $pester_vlan...
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
         if($VLAN) {
             if($VLAN.is_dsnoop_enabled) {
                 #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
-                Set-ArubaSWVlans -id 85 -name PowerArubaSW -is_dsnoop_enabled:$false
+                Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
             }
-            Remove-ArubaSWVlans -id 85 -noconfirm
+            Remove-ArubaSWVlans -id $pester_vlan -noconfirm
         }
     }
 }
@@ -114,20 +113,20 @@ Describe  "Configure VLAN" {
 
     Context "Configure VLAN via ID" {
         BeforeAll {
-            #Always add vlan 85...
-            Add-ArubaSWVlans -id 85
+            #Always add vlan $pester_vlan...
+            Add-ArubaSWVlans -id $pester_vlan
         }
 
         It "Configure VLAN name" {
-            Set-ArubaSWVLans -id 85 -name "PowerArubaSW"
-            $VLAN = Get-ArubaSWVlans -id 85
+            Set-ArubaSWVLans -id $pester_vlan -name "PowerArubaSW"
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             $VLAN.name | should be "PowerArubaSW"
         }
 
         It "Configure Vlan option (enable jumbo/voice/snooping)" {
-            Set-ArubaSWVLans -id 85 -is_voice_enabled -is_jumbo_enabled -is_dsnoop_enabled
-            $VLAN = Get-ArubaSWVlans -id 85
-            $VLAN.vlan_id | Should Be 85
+            Set-ArubaSWVLans -id $pester_vlan -is_voice_enabled -is_jumbo_enabled -is_dsnoop_enabled
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
+            $VLAN.vlan_id | Should Be $pester_vlan
             $VLAN.is_voice_enabled | should be $true
             $VLAN.is_jumbo_enabled | should be $true
             $VLAN.is_dsnoop_enabled | should be $true
@@ -135,9 +134,9 @@ Describe  "Configure VLAN" {
         }
 
         It "Configure Vlan option (disable jumbo/voice/snooping)" {
-            Set-ArubaSWVLans -id 85 -is_voice_enabled:$false -is_jumbo_enabled:$false -is_dsnoop_enabled:$false
-            $VLAN = Get-ArubaSWVlans -id 85
-            $VLAN.vlan_id | Should Be 85
+            Set-ArubaSWVLans -id $pester_vlan -is_voice_enabled:$false -is_jumbo_enabled:$false -is_dsnoop_enabled:$false
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
+            $VLAN.vlan_id | Should Be $pester_vlan
             $VLAN.is_voice_enabled | should be $false
             $VLAN.is_jumbo_enabled | should be $false
             $VLAN.is_dsnoop_enabled | should be $false
@@ -145,36 +144,36 @@ Describe  "Configure VLAN" {
         }
 
         AfterAll {
-            #Always remove vlan 85...
-            $VLAN = Get-ArubaSWVlans -id 85
+            #Always remove vlan $pester_vlan...
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             if($VLAN) {
                 if($VLAN.is_dsnoop_enabled) {
                     #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
-                    Set-ArubaSWVlans -id 85 -name PowerArubaSW -is_dsnoop_enabled:$false
+                    Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
                 }
-                Remove-ArubaSWVlans -id 85 -noconfirm
+                Remove-ArubaSWVlans -id $pester_vlan -noconfirm
             }
         }
     }
 
     Context "Configure VLAN via pipeline" {
         BeforeAll {
-            #Always add vlan 85...
-            Add-ArubaSWVlans -id 85
+            #Always add vlan $pester_vlan...
+            Add-ArubaSWVlans -id $pester_vlan
         }
 
         It "Configure VLAN name" {
-            $VLAN = Get-ArubaSWVlans -id 85
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             $VLAN | Set-ArubaSWVLans -name "PowerArubaSW"
-            $VLAN = Get-ArubaSWVlans -id 85
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             $VLAN.name | should be "PowerArubaSW"
         }
 
         It "Configure Vlan option (enable jumbo/voice/snooping)" {
-            $VLAN = Get-ArubaSWVlans -id 85
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             $VLAN | Set-ArubaSWVLans -is_voice_enabled -is_jumbo_enabled -is_dsnoop_enabled
-            $VLAN = Get-ArubaSWVlans -id 85
-            $VLAN.vlan_id | Should Be 85
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
+            $VLAN.vlan_id | Should Be $pester_vlan
             $VLAN.is_voice_enabled | should be $true
             $VLAN.is_jumbo_enabled | should be $true
             $VLAN.is_dsnoop_enabled | should be $true
@@ -182,10 +181,10 @@ Describe  "Configure VLAN" {
         }
 
         It "Configure Vlan option (disable jumbo/voice/snooping)" {
-            $VLAN = Get-ArubaSWVlans -id 85
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             $VLAN | Set-ArubaSWVLans -is_voice_enabled:$false -is_jumbo_enabled:$false -is_dsnoop_enabled:$false
-            $VLAN = Get-ArubaSWVlans -id 85
-            $VLAN.vlan_id | Should Be 85
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
+            $VLAN.vlan_id | Should Be $pester_vlan
             $VLAN.is_voice_enabled | should be $false
             $VLAN.is_jumbo_enabled | should be $false
             $VLAN.is_dsnoop_enabled | should be $false
@@ -193,14 +192,14 @@ Describe  "Configure VLAN" {
         }
 
         AfterAll {
-            #Always remove vlan 85...
-            $VLAN = Get-ArubaSWVlans -id 85
+            #Always remove vlan $pester_vlan...
+            $VLAN = Get-ArubaSWVlans -id $pester_vlan
             if($VLAN) {
                 if($VLAN.is_dsnoop_enabled) {
                     #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
-                    Set-ArubaSWVlans -id 85 -name PowerArubaSW -is_dsnoop_enabled:$false
+                    Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
                 }
-                Remove-ArubaSWVlans -id 85 -noconfirm
+                Remove-ArubaSWVlans -id $pester_vlan -noconfirm
             }
         }
 
@@ -210,32 +209,32 @@ Describe  "Configure VLAN" {
 Describe  "Remove VLAN" {
 
     BeforeEach {
-        #Always add vlan 85...
-        Add-ArubaSWVlans -id 85
+        #Always add vlan $pester_vlan...
+        Add-ArubaSWVlans -id $pester_vlan
     }
 
-    It "Remove VLAN 85 by id" {
-        Remove-ArubaSWVlans -id 85 -noconfirm
-        $VLAN = Get-ArubaSWVlans -id 85
+    It "Remove VLAN $pester_vlan by id" {
+        Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
         $VLAN | should be $NULL
     }
 
-    It "Remove VLAN 85 by pipeline" {
-        $VLAN = Get-ArubaSWVlans -id 85
+    It "Remove VLAN $pester_vlan by pipeline" {
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
         $VLAN | Remove-ArubaSWVlans -noconfirm
-        $VLAN = Get-ArubaSWVlans -id 85
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
         $VLAN | should be $NULL
     }
 
     AfterAll {
-        #Always remove vlan 85...
-        $VLAN = Get-ArubaSWVlans -id 85
+        #Always remove vlan $pester_vlan...
+        $VLAN = Get-ArubaSWVlans -id $pester_vlan
         if($VLAN) {
             if($VLAN.is_dsnoop_enabled) {
                 #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
-                Set-ArubaSWVlans -id 85 -name PowerArubaSW -is_dsnoop_enabled:$false
+                Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
             }
-            Remove-ArubaSWVlans -id 85 -noconfirm
+            Remove-ArubaSWVlans -id $pester_vlan -noconfirm
         }
     }
 }

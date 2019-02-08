@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-../common.ps1
+. ../common.ps1
 
 Describe  "Get LLDP info about remote devices" {
     It "Get LLDPRemote does not throw an error" {
