@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 . ../common.ps1
-#TODO: Add check if no ipaddress/login/password info...
+
 
 Describe  "Get Led Locator" {
     BeforeAll {

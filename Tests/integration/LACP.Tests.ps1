@@ -7,8 +7,6 @@
 
 . ../common.ps1
 
-#$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-#Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
 
 Describe  "Get Aruba LACP" {
     It "Get ArubaSWLACP Does not throw an error" {
