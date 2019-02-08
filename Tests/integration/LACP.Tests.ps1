@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-../common.ps1
+. ../common.ps1
 
 #$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
 #Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword

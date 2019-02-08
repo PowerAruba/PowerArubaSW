@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-../common.ps1
+. ../common.ps1
 
 Describe  "Get RestSessionTimeout" {
     It "Get RestSessionTimeout Does not throw an error" {
