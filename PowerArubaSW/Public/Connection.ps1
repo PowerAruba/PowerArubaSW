@@ -73,7 +73,7 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server="";session="";cookie="";httpOnly=$false;port="";invokeParams=""}
+        $connection = @{server="";session="";cookie="";httpOnly=$false;port="";invokeParams="";switch_type=""}
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -138,9 +138,12 @@ function Connect-ArubaSW {
 
         set-variable -name DefaultArubaSWConnection -value $connection -scope Global
 
+        $switchstatus = Get-ArubaSWSystemStatusSwitch
+        $connection.switch_type = $switchstatus.switch_type
+
         if (-not $noverbose) {
             $switchsystem = Get-ArubaSwSystem
-            $switchstatus = Get-ArubaSWSystemStatusSwitch
+
 
             if ($switchstatus.switch_type -eq "ST_STACKED") {
                 $product_name = $NULL;
