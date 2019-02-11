@@ -6,7 +6,7 @@
 function Invoke-ArubaSWWebRequest() {
 
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, position = 1)]
         [String]$url,
         [ValidateSet("GET", "POST", "DELETE")]
         [String]$method="get",
