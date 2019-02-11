@@ -12,6 +12,7 @@ $pester_lacp_port = 5 #Port number of LACP test
 $pester_lacp_trk1 = "trk2" #Port trunk 1 name of LACP test
 $pester_lacp_trk2 = "trk6" #Port trunk 2 name of LACP test
 $pester_port = 3 #Port number of port test
+$pester_stack_module = 1 #Number of stack moduele (for VSF/Stack)
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -41,4 +42,11 @@ if($httpOnly){
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
 } else {
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck
+}
+
+#Add stack module to port number (if it is a stacked switch)
+if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type){
+    $pester_vlanport = "$pester_stack_module/$pester_vlanport"
+    $pester_lacp_port = "$pester_stack_module/$pester_lacp_port"
+    $pester_port = "$pester_stack_module/$pester_port"
 }

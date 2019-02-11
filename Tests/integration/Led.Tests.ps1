@@ -39,6 +39,7 @@ Describe  "Configure Led Locator" {
 
     It "Configure Led Locator (with duration 1 minute)" {
         Set-ArubaSWLed -status on -duration 1
+        Start-Sleep 1
         $LED = Get-ArubaSWLed
         $LED.status | Should Be "LS_ON"
         $LED.duration_in_seconds | Should BeNullOrEmpty
