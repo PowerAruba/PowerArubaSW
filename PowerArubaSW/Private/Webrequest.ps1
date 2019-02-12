@@ -8,7 +8,7 @@ function Invoke-ArubaSWWebRequest() {
     Param(
         [Parameter(Mandatory = $true, position = 1)]
         [String]$url,
-        [ValidateSet("GET", "POST", "DELETE")]
+        [ValidateSet("GET", "POST", "DELETE", "PUT")]
         [String]$method="get",
         [Parameter(Mandatory = $false)]
         [psobject]$body,
