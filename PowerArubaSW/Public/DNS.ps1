@@ -97,15 +97,21 @@ function Set-ArubaSWDns {
 
         $conf | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
         
-
-        if ( $PsBoundParameters.ContainsKey('server1') -and $PsBoundParameters.ContainsKey('server2') )
+        if ($PsBoundParameters.ContainsKey('server1'))
         {
             $ip1 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
             $ip1 | add-member -name "octets" -MemberType NoteProperty -Value $server1
 
             $conf | add-member -name "server_1" -membertype NoteProperty -Value $ip1
-        
+        }
+        else 
+        {
+            $conf | add-member -name "server_1" -membertype NoteProperty -Value $check.server_1
+        }
+
+        if ($PsBoundParameters.ContainsKey('server2'))
+        {
             $ip2 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
             $ip2 | add-member -name "octets" -MemberType NoteProperty -Value $server2
@@ -114,33 +120,8 @@ function Set-ArubaSWDns {
         }
         else 
         {
-            if ($PsBoundParameters.ContainsKey('server1'))
-            {
-                $ip1 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
-
-                $ip1 | add-member -name "octets" -MemberType NoteProperty -Value $server1
-
-                $conf | add-member -name "server_1" -membertype NoteProperty -Value $ip1
-            }
-            else 
-            {
-                $conf | add-member -name "server_1" -membertype NoteProperty -Value $check.server_1
-            }
-
-            if ($PsBoundParameters.ContainsKey('server2'))
-            {
-                $ip2 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
-
-                $ip2 | add-member -name "octets" -MemberType NoteProperty -Value $server2
-
-                $conf | add-member -name "server_2" -membertype NoteProperty -Value $ip2
-            }
-            else 
-            {
-                $conf | add-member -name "server_2" -membertype NoteProperty -Value $check.server_2
-            }
+            $conf | add-member -name "server_2" -membertype NoteProperty -Value $check.server_2
         }
-        
 
         if ( $PsBoundParameters.ContainsKey('domain') )
         {
@@ -152,7 +133,6 @@ function Set-ArubaSWDns {
         $run = $response | convertfrom-json
 
         $run
-
     }
 
     End {
@@ -170,7 +150,7 @@ function Remove-ArubaSWDns {
 
         .EXAMPLE
         Remove-ArubaSWDns -mode Manual 
-        This remove the ip of server 1 and server 2, and all the domain names
+        Remove the ip of server 1 and server 2, and all the domain names
     #>
 
     Param(
