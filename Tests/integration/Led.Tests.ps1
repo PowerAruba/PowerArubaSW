@@ -84,7 +84,7 @@ Describe  "Configure Led Locator" {
         $LED[0].remaining_seconds | Should BeNullOrEmpty
     }
 
-    It "Configure Led locator to startup during 1minute" {
+    It "Configure Led locator to startup during 1 minute" {
         Set-ArubaSWLed -status on -when Startup -duration 1
         $LED = Get-ArubaSWLed
         $LED[0].status | Should Be "LS_ON"
