@@ -7,9 +7,6 @@
 
 ../common.ps1
 
-$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
-
 Describe  "Get-ArubaSWDns" {
     It "Get-ArubaSWDns Does not throw an error" {
         { Get-ArubaSWDns } | Should Not Throw 
