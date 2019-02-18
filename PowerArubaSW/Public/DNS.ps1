@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
-# Copyright 2018, C�dric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -48,15 +48,19 @@ function Set-ArubaSWDns {
 
         .EXAMPLE
         Set-ArubaSWDns -mode Manual
-        Set the dns mode to manual
+        Set the DNS mode to manual
 
         .EXAMPLE
         Set-ArubaSWDns -mode DHCP
-        Set the dns mode to DHCP
+        Set the DNS mode to DHCP
 
         .EXAMPLE
         Set-ArubaSWDns -mode Manual -server1 192.0.2.1 -server2 192.0.2.2 -domain example.org
         This set DNS mode to manual with server 1 and server 2 and domain name to example.org
+
+        .EXAMPLE
+        Set-ArubaSWDns -mode Manual -domain example.org, example.net
+        This set DNS mode to manual with domain name to example.org and example.net
     #>
 
     Param(
@@ -80,9 +84,9 @@ function Set-ArubaSWDns {
 
         $conf = New-Object -TypeName PSObject
 
-        $ip1 = New-Object -TypeName psobject
+        $ip1 = New-Object -TypeName PSObject
 
-        $ip2 = New-Object -TypeName psobject
+        $ip2 = New-Object -TypeName PSObject
 
         $check = Get-ArubaSWDns
 
@@ -143,10 +147,10 @@ function Remove-ArubaSWDns {
 
     <#
         .SYNOPSIS
-        Remove dns server or domain name on the switch
+        Remove DNS server or domain name on the switch
 
         .DESCRIPTION
-        Remove dns server or domain name
+        Remove DNS server or domain name
 
         .EXAMPLE
         Remove-ArubaSWDns -mode Manual 
@@ -178,7 +182,7 @@ function Remove-ArubaSWDns {
         }
 
         $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
-                    
+
         $dnsserver1 = $null
 
         $dns | add-member -name "server_1" -membertype NoteProperty -Value $dnsserver1
@@ -194,8 +198,8 @@ function Remove-ArubaSWDns {
         $url = "rest/v4/dns"
 
         if ( -not ( $noconfirm )) {
-            $message  = "Remove dns on the switch"
-            $question = "Proceed with removal of dns config ?"
+            $message  = "Remove DNS on the switch"
+            $question = "Proceed with removal of DNS config ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
@@ -204,9 +208,9 @@ function Remove-ArubaSWDns {
         }
         else { $decision = 0 }
         if ($decision -eq 0) {
-            Write-Progress -activity "Remove dns"
+            Write-Progress -activity "Remove DNS"
             $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -url $url
-            Write-Progress -activity "Remove dns" -completed
+            Write-Progress -activity "Remove DNS" -completed
         }
     }
 
