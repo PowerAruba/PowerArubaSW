@@ -44,4 +44,16 @@ Describe  "Set-ArubaSWDns" {
     }
 }
 
+Describe  "Remove-ArubaSWDns" {
+    It "Remove ArubaSWDns (Mode Manual)" {
+        Set-ArubaSWDns -mode Manual -server1 1.1.1.1 -server2 8.8.8.8 -domain example.org
+        Remove-ArubaSWDns -mode Manual -noconfirm
+        $dns = Get-ArubaSWDns
+        $dns.dns_config_mode | Should be "DCM_MANUAL"
+        $dns.server_1 | Should -BeNullOrEmpty
+        $dns.server_2 | Should -BeNullOrEmpty
+        $dns.dns_domain_names | Should -BeNullOrEmpty
+    }
+}
+
 Disconnect-ArubaSW -noconfirm
