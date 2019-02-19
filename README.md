@@ -18,7 +18,7 @@ With this module (version 0.6.0) you can manage:
 More functionality will be added later.
 
 Connection can use HTTPS (default) or HTTP
-Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware)
+Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware) on Windows/Linux/macOS
 
 # Usage
 
@@ -32,7 +32,7 @@ For example, you can manage Vlans with the following commands:
 
 # Requirements
 
-- Powershell 5 (If possible get the latest version)
+- Powershell 5 or 6 (Core) (If possible get the latest version)
 - An Aruba OS Switch (with firmware 16.x), REST API enable and HTTPS enable (recommended)
 
 # Instructions
