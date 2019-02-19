@@ -62,7 +62,7 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
             $VLANP.port_mode | should be "POM_TAGGED_STATIC"
         }
 
-        It "Remove vlan_id $pester_vlan on port_id 8" {
+        It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
             Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -noconfirm
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should Be 1
