@@ -144,6 +144,7 @@ Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
 Disconnect-ArubaSW
+Get-ArubaSWDns
 Get-ArubaSWLACP
 Get-ArubaSWLed
 Get-ArubaSWLLDPGlobalStatus
@@ -156,14 +157,17 @@ Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSystem
 Get-ArubaSWSystemStatus
+Get-ArubaSWSystemStatusGlobal
 Get-ArubaSWSystemStatusSwitch
 Get-ArubaSWVlans
 Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
+Remove-ArubaSWDns
 Remove-ArubaSWLACP
 Remove-ArubaSWVlans
 Remove-ArubaSWVlansPorts
 Set-ArubaSWCipherSSL
+Set-ArubaSWDns
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
 Set-ArubaSWPort
@@ -173,6 +177,7 @@ Set-ArubaSWuntrustedSSL
 Set-ArubaSWVlans
 Set-ArubaSWVlansPorts
 Set-Cookie
+Show-ArubaSWException
 ```
 
 # Author
