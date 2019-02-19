@@ -1,7 +1,4 @@
 
-
-Last release: [![GitHub version](https://badge.fury.io/gh/alagoutte%2Fpowerarubasw.svg)](https://badge.fury.io/gh/alagoutte%2Fpowerarubasw)
-
 # PowerArubaSW
 
 This is a Powershell module for configure a ArubaOS Switch.
