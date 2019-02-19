@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
-# Copyright 2018, C�dric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -48,15 +48,19 @@ function Set-ArubaSWDns {
 
         .EXAMPLE
         Set-ArubaSWDns -mode Manual
-        Set the dns mode to manual
+        Set the DNS mode to manual
 
         .EXAMPLE
         Set-ArubaSWDns -mode DHCP
-        Set the dns mode to DHCP
+        Set the DNS mode to DHCP
 
         .EXAMPLE
         Set-ArubaSWDns -mode Manual -server1 192.0.2.1 -server2 192.0.2.2 -domain example.org
         This set DNS mode to manual with server 1 and server 2 and domain name to example.org
+
+        .EXAMPLE
+        Set-ArubaSWDns -mode Manual -domain example.org, example.net
+        This set DNS mode to manual with domain name to example.org and example.net
     #>
 
     Param(
@@ -80,9 +84,9 @@ function Set-ArubaSWDns {
 
         $conf = New-Object -TypeName PSObject
 
-        $ip1 = New-Object -TypeName psobject
+        $ip1 = New-Object -TypeName PSObject
 
-        $ip2 = New-Object -TypeName psobject
+        $ip2 = New-Object -TypeName PSObject
 
         $check = Get-ArubaSWDns
 
@@ -96,7 +100,7 @@ function Set-ArubaSWDns {
         }
 
         $conf | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
-        
+
         if ($PsBoundParameters.ContainsKey('server1'))
         {
             $ip1 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
@@ -105,7 +109,7 @@ function Set-ArubaSWDns {
 
             $conf | add-member -name "server_1" -membertype NoteProperty -Value $ip1
         }
-        else 
+        else
         {
             $conf | add-member -name "server_1" -membertype NoteProperty -Value $check.server_1
         }
@@ -118,7 +122,7 @@ function Set-ArubaSWDns {
 
             $conf | add-member -name "server_2" -membertype NoteProperty -Value $ip2
         }
-        else 
+        else
         {
             $conf | add-member -name "server_2" -membertype NoteProperty -Value $check.server_2
         }
@@ -143,20 +147,17 @@ function Remove-ArubaSWDns {
 
     <#
         .SYNOPSIS
-        Remove dns server or domain name on the switch
+        Remove DNS server or domain name on the switch
 
         .DESCRIPTION
-        Remove dns server or domain name
+        Remove DNS server or domain name
 
         .EXAMPLE
-        Remove-ArubaSWDns -mode Manual 
+        Remove-ArubaSWDns
         Remove the ip of server 1 and server 2, and all the domain names
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
-        [ValidateSet ("DHCP", "Manual")]
-        [string]$mode,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
     )
@@ -168,34 +169,13 @@ function Remove-ArubaSWDns {
 
         $dns = new-Object -TypeName PSObject
 
-        switch( $mode ) {
-            DHCP {
-                $mode_status = "DCM_DHCP"
-            }
-            Manual {
-                $mode_status = "DCM_MANUAL"
-            }
-        }
-
-        $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
-                    
-        $dnsserver1 = $null
-
-        $dns | add-member -name "server_1" -membertype NoteProperty -Value $dnsserver1
-
-        $dnsserver2 = $null
-
-        $dns | add-member -name "server_2" -membertype NoteProperty -Value $dnsserver2
-                    
-        $dnsdomain = $null
-
-        $dns | add-member -name "dns_domain_names" -membertype NoteProperty -Value $dnsdomain
+        $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value "DCM_DISABLED"
 
         $url = "rest/v4/dns"
 
         if ( -not ( $noconfirm )) {
-            $message  = "Remove dns on the switch"
-            $question = "Proceed with removal of dns config ?"
+            $message  = "Remove DNS on the switch"
+            $question = "Proceed with removal of DNS config ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
@@ -204,9 +184,9 @@ function Remove-ArubaSWDns {
         }
         else { $decision = 0 }
         if ($decision -eq 0) {
-            Write-Progress -activity "Remove dns"
+            Write-Progress -activity "Remove DNS"
             $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -url $url
-            Write-Progress -activity "Remove dns" -completed
+            Write-Progress -activity "Remove DNS" -completed
         }
     }
 
