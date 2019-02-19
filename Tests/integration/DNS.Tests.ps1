@@ -20,6 +20,7 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_1.version | Should be "IAV_IP_V4"
         $dns.server_1.octets | Should be "1.1.1.1"
         $dns.server_2 | Should -BeNullOrEmpty
+        $dns.dns_domain_names | Should -BeNullOrEmpty
         Remove-ArubaSWDns -mode Manual -noconfirm
     }
 
@@ -29,6 +30,7 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_1 | Should -BeNullOrEmpty
         $dns.server_2.version | Should be "IAV_IP_V4"
         $dns.server_2.octets | Should be "8.8.8.8"
+        $dns.dns_domain_names | Should -BeNullOrEmpty
         Remove-ArubaSWDns -mode Manual -noconfirm
     }
 
