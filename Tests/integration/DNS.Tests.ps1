@@ -14,6 +14,12 @@ Describe  "Get-ArubaSWDns" {
 }
 
 Describe  "Set-ArubaSWDns" {
+
+    BeforeEach {
+        #Always DNS Settings...
+        Remove-ArubaSWDns -noconfirm
+    }
+
     It "Set ArubaSWDns ip server 1" {
         Set-ArubaSWDns -mode Manual -server1 1.1.1.1
         $dns = Get-ArubaSWDns
@@ -21,7 +27,6 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_1.octets | Should be "1.1.1.1"
         $dns.server_2 | Should -BeNullOrEmpty
         $dns.dns_domain_names | Should -BeNullOrEmpty
-        Remove-ArubaSWDns -noconfirm
     }
 
     It "Set ArubaSWDns ip server 2" {
@@ -31,7 +36,6 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_2.version | Should be "IAV_IP_V4"
         $dns.server_2.octets | Should be "8.8.8.8"
         $dns.dns_domain_names | Should -BeNullOrEmpty
-        Remove-ArubaSWDns -noconfirm
     }
 
     It "Set ArubaSWDns dns domain names" {
@@ -42,8 +46,8 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_2.version | Should be "IAV_IP_V4"
         $dns.server_2.octets | Should be "8.8.8.8"
         $dns.dns_domain_names | Should be "example.org"
-        Remove-ArubaSWDns -noconfirm
     }
+
     It "Set ArubaSWDns dns (multiple) domain names" {
         Set-ArubaSWDns -mode Manual -server1 1.1.1.1 -server2 8.8.8.8 -domain example.org, example.net
         $dns = Get-ArubaSWDns
@@ -53,8 +57,13 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_2.octets | Should be "8.8.8.8"
         $dns.dns_domain_names[0] | Should be "example.org"
         $dns.dns_domain_names[1] | Should be "example.net"
+    }
+
+    AfterAll {
+        #Always DNS Settings...
         Remove-ArubaSWDns -noconfirm
     }
+
 }
 
 Describe  "Remove-ArubaSWDns" {
