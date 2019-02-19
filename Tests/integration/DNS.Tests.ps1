@@ -9,7 +9,7 @@
 
 Describe  "Get-ArubaSWDns" {
     It "Get-ArubaSWDns Does not throw an error" {
-        { Get-ArubaSWDns } | Should Not Throw 
+        { Get-ArubaSWDns } | Should Not Throw
     }
 }
 
