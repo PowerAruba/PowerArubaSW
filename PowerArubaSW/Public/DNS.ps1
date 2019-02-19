@@ -153,14 +153,11 @@ function Remove-ArubaSWDns {
         Remove DNS server or domain name
 
         .EXAMPLE
-        Remove-ArubaSWDns -mode Manual 
+        Remove-ArubaSWDns 
         Remove the ip of server 1 and server 2, and all the domain names
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
-        [ValidateSet ("DHCP", "Manual")]
-        [string]$mode,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
     )
@@ -172,28 +169,7 @@ function Remove-ArubaSWDns {
 
         $dns = new-Object -TypeName PSObject
 
-        switch( $mode ) {
-            DHCP {
-                $mode_status = "DCM_DHCP"
-            }
-            Manual {
-                $mode_status = "DCM_MANUAL"
-            }
-        }
-
-        $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
-
-        $dnsserver1 = $null
-
-        $dns | add-member -name "server_1" -membertype NoteProperty -Value $dnsserver1
-
-        $dnsserver2 = $null
-
-        $dns | add-member -name "server_2" -membertype NoteProperty -Value $dnsserver2
-                    
-        $dnsdomain = $null
-
-        $dns | add-member -name "dns_domain_names" -membertype NoteProperty -Value $dnsdomain
+        $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value "DCM_DISABLED"
 
         $url = "rest/v4/dns"
 

@@ -21,7 +21,7 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_1.octets | Should be "1.1.1.1"
         $dns.server_2 | Should -BeNullOrEmpty
         $dns.dns_domain_names | Should -BeNullOrEmpty
-        Remove-ArubaSWDns -mode Manual -noconfirm
+        Remove-ArubaSWDns -noconfirm
     }
 
     It "Set ArubaSWDns ip server 2" {
@@ -31,7 +31,7 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_2.version | Should be "IAV_IP_V4"
         $dns.server_2.octets | Should be "8.8.8.8"
         $dns.dns_domain_names | Should -BeNullOrEmpty
-        Remove-ArubaSWDns -mode Manual -noconfirm
+        Remove-ArubaSWDns -noconfirm
     }
 
     It "Set ArubaSWDns dns domain names" {
@@ -42,7 +42,7 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_2.version | Should be "IAV_IP_V4"
         $dns.server_2.octets | Should be "8.8.8.8"
         $dns.dns_domain_names | Should be "example.org"
-        Remove-ArubaSWDns -mode Manual -noconfirm
+        Remove-ArubaSWDns -noconfirm
     }
     It "Set ArubaSWDns dns (multiple) domain names" {
         Set-ArubaSWDns -mode Manual -server1 1.1.1.1 -server2 8.8.8.8 -domain example.org, example.net
@@ -53,16 +53,16 @@ Describe  "Set-ArubaSWDns" {
         $dns.server_2.octets | Should be "8.8.8.8"
         $dns.dns_domain_names[0] | Should be "example.org"
         $dns.dns_domain_names[1] | Should be "example.net"
-        Remove-ArubaSWDns -mode Manual -noconfirm
+        Remove-ArubaSWDns -noconfirm
     }
 }
 
 Describe  "Remove-ArubaSWDns" {
-    It "Remove ArubaSWDns (Mode Manual)" {
+    It "Remove ArubaSWDns" {
         Set-ArubaSWDns -mode Manual -server1 1.1.1.1 -server2 8.8.8.8 -domain example.org
-        Remove-ArubaSWDns -mode Manual -noconfirm
+        Remove-ArubaSWDns -noconfirm
         $dns = Get-ArubaSWDns
-        $dns.dns_config_mode | Should be "DCM_MANUAL"
+        $dns.dns_config_mode | Should be "DCM_DISABLED"
         $dns.server_1 | Should -BeNullOrEmpty
         $dns.server_2 | Should -BeNullOrEmpty
         $dns.dns_domain_names | Should -BeNullOrEmpty
