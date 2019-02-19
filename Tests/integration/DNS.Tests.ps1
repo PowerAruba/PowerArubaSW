@@ -42,6 +42,17 @@ Describe  "Set-ArubaSWDns" {
         $dns.dns_domain_names | Should be "example.org"
         Remove-ArubaSWDns -mode Manual -noconfirm
     }
+    It "Set ArubaSWDns dns (multiple) domain names" {
+        Set-ArubaSWDns -mode Manual -server1 1.1.1.1 -server2 8.8.8.8 -domain example.org, example.net
+        $dns = Get-ArubaSWDns
+        $dns.server_1.version | Should be "IAV_IP_V4"
+        $dns.server_1.octets | Should be "1.1.1.1"
+        $dns.server_2.version | Should be "IAV_IP_V4"
+        $dns.server_2.octets | Should be "8.8.8.8"
+        $dns.dns_domain_names[0] | Should be "example.org"
+        $dns.dns_domain_names[1] | Should be "example.net"
+        Remove-ArubaSWDns -mode Manual -noconfirm
+    }
 }
 
 Describe  "Remove-ArubaSWDns" {
