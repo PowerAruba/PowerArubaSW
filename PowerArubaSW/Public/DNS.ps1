@@ -100,7 +100,7 @@ function Set-ArubaSWDns {
         }
 
         $conf | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
-        
+
         if ($PsBoundParameters.ContainsKey('server1'))
         {
             $ip1 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
@@ -109,7 +109,7 @@ function Set-ArubaSWDns {
 
             $conf | add-member -name "server_1" -membertype NoteProperty -Value $ip1
         }
-        else 
+        else
         {
             $conf | add-member -name "server_1" -membertype NoteProperty -Value $check.server_1
         }
@@ -122,7 +122,7 @@ function Set-ArubaSWDns {
 
             $conf | add-member -name "server_2" -membertype NoteProperty -Value $ip2
         }
-        else 
+        else
         {
             $conf | add-member -name "server_2" -membertype NoteProperty -Value $check.server_2
         }
@@ -153,7 +153,7 @@ function Remove-ArubaSWDns {
         Remove DNS server or domain name
 
         .EXAMPLE
-        Remove-ArubaSWDns 
+        Remove-ArubaSWDns
         Remove the ip of server 1 and server 2, and all the domain names
     #>
 
