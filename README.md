@@ -106,6 +106,11 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
 # Issue
 
 ## Unable to connect
+if you use `Connect-ArubaSW` and get `Unable to Connect (certificate)`
+
+The issue coming from use Self-Signed or Expired Certificate for switch management
+Try to connect using `Connect-ArubaSW -SkipCertificateCheck`
+
 if you use `Connect-ArubaSW` and get `Unable to Connect`
 
 Check if the HTTPS is enable on the switch
@@ -130,8 +135,7 @@ if it is not enabled you can enable using
 (config)# web-management ssl
 ```
 
-or using `Connect-ArubaSW -httpOnly`
-
+You can use also `Connect-ArubaSW -httpOnly` for connect using HTTP (NOT RECOMMENDED !)
 
 # List of available command
 ```powershell
