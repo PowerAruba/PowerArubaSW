@@ -1,4 +1,4 @@
-#
+﻿#
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
 # Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
