@@ -13,6 +13,7 @@ With this module (version 0.6.0) you can manage:
 - LACP (Add/Configure/Remove)
 - Led Locator (Get|Set Led indicator)
 - Ports (Information (name, status, config_mode...) and Statistics)
+- DNS (Add/configure/remove IP Address and domain names )
 
 More functionality will be added later.
 
