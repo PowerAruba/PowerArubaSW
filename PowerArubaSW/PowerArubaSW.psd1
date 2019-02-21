@@ -14,6 +14,9 @@ RootModule = 'PowerArubaSW.psm1'
 # Version number of this module.
 ModuleVersion = '0.6'
 
+# Supported PSEditions
+#CompatiblePSEditions = @('Desktop', 'Core')
+
 # ID used to uniquely identify this module
 GUID = '33b62abc-06b9-4c26-b9ac-05a43b40c510'
 
@@ -92,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-         Tags = @('Aruba', 'HPE', 'Switch')
+         Tags = @('Aruba', 'HPE', 'Switch', 'PSEdition_Core','PSEdition_Desktop')
 
         # A URL to the license for this module.
          LicenseUri = 'https://github.com/PowerAruba/PowerArubaSW/blob/master/LICENSE'
