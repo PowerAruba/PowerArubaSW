@@ -1,7 +1,4 @@
 
-
-Last release: [![GitHub version](https://badge.fury.io/gh/alagoutte%2Fpowerarubasw.svg)](https://badge.fury.io/gh/alagoutte%2Fpowerarubasw)
-
 # PowerArubaSW
 
 This is a Powershell module for configure a ArubaOS Switch.
@@ -16,11 +13,12 @@ With this module (version 0.6.0) you can manage:
 - LACP (Add/Configure/Remove)
 - Led Locator (Get|Set Led indicator)
 - Ports (Information (name, status, config_mode...) and Statistics)
+- DNS (Add/configure/remove IP Address and domain names )
 
 More functionality will be added later.
 
 Connection can use HTTPS (default) or HTTP
-Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware)
+Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware) on Windows/Linux/macOS
 
 # Usage
 
@@ -34,7 +32,7 @@ For example, you can manage Vlans with the following commands:
 
 # Requirements
 
-- Powershell 5 (If possible get the latest version)
+- Powershell 5 or 6 (Core) (If possible get the latest version)
 - An Aruba OS Switch (with firmware 16.x), REST API enable and HTTPS enable (recommended)
 
 # Instructions
@@ -108,6 +106,11 @@ You can create a new Vlan `Add-ArubaSWVlans`, retrieve its information `Get-Arub
 # Issue
 
 ## Unable to connect
+if you use `Connect-ArubaSW` and get `Unable to Connect (certificate)`
+
+The issue coming from use Self-Signed or Expired Certificate for switch management
+Try to connect using `Connect-ArubaSW -SkipCertificateCheck`
+
 if you use `Connect-ArubaSW` and get `Unable to Connect`
 
 Check if the HTTPS is enable on the switch
@@ -132,8 +135,7 @@ if it is not enabled you can enable using
 (config)# web-management ssl
 ```
 
-or using `Connect-ArubaSW -httpOnly`
-
+You can use also `Connect-ArubaSW -httpOnly` for connect using HTTP (NOT RECOMMENDED !)
 
 # List of available command
 ```powershell
@@ -142,6 +144,7 @@ Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
 Disconnect-ArubaSW
+Get-ArubaSWDns
 Get-ArubaSWLACP
 Get-ArubaSWLed
 Get-ArubaSWLLDPGlobalStatus
@@ -154,14 +157,17 @@ Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSystem
 Get-ArubaSWSystemStatus
+Get-ArubaSWSystemStatusGlobal
 Get-ArubaSWSystemStatusSwitch
 Get-ArubaSWVlans
 Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
+Remove-ArubaSWDns
 Remove-ArubaSWLACP
 Remove-ArubaSWVlans
 Remove-ArubaSWVlansPorts
 Set-ArubaSWCipherSSL
+Set-ArubaSWDns
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
 Set-ArubaSWPort
@@ -171,6 +177,7 @@ Set-ArubaSWuntrustedSSL
 Set-ArubaSWVlans
 Set-ArubaSWVlansPorts
 Set-Cookie
+Show-ArubaSWException
 ```
 
 # Author
