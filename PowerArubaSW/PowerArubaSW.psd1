@@ -12,7 +12,7 @@
 RootModule = 'PowerArubaSW.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.6'
+ModuleVersion = '0.7'
 
 # Supported PSEditions
 #CompatiblePSEditions = @('Desktop', 'Core')
