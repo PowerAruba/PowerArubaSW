@@ -26,7 +26,7 @@ function Set-ArubaSWVsfDisable {
 
         $url = "rest/v4/stacking/vsf/disable"
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -url $url
+        $response = invoke-ArubaSWWebRequest -method "POST" -url $url -body " "
 
         $run = $response | convertfrom-json
 
