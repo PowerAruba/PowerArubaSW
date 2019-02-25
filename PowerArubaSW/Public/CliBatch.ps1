@@ -1,3 +1,10 @@
+#
+# Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 function Write-ArubaSWCliBatch {
 
     <#
@@ -6,6 +13,8 @@ function Write-ArubaSWCliBatch {
 
         .DESCRIPTION
         Write a cli batch command on Aruba OS Switch.
+        All configuration commands in non-interactive mode  are supported. Exit, configure, erase, startup-config commands are supported.
+        Crypto, show, execution and testmode commands are NOT supported.
 
         .EXAMPLE
         Write-ArubaSWCliBatch -command 
@@ -26,10 +35,10 @@ function Write-ArubaSWCliBatch {
 
         foreach ($line in $command)
         {
-            $result = $result + $command[$nb] + '\n' 
+            $result = $result + $command[$nb] + "`n"
             $nb = $nb + 1
         }
-
+        
         [string]$result
 
         $url = "rest/v4/cli_batch"
@@ -60,7 +69,7 @@ function Get-ArubaSWCliBatchStatus {
         Get a cli batch command status.
 
         .DESCRIPTION
-        Write a cli batch command status on Aruba OS Switch.
+        Get a cli batch command status on Aruba OS Switch.
 
         .EXAMPLE
         Get-ArubaSWCliBatchStatus 
