@@ -38,7 +38,7 @@ For example, you can manage Vlans with the following commands:
 # Instructions
 ### Install the module
 ```powershell
-# Automated installation (Powershell 5):
+# Automated installation (Powershell 5 or later):
     Install-Module PowerArubaSW
 
 # Import the module
