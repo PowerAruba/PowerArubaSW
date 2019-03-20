@@ -3,7 +3,7 @@
 
 This is a Powershell module for configure a ArubaOS Switch.
 
-With this module (version 0.6.0) you can manage:
+With this module (version 0.7.0) you can manage:
 
 - System (Name, Location, Contact) & Switch Status (Product and Hardware info)
 - Vlans (Add/Configure/Remove)
