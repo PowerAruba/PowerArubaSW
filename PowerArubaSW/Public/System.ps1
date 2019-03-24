@@ -113,7 +113,7 @@ function Get-ArubaSWSystemStatus {
 
     Process {
 
-        if ('ST_STANDALONE' -ne $DefaultArubaSWConnection.switch_type) {
+        if ('ST_STACKED' -eq $DefaultArubaSWConnection.switch_type) {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatusGlobal"
         }
 
@@ -177,7 +177,7 @@ function Get-ArubaSWSystemStatusGlobal {
 
     Process {
 
-        if ('ST_STACKED' -ne $DefaultArubaSWConnection.switch_type) {
+        if ('ST_STANDALONE' -eq $DefaultArubaSWConnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWConnection.switch_type) {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatus"
         }
         $url = "rest/v4/system/status/global_info"
