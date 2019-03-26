@@ -9,10 +9,10 @@ function Get-ArubaSWIpAddress {
 
     <#
         .SYNOPSIS
-        Get ip address information.
+        Get IP Address information.
 
         .DESCRIPTION
-        Get ip address information about the device
+        Get IP Address(es) information about the device
 
         .EXAMPLE
         Get-ArubaSWIPAddress
