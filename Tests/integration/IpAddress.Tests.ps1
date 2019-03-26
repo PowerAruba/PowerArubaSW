@@ -5,15 +5,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-../common.ps1
-
-$mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword
+. ../common.ps1
 
 Describe  "Get-ArubaSWIPAddress" {
     It "Get-ArubaSWIPAddress Does not throw an error" {
         { Get-ArubaSWIPAddress } | Should Not Throw 
     }
 }
-
-Disconnect-ArubaSW -noconfirm
