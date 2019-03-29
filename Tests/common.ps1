@@ -47,8 +47,13 @@ if($httpOnly){
 
 $status = Get-ArubaSWSystemStatusSwitch
 
+if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type){
+    $product_number = $status.blades.product_number[0]
+} else {
+    $product_number = $status.product_number
+}
 #Add chassis module (letter) to port number if it is a HP 5406Rzl2 (J9850A) or HP 5412Rzl2 (J9851A)
-if ($status.product_number -eq 'J9850A' -or $status.product_number -eq 'J9851A') {
+if ($product_number -eq 'J9850A' -or $product_number -eq 'J9851A') {
     $pester_vlanport = "$pester_chassis_module$pester_vlanport"
     $pester_lacp_port = "$pester_chassis_module$pester_lacp_port"
     $pester_port = "$pester_chassis_module$pester_$pester_port"
