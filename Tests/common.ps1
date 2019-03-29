@@ -13,6 +13,7 @@ $pester_lacp_trk1 = "trk2" #Port trunk 1 name of LACP test
 $pester_lacp_trk2 = "trk6" #Port trunk 2 name of LACP test
 $pester_port = 3 #Port number of port test
 $pester_stack_module = 1 #Number of stack moduele (for VSF/Stack)
+$pester_chassis_module = "A" #Letter of chassis module (for HP54XXRzl2)
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -42,6 +43,15 @@ if($httpOnly){
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
 } else {
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck
+}
+
+$status = Get-ArubaSWSystemStatusSwitch
+
+#Add chassis module (letter) to port number if it is a HP 5406Rzl2 (J9850A) or HP 5412Rzl2 (J9851A)
+if ($status.product_number -eq 'J9850A' -or $status.product_number -eq 'J9851A') {
+    $pester_vlanport = "$pester_chassis_module$pester_vlanport"
+    $pester_lacp_port = "$pester_chassis_module$pester_lacp_port"
+    $pester_port = "$pester_chassis_module$pester_$pester_port"
 }
 
 #Add stack module to port number (if it is a stacked switch)
