@@ -60,6 +60,7 @@ if ($product_number -eq 'J9850A' -or $product_number -eq 'J9851A') {
     $pester_vlanport = "$pester_chassis_module$pester_vlanport"
     $pester_lacp_port = "$pester_chassis_module$pester_lacp_port"
     $pester_port = "$pester_chassis_module$pester_$pester_port"
+    $pester_trunk_port = "$pester_chassis_module$pester_trunk_port"
 }
 
 #Add stack module to port number (if it is a stacked switch)
@@ -67,4 +68,5 @@ if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type){
     $pester_vlanport = "$pester_stack_module/$pester_vlanport"
     $pester_lacp_port = "$pester_stack_module/$pester_lacp_port"
     $pester_port = "$pester_stack_module/$pester_port"
+    $pester_trunk_port = "$pester_stack_module/$pester_trunk_port"
 }
