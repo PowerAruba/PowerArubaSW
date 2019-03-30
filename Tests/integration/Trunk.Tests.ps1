@@ -9,7 +9,7 @@
 
 Describe  "Get Aruba Trunk" {
     It "Get ArubaSWTrunk Does not throw an error" {
-        { Get-ArubaSWTrunk } | Should Not Throw 
+        { Get-ArubaSWTrunk } | Should Not Throw
     }
 }
 
@@ -38,12 +38,12 @@ Describe  "Add Aruba Trunk" {
 
 Describe  "Remove Aruba Trunk" {
     It "Remove ArubaSWTrunk does throw an error if trunk group doesn't exist on a port" {
-        { Remove-ArubaSWLACP -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm } | Should Throw 
+        { Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm } | Should Throw
     }
 
-    It "Remove ArubaSWLACP does not throw an error if the trunk group exist on a port" {
-        Add-ArubaSWLACP -trunk_group $pester_trunk_trk1 -port $pester_trunk_port
-        { Remove-ArubaSWLACP -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm } | Should Not Throw 
+    It "Remove ArubaSWTrunk does not throw an error if the trunk group exist on a port" {
+        Add-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port
+        { Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm } | Should Not Throw
     }
 }
 
