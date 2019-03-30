@@ -16,6 +16,7 @@ function Get-ArubaSWTrunk {
 
         .EXAMPLE
         Get-ArubaSWTrunk
+
         Get the list of ports in a trunk configuration with the link aggregation interface and the name of ports in this interface.
     #>
 
@@ -49,15 +50,17 @@ function Add-ArubaSWTrunk {
 
         .EXAMPLE
         Add-ArubaSWTrunk trk5 4
+
         Add port 4 in trunk group trk5
 
         .EXAMPLE
         Add-ArubaSWTrunk -trunk_group trk4 -port 6
+
         Add port 6 in trunk group trk4.
 
         .EXAMPLE
         Add-ArubaSWTrunk -trunk_group trk6 -port 3
-        PS C:>Add-ArubaSWTrunk -trunk_group trk6 -port 5
+        PS C:\>Add-ArubaSWTrunk -trunk_group trk6 -port 5
 
         Configure ports 3 and 5 in trunk group 6.
     #>
@@ -67,7 +70,7 @@ function Add-ArubaSWTrunk {
         [string]$trunk_group,
         [Parameter (Mandatory=$true, Position=2)]
         [string]$port
-    
+
     )
 
     Begin {
@@ -81,7 +84,7 @@ function Add-ArubaSWTrunk {
 
         $trunk | add-member -name "port_id" -membertype NoteProperty -Value $port
 
-        $trunk | add-member -name "trunk_group" -membertype NoteProperty -Value $interface
+        $trunk | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
         $response = invoke-ArubaSWWebRequest -method "POST" -body $trunk -url $url
 
@@ -105,12 +108,12 @@ function Remove-ArubaSWTrunk {
         Remove port of the trunk group
 
         .EXAMPLE
-        Remove-ArubaSWTrunk -trunk_group trk4 -port 5 
+        Remove-ArubaSWTrunk -trunk_group trk4 -port 5
         Remove port 5 of the trunk group trk4.
 
         .EXAMPLE
         Remove-ArubaSWTrunk -trunk_group -port 3 trk6 -noconfirm
-        PS C:>Remove-ArubaSWTrunk -trunk_group trk6 -port 5 -noconfirm
+        PS C:\>Remove-ArubaSWTrunk -trunk_group trk6 -port 5 -noconfirm
 
         Remove ports 3 and 5 in trunk group 6 without confirm
     #>
@@ -133,7 +136,7 @@ function Remove-ArubaSWTrunk {
 
         $trunk | add-member -name "port_id" -membertype NoteProperty -Value $port
 
-        $trunk | add-member -name "trunk_group" -membertype NoteProperty -Value $interface
+        $trunk | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
         $id = $trunk.port_id
 
@@ -141,7 +144,7 @@ function Remove-ArubaSWTrunk {
 
         if ( -not ( $Noconfirm )) {
             $message  = "Remove trunk group on switch"
-            $question = "Proceed with removal of trunk group ${id} ?"
+            $question = "Proceed with removal of trunk group ${$interface} on port ${$port}?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
