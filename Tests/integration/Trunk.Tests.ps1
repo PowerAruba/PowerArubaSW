@@ -24,7 +24,7 @@ Describe  "Add Aruba Trunk" {
 
     It "Change trunk group $pester_trunk_trk1 on a port without removing it before" {
         Add-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port
-        { Add-ArubaSWTrunk -trunk_group $pester_trunk_trk2 -port $pester_trunk_port } | Should Throw
+        { Add-ArubaSWTrunk -trunk_group $pester_trunk_trk2 -port $pester_trunk_port 3> $null } | Should Throw
         Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm
     }
 
@@ -38,7 +38,7 @@ Describe  "Add Aruba Trunk" {
 
 Describe  "Remove Aruba Trunk" {
     It "Remove ArubaSWTrunk does throw an error if trunk group doesn't exist on a port" {
-        { Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm } | Should Throw
+        { Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm 3> $null } | Should Throw
     }
 
     It "Remove ArubaSWTrunk does not throw an error if the trunk group exist on a port" {
