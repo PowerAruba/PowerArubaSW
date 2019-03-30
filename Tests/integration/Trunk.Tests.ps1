@@ -14,7 +14,7 @@ Describe  "Get Aruba Trunk" {
 }
 
 Describe  "Add Aruba Trunk" {
-    It "Add Trunk trk $pester_trunk_trk1 on port $pester_trunk_port" {
+    It "Add Trunk $pester_trunk_trk1 on port $pester_trunk_port" {
         Add-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port
         $Trunk = Get-ArubaSWTrunk | Where-Object port_id -eq $pester_trunk_port
         $Trunk.port_id | Should be "$pester_trunk_port"
@@ -28,7 +28,7 @@ Describe  "Add Aruba Trunk" {
         Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm
     }
 
-    It "Change trunk group $pester_trunk_trk5 on a port after removing this port of the trunk group" {
+    It "Change trunk group $pester_trunk_trk2 on a port after removing this port of the trunk group" {
         Add-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port
         Remove-ArubaSWTrunk -trunk_group $pester_trunk_trk1 -port $pester_trunk_port -noconfirm
         { Add-ArubaSWTrunk -trunk_group $pester_trunk_trk2 -port $pester_trunk_port } | Should Not Throw
