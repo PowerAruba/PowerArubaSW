@@ -22,3 +22,6 @@ $httpOnly = $false
 #$pester_port = 3
 #$pester_stack_module = 1
 #$pester_chassis_module = "A"
+#$pester_trunk_port = 5
+#$pester_trunk_trk1 = "trk3"
+#$pester_trunk_trk2 = "trk7"
