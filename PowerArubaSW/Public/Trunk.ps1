@@ -144,7 +144,7 @@ function Remove-ArubaSWTrunk {
 
         if ( -not ( $Noconfirm )) {
             $message  = "Remove trunk group on switch"
-            $question = "Proceed with removal of trunk group ${$interface} on port ${$port}?"
+            $question = "Proceed with removal of trunk group $trunk_group on port $port ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
