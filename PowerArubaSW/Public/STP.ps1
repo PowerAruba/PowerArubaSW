@@ -16,6 +16,7 @@ function Get-ArubaSWSTP {
 
         .EXAMPLE
         Get-ArubaSWSTP
+
         This function give you the spanning-tree configuration
     #>
 
@@ -44,11 +45,12 @@ function Get-ArubaSWSTPPortStatus {
         Get spanning-tree information of all ports on ArubaOS Switch.
 
         .DESCRIPTION
-        Get spanning-tree configurationof all ports.
+        Get spanning-tree configuration of all ports.
 
         .EXAMPLE
         Get-ArubaSWSTPPortStatus
-        Get the spanning-tree configuration of all the ports. 
+
+        Get the spanning-tree configuration of all the ports.
     #>
 
     Begin {
@@ -80,10 +82,12 @@ function Set-ArubaSWSTPGlobal {
 
         .EXAMPLE
         Set-ArubaSWSTPGlobal -enable on -priority 7 -mode mstp
+
         Set the spanning-tree protocol on, the priority to 7 and the mode to MSTP
 
         .EXAMPLE
         Set-ArubaSWSTPGlobal off 4 rpvst
+
         Set the spanning-tree protocol off, the priority to 4 and the mode to RPVST
     #>
 
@@ -161,7 +165,8 @@ function Get-ArubaSWSTPPort {
         Get spanning-tree configuration per port.
 
         .EXAMPLE
-        Get-ArubaSWSTPPort -port 5 
+        Get-ArubaSWSTPPort -port 5
+
         Get the spanning-tree configuration for the port 5.
     #>
 
@@ -198,7 +203,8 @@ function Set-ArubaSWSTPPort {
         Set spanning-tree configuration per port.
 
         .EXAMPLE
-        Set-ArubaSWSTPPort -port 4 [-priority 6] [-admin_edge On] [-bpdu_protection Off] [-bpdu_filter Off] [-root_guard off]
+        Set-ArubaSWSTPPort -port 4 -priority 6 -admin_edge On -bpdu_protection Off -bpdu_filter Off -root_guard off
+
         Set the priority to 6 for port 4, the admin edge on, and turn off bpdu protection, bpdu filter and root guard.
     #>
 
