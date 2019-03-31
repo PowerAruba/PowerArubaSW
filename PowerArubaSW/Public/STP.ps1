@@ -132,14 +132,20 @@ function Get-ArubaSWSTPPort {
         Get spanning-tree configuration per port.
 
         .EXAMPLE
+        Get-ArubaSWSTPPort
+
+        Get the spanning-tree configuration for ALL ports.
+
+        .EXAMPLE
         Get-ArubaSWSTPPort -port 5
 
         Get the spanning-tree configuration for the port 5.
     #>
 
+
     Param(
-        [Parameter (Mandatory=$true)]
-        [int]$port
+        [Parameter (Mandatory=$false)]
+        [string]$port
     )
 
     Begin {
@@ -147,13 +153,21 @@ function Get-ArubaSWSTPPort {
 
     Process {
 
-        $url = "rest/v4/stp/ports/${port}"
+
+        $url = "rest/v4/stp/ports"
+
+        if($port) {
+            $url += "/$port"
+        }
 
         $response = invoke-ArubaSWWebRequest -method "GET" -url $url
 
         $stp = $response | convertfrom-json
-
-        $stp
+        if($port) {
+            $stp
+        } else {
+            $stp.stp_port_element
+        }
     }
 
     End {
