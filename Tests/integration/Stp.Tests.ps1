@@ -11,7 +11,7 @@ Describe  "Get ArubaSWSTP" {
     It "Get-ArubaSWSTP Does not throw an error" {
         {
             Get-ArubaSWSTP
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get ArubaSWSTP" {
@@ -25,7 +25,7 @@ Describe  "Get ArubaSWSTPPortStatus" {
     It "Get-ArubaSWSTPPortStatus Does not throw an error" {
         {
             Get-ArubaSWSTPPortStatus
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get ArubaSWSTP" {
@@ -50,7 +50,7 @@ Describe  "Get ArubaSWSTPPort" {
     It "Get-ArubaSWSTPPort Does not throw an error" {
         {
             Get-ArubaSWSTPPort -port 3
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get-ArubaSWSTPPort" {
@@ -64,7 +64,7 @@ Describe  "Set ArubaSWSTPPort" {
         $def = Get-ArubaSWSTPPort -port 3
         Set-ArubaSWSTPPort -port 3 -priority 10 -admin_edge on -bpdu_protection on -bpdu_filter on -root_guard on
         $stp = Get-ArubaSWSTPPort -port 3
-        $stp.priority | Should be "2"
+        $stp.priority | Should be "10"
         $stp.is_enable_admin_edge_port | Should be "True"
         $stp.is_enable_bpdu_protection | Should be "True"
         $stp.is_enable_bpdu_filter | Should be "True"
