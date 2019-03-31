@@ -20,15 +20,15 @@ Describe  "Get ArubaSWSTP" {
     }
 }
 
-Describe  "Set ArubaSWSTPGlobal" {
+Describe  "Set ArubaSWSTP" {
     It "Change status, priority and mode" {
         $def = Get-ArubaSWSTP
-        Set-ArubaSWSTPGlobal -enable Off -priority 2 -mode rpvst
+        Set-ArubaSWSTP -enable -priority 2 -mode rpvst
         $stp = Get-ArubaSWSTP
         $stp.is_enabled | Should be "False"
         $stp.priority | Should be "2"
         $stp.mode | Should be "STM_RPVST"
-        Set-ArubaSWSTPGlobal -enable On -priority $def.priority -mode $def.mode
+        Set-ArubaSWSTP -enable:$false -priority $def.priority -mode $def.mode
     }
 }
 

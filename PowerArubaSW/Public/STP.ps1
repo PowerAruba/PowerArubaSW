@@ -38,7 +38,7 @@ function Get-ArubaSWSTP {
     }
 }
 
-function Set-ArubaSWSTPGlobal {
+function Set-ArubaSWSTP {
 
     <#
         .SYNOPSIS
@@ -48,24 +48,24 @@ function Set-ArubaSWSTPGlobal {
         Set spanning-tree configuration.
 
         .EXAMPLE
-        Set-ArubaSWSTPGlobal -enable on -priority 7 -mode mstp
+        Set-ArubaSWSTPGlobal -enable -priority 7 -mode mstp
 
         Set the spanning-tree protocol on, the priority to 7 and the mode to MSTP
 
         .EXAMPLE
-        Set-ArubaSWSTPGlobal off 4 rpvst
+        Set-ArubaSWSTPGlobal $false 4 rpvst
 
         Set the spanning-tree protocol off, the priority to 4 and the mode to RPVST
     #>
 
     Param(
     [Parameter (Mandatory=$true, Position=1)]
-    [ValidateSet ("On", "Off")]
-    [string]$enable,
+    [switch]$enable,
     [Parameter (Mandatory=$false, Position=2)]
     [ValidateRange (0,15)]
     [int]$priority,
     [Parameter (Mandatory=$false, Position=3)]
+    [ValidateSet ("MSTP", "RPVST")]
     [string]$mode
     )
 
@@ -76,41 +76,38 @@ function Set-ArubaSWSTPGlobal {
 
         $url = "rest/v4/stp"
 
-        $stp = new-Object -TypeName PSObject
+        $_stp = new-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('enable') )
         {
-            switch( $enable ) {
-                ON {
-                    $enable_status = $true
-                }
-                OFF {
-                    $enable_status = $false
-                }
+            if ( $enable ) {
+                $_stp | add-member -name "is_enabled" -membertype NoteProperty -Value $True
             }
-            $stp | add-member -name "is_enabled" -membertype NoteProperty -Value $enable_status
+            else {
+                $_stp | add-member -name "is_enabled" -membertype NoteProperty -Value $false
+            }
         }
 
         if ( $PsBoundParameters.ContainsKey('priority') )
         {
-            $stp | add-member -name "priority" -membertype NoteProperty -Value $priority
+            $_stp | add-member -name "priority" -membertype NoteProperty -Value $priority
         }
 
         if ( $PsBoundParameters.ContainsKey('mode') )
         {
-            If ($mode -eq "mstp")
-            {
-                $mode = "STM_MSTP"
-            }
-            If ($mode -eq "rpvst")
-            {
-                $mode = "STM_RPVST"
+            switch( $mode ) {
+                mstp {
+                    $_mode = "STM_MSTP"
+                }
+                rpvst {
+                    $_mode = "STM_RPVST"
+                }
             }
 
-            $stp | add-member -name "mode" -membertype NoteProperty -Value $mode
+            $_stp | add-member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $stp -url $url
+        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
 
         $run = $response | convertfrom-json
 
