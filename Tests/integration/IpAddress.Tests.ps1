@@ -19,3 +19,5 @@ Describe  "Get-ArubaSWIPAddress" {
         $ipaddress.vlan_id | Should -BeOfType int
     }
 }
+
+Disconnect-ArubaSW -noconfirm
