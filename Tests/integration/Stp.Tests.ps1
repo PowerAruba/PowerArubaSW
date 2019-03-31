@@ -20,20 +20,6 @@ Describe  "Get ArubaSWSTP" {
     }
 }
 
-
-Describe  "Get ArubaSWSTPPortStatus" {
-    It "Get-ArubaSWSTPPortStatus Does not throw an error" {
-        {
-            Get-ArubaSWSTPPortStatus
-        } | Should Not Throw
-    }
-
-    It "Get ArubaSWSTP" {
-        $stp = Get-ArubaSWSTPPortStatus
-        $stp | Should not be $NULL
-    }
-}
-
 Describe  "Set ArubaSWSTPGlobal" {
     It "Change status, priority and mode" {
         $def = Get-ArubaSWSTP

@@ -38,39 +38,6 @@ function Get-ArubaSWSTP {
     }
 }
 
-function Get-ArubaSWSTPPortStatus {
-
-    <#
-        .SYNOPSIS
-        Get spanning-tree information of all ports on ArubaOS Switch.
-
-        .DESCRIPTION
-        Get spanning-tree configuration of all ports.
-
-        .EXAMPLE
-        Get-ArubaSWSTPPortStatus
-
-        Get the spanning-tree configuration of all the ports.
-    #>
-
-    Begin {
-    }
-
-    Process {
-
-        $url = "rest/v4/stp/ports"
-
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
-
-        $stp = ($response | convertfrom-json).stp_port_element
-
-        $stp
-    }
-
-    End {
-    }
-}
-
 function Set-ArubaSWSTPGlobal {
 
     <#
