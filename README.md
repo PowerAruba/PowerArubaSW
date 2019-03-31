@@ -13,7 +13,10 @@ With this module (version 0.7.0) you can manage:
 - LACP (Add/Configure/Remove)
 - Led Locator (Get|Set Led indicator)
 - Ports (Information (name, status, config_mode...) and Statistics)
-- DNS (Add/configure/remove IP Address and domain names )
+- DNS (Add/configure/remove IP Address and domain names)
+- Trunk (Add/Configure/Remove)
+- STP (Add/Configure/Remove GlobalConfig or Port)
+- IP Address (Get)
 
 More functionality will be added later.
 
@@ -28,7 +31,6 @@ For example, you can manage Vlans with the following commands:
 - `Add-ArubaSWVlans`
 - `Set-ArubaSWVlans`
 - `Remove-ArubaSWVlans`
-
 
 # Requirements
 
