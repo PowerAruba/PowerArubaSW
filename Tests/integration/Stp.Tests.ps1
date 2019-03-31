@@ -42,7 +42,7 @@ Describe  "Set ArubaSWSTPGlobal" {
         $stp.is_enabled | Should be "False"
         $stp.priority | Should be "2"
         $stp.mode | Should be "STM_RPVST"
-        Set-ArubaSWSTPGlobal -enable $def.is_enabled -priority $def.priority -mode $def.mode
+        Set-ArubaSWSTPGlobal -enable On -priority $def.priority -mode $def.mode
     }
 }
 
@@ -69,7 +69,7 @@ Describe  "Set ArubaSWSTPPort" {
         $stp.is_enable_bpdu_protection | Should be "True"
         $stp.is_enable_bpdu_filter | Should be "True"
         $stp.is_enable_root_guard | Should be "True"
-        Set-ArubaSWSTPPort -port 3 -priority $def.priority -admin_edge $def.is_enable_admin_edge_port -bpdu_protection $def.is_enable_bpdu_protection -bpdu_filter $def.is_enable_bpdu_filter -root_guard $def.is_enable_root_guard
+        Set-ArubaSWSTPPort -port 3 -priority $def.priority -admin_edge off -bpdu_protection off -bpdu_filter off -root_guard off
     }
 }
 
