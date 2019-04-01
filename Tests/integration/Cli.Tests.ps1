@@ -39,3 +39,4 @@ Describe  "Write-ArubaSWCliBatch" {
     }
 }
 
+Disconnect-ArubaSW
