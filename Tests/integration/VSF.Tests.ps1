@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-..\common.ps1
+. ..\common.ps1
 
 Describe  "Get VSF global config" {
     It "Get ArubaSWVsfGlobalConfig Does not throw an error" {
