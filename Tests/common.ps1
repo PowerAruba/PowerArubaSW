@@ -1,4 +1,3 @@
-
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
 #
@@ -17,6 +16,7 @@ $pester_chassis_module = "A" #Letter of chassis module (for HP54XXRzl2)
 $pester_trunk_port = 5 #Port number of LACP test
 $pester_trunk_trk1 = "trk3" #Port trunk 1 name of Trunk test
 $pester_trunk_trk2 = "trk7" #Port trunk 2 name of Trunk test
+$pester_stp_port = 3 #Port Number of STP test
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -61,6 +61,7 @@ if ($product_number -eq 'J9850A' -or $product_number -eq 'J9851A') {
     $pester_lacp_port = "$pester_chassis_module$pester_lacp_port"
     $pester_port = "$pester_chassis_module$pester_$pester_port"
     $pester_trunk_port = "$pester_chassis_module$pester_trunk_port"
+    $pester_stp_port = "$pester_chassis_module$pester_stp_port"
 }
 
 #Add stack module to port number (if it is a stacked switch)
@@ -69,4 +70,5 @@ if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type){
     $pester_lacp_port = "$pester_stack_module/$pester_lacp_port"
     $pester_port = "$pester_stack_module/$pester_port"
     $pester_trunk_port = "$pester_stack_module/$pester_trunk_port"
+    $pester_stp_port = "$pester_stack_module/$pester_stp_port"
 }
