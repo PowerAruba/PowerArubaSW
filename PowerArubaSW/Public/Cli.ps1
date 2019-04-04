@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
-# Copyright 2018, C�dric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -16,6 +16,7 @@ function Get-ArubaSWCli {
 
         .EXAMPLE
         Get-ArubaSWCli -cmd "Show running config"
+
         This function give you the result of a cli command on the switch.
     #>
 
