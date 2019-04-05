@@ -62,12 +62,15 @@ function Set-ArubaSWVsfGlobalConfig {
         [ValidateRange (1,4094)]
         [int]$mad_vlan,
         [Parameter (Mandatory=$false)]
+        [string]$mad_ip,
+        [Parameter (Mandatory=$false)]
+        [string]$mad_community,
+        [Parameter (Mandatory=$false)]
         [string]$oobm_mad,
         [Parameter (Mandatory=$false)]
-        [int]$lldp_mad,
+        [object]$lldp_mad,
         [Parameter (Mandatory=$false)]
-        [ValidateSet ("True", "False")]
-        [string]$lldp_mad_enable
+        [switch]$lldp_mad_enable
     )
 
     Begin {
@@ -78,6 +81,10 @@ function Set-ArubaSWVsfGlobalConfig {
         $url = "rest/v4/stacking/vsf/global_config"
 
         $vsf = new-Object -TypeName PSObject
+
+        $ip = New-Object -TypeName PSObject
+
+        $mad = New-Object -TypeName PSObject
 
         $vsf | add-member -name "domain_id" -membertype NoteProperty -Value $domain_id
 
@@ -100,11 +107,6 @@ function Set-ArubaSWVsfGlobalConfig {
             $vsf | add-member -name "port_speed" -membertype NoteProperty -Value $port_speed
         }
 
-        if ( $PsBoundParameters.ContainsKey('mad_vlan') )
-        {
-            $vsf | add-member -name "mad_vlan" -membertype NoteProperty -Value $mad_vlan
-        }
-
         if ( $PsBoundParameters.ContainsKey('oobm_mad') )
         {
             switch( $oobm_mad ) {
@@ -117,7 +119,34 @@ function Set-ArubaSWVsfGlobalConfig {
             }
             $vsf | add-member -name "is_oobm_mad_enabled" -membertype NoteProperty -Value $oobm_mad
         }
-        $response = invoke-ArubaSWWebRequest -method "PUT" -url $url
+
+        if ( $PsBoundParameters.ContainsKey('lldp_mad_enable') ) {
+            if ( $lldp_mad_enable ) {
+                $vsf | add-member -name "is_lldp_mad_enabled" -membertype NoteProperty -Value $True
+            } else {
+                $vsf | add-member -name "is_lldp_mad_enabled" -membertype NoteProperty -Value $false
+            }
+        }
+
+        if ($PsBoundParameters.ContainsKey('mad_ip'))
+        {
+            $ip | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
+
+            $ip | add-member -name "octets" -MemberType NoteProperty -Value $mad_ip
+
+            $mad | add-member -name "mad_ip" -MemberType NoteProperty -Value $ip
+
+            $mad | add-member -name "community_name" -MemberType NoteProperty -Value $mad_community
+
+            $vsf | add-member -name "lldp_vlan" -membertype NoteProperty -Value $mad
+        }
+
+        if ( $PsBoundParameters.ContainsKey('mad_vlan') )
+        {
+            $vsf | add-member -name "mad_vlan" -membertype NoteProperty -Value $mad_vlan
+        }
+
+        $response = invoke-ArubaSWWebRequest -method "PUT" -url $url -body $vsf
 
         $run = $response | convertfrom-json
 
