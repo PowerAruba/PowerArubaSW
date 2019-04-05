@@ -11,31 +11,24 @@ $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
 Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck
 
 
-Describe  "Get-ArubaSWCliBatchStatus" {
-    It "Get-ArubaSWCliBatchStatus Does not throw an error" {
-        { Get-ArubaSWCliBatchStatus } | Should Not Throw 
+Describe  "Get-ArubaSWCli" {
+    It "Get-ArubaSWCli Does not throw an error" {
+        { Get-ArubaSWCli -cmd "show run" } | Should Not Throw 
     }
-}
-
-Describe  "Get-ArubaSWCliBatchStatus" {
-    It "Get-ArubaSWCliBatchStatus Should be a success" {
-        Write-ArubaSWCliBatch "configure terminal"
-        $cli = Get-ArubaSWCliBatchStatus
+    It "Get-ArubaSWCli Should not be null" {
+        { Get-ArubaSWCli -cmd "show run" } | Should not be $NULL
+    }
+    It "Value of status should be a success" {
+        $cli = Get-ArubaSWCli -cmd "show run"
         $cli.status | Should be "CCS_SUCCESS"
     }
-}
-
-Describe  "Get-ArubaSWCliBatchStatus" {
-    It "Get-ArubaSWCliBatchStatus Should give the command" {
-        Write-ArubaSWCliBatch "configure terminal"
-        $cli = Get-ArubaSWCliBatchStatus
-        $cli.cmd | Should be "configure terminal"
+    It "Value of cmd should be the command given as parameter" {
+        $cli = Get-ArubaSWCli -cmd "show run"
+        $cli.cmd | Should be "show run"
     }
-}
-
-Describe  "Write-ArubaSWCliBatch" {
-    It "Write-ArubaSWCliBatch Should not throw an error" {
-        { Write-ArubaSWCliBatch "configure terminal" } | Should Not Throw
+    It "Value of result_base64_encoded should not be null" {
+        $cli = Get-ArubaSWCli -cmd "show run"
+        $cli.result_base64_encoded | Should not be $NULL
     }
 }
 
