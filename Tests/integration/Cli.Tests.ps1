@@ -18,6 +18,7 @@ Describe  "Get (Any)CLi" {
         $cli = Get-ArubaSWCli -cmd "show run"
         $cli.status | Should be "CCS_SUCCESS"
         $cli.cmd | Should be "show run"
+        $cli.error_msg | Should -BeNullOrEmpty
         $cli.result_base64_encoded | Should not be $NULL
         $cli.result | Should not be $NULL
     }
