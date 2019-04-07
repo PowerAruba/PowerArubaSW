@@ -40,15 +40,15 @@ function Get-ArubaSWCli {
 
         $conf = ($response | ConvertFrom-Json)
 
+        $result_base64_encoded = $conf.result_base64_encoded
+
+        $result  = [System.Convert]::FromBase64String($result_base64_encoded)
+
+        $result = [System.Text.Encoding]::UTF8.GetString($result)
+
+        $conf | add-member -name "result" -membertype NoteProperty -value $result
+
         $conf
-
-        $conf = ($response | ConvertFrom-Json).result_base64_encoded
-
-        $encoded  = [System.Convert]::FromBase64String($conf)
-
-        $decoded = [System.Text.Encoding]::UTF8.GetString($encoded)
-
-        $decoded
 
     }
 
