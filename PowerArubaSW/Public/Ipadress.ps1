@@ -26,9 +26,9 @@ function Get-ArubaSWIpAddress {
 
         $url = "rest/v4/ipaddresses"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json)
+        $run = ($response | ConvertFrom-Json)
 
         $run.ip_address_subnet_element
     }

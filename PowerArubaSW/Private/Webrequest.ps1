@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-function Invoke-ArubaSWWebRequest(){
+function Invoke-ArubaSWWebRequest() {
 
     Param(
         [Parameter(Mandatory = $true)]
@@ -27,20 +27,22 @@ function Invoke-ArubaSWWebRequest(){
         $port = ${DefaultArubaSWConnection}.port
         $invokeParams = ${DefaultArubaSWConnection}.InvokeParams
 
-        if($httpOnly) {
+        if ($httpOnly) {
             $fullurl = "http://${Server}:${port}/${url}"
-        } else {
+        }
+        else {
             $fullurl = "https://${Server}:${port}/${url}"
         }
 
-        if( -Not $PsBoundParameters.ContainsKey('sessionvariable') ){
+        if ( -Not $PsBoundParameters.ContainsKey('sessionvariable') ) {
             $sessionvariable = $DefaultArubaSWConnection.session
         }
 
         try {
-            if($body){
+            if ($body) {
                 $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable @invokeParams
-            } else {
+            }
+            else {
                 $response = Invoke-WebRequest $fullurl -Method $method -Websession $sessionvariable @invokeParams
             }
         }

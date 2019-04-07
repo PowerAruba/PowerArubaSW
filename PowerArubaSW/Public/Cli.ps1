@@ -33,9 +33,9 @@ function Get-ArubaSWCli {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory = $true, Position = 1)]
         [string]$cmd,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$display_result
     )
 
@@ -46,25 +46,27 @@ function Get-ArubaSWCli {
 
         $url = "rest/v4/cli"
 
-        $run = new-Object -TypeName PSObject
+        $run = New-Object -TypeName PSObject
 
-        $run | add-member -name "cmd" -membertype NoteProperty -Value "$cmd"
+        $run | Add-Member -name "cmd" -membertype NoteProperty -Value "$cmd"
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $run -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $run -url $url
 
         $conf = ($response | ConvertFrom-Json)
 
         $result_base64_encoded = $conf.result_base64_encoded
 
-        $result  = [System.Convert]::FromBase64String($result_base64_encoded)
+        $result = [System.Convert]::FromBase64String($result_base64_encoded)
 
         $result = [System.Text.Encoding]::UTF8.GetString($result)
 
-        $conf | add-member -name "result" -membertype NoteProperty -value $result
+        $conf | Add-Member -name "result" -membertype NoteProperty -value $result
 
-        if($display_result) { #only display CLI output
+        if ($display_result) {
+            #only display CLI output
             $conf.result
-        } else {
+        }
+        else {
             $conf
         }
     }
@@ -96,7 +98,7 @@ function Send-ArubaSWCliBatch {
         #>
 
     Param(
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [string[]]$command
     )
 
@@ -107,25 +109,24 @@ function Send-ArubaSWCliBatch {
 
         $nb = 0
 
-        foreach ($line in $command)
-        {
+        foreach ($line in $command) {
             $result = $result + $command[$nb] + "`n"
             $nb = $nb + 1
         }
 
         $url = "rest/v4/cli_batch"
 
-        $conf = new-Object -TypeName PSObject
+        $conf = New-Object -TypeName PSObject
 
         $encode = [System.Text.Encoding]::UTF8.GetBytes($result)
 
-        $EncodedText =[Convert]::ToBase64String($encode)
+        $EncodedText = [Convert]::ToBase64String($encode)
 
-        $conf | add-member -name "cli_batch_base64_encoded" -membertype NoteProperty -Value $EncodedText
+        $conf | Add-Member -name "cli_batch_base64_encoded" -membertype NoteProperty -Value $EncodedText
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $conf -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
     }
@@ -156,9 +157,9 @@ function Get-ArubaSWCliBatchStatus {
 
         $url = "rest/v4/cli_batch/status"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).cmd_exec_logs
+        $run = ($response | ConvertFrom-Json).cmd_exec_logs
 
         $run
     }

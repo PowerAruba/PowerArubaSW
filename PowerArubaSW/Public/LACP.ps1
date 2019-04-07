@@ -27,9 +27,9 @@ function Get-ArubaSWLACP {
 
         $url = "rest/v4/lacp/port"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).lacp_element
+        $run = ($response | ConvertFrom-Json).lacp_element
 
         $run
     }
@@ -65,9 +65,9 @@ function Add-ArubaSWLACP {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
-        [Parameter (Mandatory=$true, Position=2)]
+        [Parameter (Mandatory = $true, Position = 2)]
         [string]$port
     )
 
@@ -78,15 +78,15 @@ function Add-ArubaSWLACP {
 
         $url = "rest/v4/lacp/port"
 
-        $lacp = new-Object -TypeName PSObject
+        $lacp = New-Object -TypeName PSObject
 
-        $lacp | add-member -name "port_id" -membertype NoteProperty -Value $port
+        $lacp | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
-        $lacp | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
+        $lacp | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $lacp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
 
@@ -118,9 +118,9 @@ function Remove-ArubaSWLACP {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
-        [Parameter (Mandatory=$true, Position=2)]
+        [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
@@ -131,18 +131,18 @@ function Remove-ArubaSWLACP {
 
     Process {
 
-        $lacp = new-Object -TypeName PSObject
+        $lacp = New-Object -TypeName PSObject
 
-        $lacp | add-member -name "port_id" -membertype NoteProperty -Value $port
+        $lacp | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
-        $lacp | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
+        $lacp | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
         $id = $lacp.port_id
 
         $url = "rest/v4/lacp/port/${id}"
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove LACP on switch"
+            $message = "Remove LACP on switch"
             $question = "Proceed with removal of LACP ${id} ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))

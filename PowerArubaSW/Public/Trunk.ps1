@@ -27,9 +27,9 @@ function Get-ArubaSWTrunk {
 
         $url = "rest/v4/trunk/port"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).trunk_element
+        $run = ($response | ConvertFrom-Json).trunk_element
 
         $run
 
@@ -66,9 +66,9 @@ function Add-ArubaSWTrunk {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
-        [Parameter (Mandatory=$true, Position=2)]
+        [Parameter (Mandatory = $true, Position = 2)]
         [string]$port
 
     )
@@ -80,15 +80,15 @@ function Add-ArubaSWTrunk {
 
         $url = "rest/v4/trunk/port"
 
-        $trunk = new-Object -TypeName PSObject
+        $trunk = New-Object -TypeName PSObject
 
-        $trunk | add-member -name "port_id" -membertype NoteProperty -Value $port
+        $trunk | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
-        $trunk | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
+        $trunk | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $trunk -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $trunk -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
 
@@ -119,9 +119,9 @@ function Remove-ArubaSWTrunk {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
-        [Parameter (Mandatory=$true, Position=2)]
+        [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
@@ -132,18 +132,18 @@ function Remove-ArubaSWTrunk {
 
     Process {
 
-        $trunk = new-Object -TypeName PSObject
+        $trunk = New-Object -TypeName PSObject
 
-        $trunk | add-member -name "port_id" -membertype NoteProperty -Value $port
+        $trunk | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
-        $trunk | add-member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
+        $trunk | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
         $id = $trunk.port_id
 
         $url = "rest/v4/trunk/port/${id}"
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove trunk group on switch"
+            $message = "Remove trunk group on switch"
             $question = "Proceed with removal of trunk group $trunk_group on port $port ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))

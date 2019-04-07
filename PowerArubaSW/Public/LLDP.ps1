@@ -26,9 +26,9 @@ function Get-ArubaSWLLDPRemote {
 
         $url = "rest/v4/lldp/remote-device"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).lldp_remote_device_element
+        $run = ($response | ConvertFrom-Json).lldp_remote_device_element
 
         $run
     }
@@ -44,7 +44,7 @@ function Get-ArubaSWLLDPGlobalStatus {
         Get information about LLDP global status.
 
         .DESCRIPTION
-        Get lldp informations. 
+        Get lldp informations.
 
         .EXAMPLE
         Get-ArubaSWLLDPGlobalStatus
@@ -58,9 +58,9 @@ function Get-ArubaSWLLDPGlobalStatus {
 
         $url = "rest/v4/lldp"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
     }
@@ -88,16 +88,16 @@ function Set-ArubaSWLLDPGlobalStatus {
     #>
 
     Param(
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$enable,
-        [Parameter (Mandatory=$false)]
-        [ValidateRange (8,32768)]
+        [Parameter (Mandatory = $false)]
+        [ValidateRange (8, 32768)]
         [int]$transmit,
-        [Parameter (Mandatory=$false)]
-        [ValidateRange (2,10)]
+        [Parameter (Mandatory = $false)]
+        [ValidateRange (2, 10)]
         [int]$holdtime,
-        [Parameter (Mandatory=$false)]
-        [ValidateRange (1,10)]
+        [Parameter (Mandatory = $false)]
+        [ValidateRange (1, 10)]
         [int]$faststart
     )
 
@@ -108,40 +108,34 @@ function Set-ArubaSWLLDPGlobalStatus {
 
         $url = "rest/v4/lldp"
 
-        $conf = new-Object -TypeName PSObject
+        $conf = New-Object -TypeName PSObject
 
-        if ( $PsBoundParameters.ContainsKey('enable') )
-        {
-            if ( $enable )
-            {
+        if ( $PsBoundParameters.ContainsKey('enable') ) {
+            if ( $enable ) {
                 $enable_status = "LLAS_ENABLED"
             }
-            else
-            {
+            else {
                 $enable_status = "LLAS_DISABLED"
             }
 
-            $conf | add-member -name "admin_status" -membertype NoteProperty -Value $enable_status
+            $conf | Add-Member -name "admin_status" -membertype NoteProperty -Value $enable_status
         }
 
-        if ( $PsBoundParameters.ContainsKey('transmit') )
-        {
-            $conf | add-member -name "transmit_interval" -membertype NoteProperty -Value $transmit
+        if ( $PsBoundParameters.ContainsKey('transmit') ) {
+            $conf | Add-Member -name "transmit_interval" -membertype NoteProperty -Value $transmit
         }
 
-        if ( $PsBoundParameters.ContainsKey('holdtime') )
-        {
-            $conf | add-member -name "hold_time_multiplier" -membertype NoteProperty -Value $holdtime
+        if ( $PsBoundParameters.ContainsKey('holdtime') ) {
+            $conf | Add-Member -name "hold_time_multiplier" -membertype NoteProperty -Value $holdtime
         }
 
-        if ( $PsBoundParameters.ContainsKey('faststart') )
-        {
-            $conf | add-member -name "fast_start_count" -membertype NoteProperty -Value $faststart
+        if ( $PsBoundParameters.ContainsKey('faststart') ) {
+            $conf | Add-Member -name "fast_start_count" -membertype NoteProperty -Value $faststart
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
 
@@ -158,7 +152,7 @@ function Get-ArubaSWLLDPNeighborStats {
         Get information about LLDP neighbor stats
 
         .DESCRIPTION
-        Get lldp neighbor stats informations 
+        Get lldp neighbor stats informations
 
         .EXAMPLE
         Get-ArubaSWLLDPNeighborStats
@@ -172,9 +166,9 @@ function Get-ArubaSWLLDPNeighborStats {
 
         $url = "rest/v4/lldp/stats/device"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
     }
@@ -193,7 +187,7 @@ function Get-ArubaSWLLDPPortStats {
         Get lldp port stats informations
 
         .EXAMPLE
-        Get-ArubaSWLLDPPortStats 
+        Get-ArubaSWLLDPPortStats
         Gat all the LLDP stats informations about all the ports.
 
         .EXAMPLE
@@ -202,7 +196,7 @@ function Get-ArubaSWLLDPPortStats {
     #>
 
     Param(
-        [Parameter (Mandatory=$false, ParameterSetName="port")]
+        [Parameter (Mandatory = $false, ParameterSetName = "port")]
         [string]$port
     )
 
@@ -213,12 +207,12 @@ function Get-ArubaSWLLDPPortStats {
 
         $url = "rest/v4/lldp/stats/ports"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).lldp_port_stats_element
+        $run = ($response | ConvertFrom-Json).lldp_port_stats_element
 
         switch ( $PSCmdlet.ParameterSetName ) {
-            "port" { $run  | where-object {$_.port_name -match $port}}
+            "port" { $run | Where-Object { $_.port_name -match $port } }
             default { $run }
         }
     }

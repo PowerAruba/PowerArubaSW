@@ -27,9 +27,9 @@ function Get-ArubaSWSTP {
 
         $url = "rest/v4/stp"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $stp = $response | convertfrom-json
+        $stp = $response | ConvertFrom-Json
 
         $stp
     }
@@ -59,14 +59,14 @@ function Set-ArubaSWSTP {
     #>
 
     Param(
-    [Parameter (Mandatory=$true, Position=1)]
-    [switch]$enable,
-    [Parameter (Mandatory=$false, Position=2)]
-    [ValidateRange (0,15)]
-    [int]$priority,
-    [Parameter (Mandatory=$false, Position=3)]
-    [ValidateSet ("MSTP", "RPVST")]
-    [string]$mode
+        [Parameter (Mandatory = $true, Position = 1)]
+        [switch]$enable,
+        [Parameter (Mandatory = $false, Position = 2)]
+        [ValidateRange (0, 15)]
+        [int]$priority,
+        [Parameter (Mandatory = $false, Position = 3)]
+        [ValidateSet ("MSTP", "RPVST")]
+        [string]$mode
     )
 
     Begin {
@@ -76,26 +76,23 @@ function Set-ArubaSWSTP {
 
         $url = "rest/v4/stp"
 
-        $_stp = new-Object -TypeName PSObject
+        $_stp = New-Object -TypeName PSObject
 
-        if ( $PsBoundParameters.ContainsKey('enable') )
-        {
+        if ( $PsBoundParameters.ContainsKey('enable') ) {
             if ( $enable ) {
-                $_stp | add-member -name "is_enabled" -membertype NoteProperty -Value $True
+                $_stp | Add-Member -name "is_enabled" -membertype NoteProperty -Value $True
             }
             else {
-                $_stp | add-member -name "is_enabled" -membertype NoteProperty -Value $false
+                $_stp | Add-Member -name "is_enabled" -membertype NoteProperty -Value $false
             }
         }
 
-        if ( $PsBoundParameters.ContainsKey('priority') )
-        {
-            $_stp | add-member -name "priority" -membertype NoteProperty -Value $priority
+        if ( $PsBoundParameters.ContainsKey('priority') ) {
+            $_stp | Add-Member -name "priority" -membertype NoteProperty -Value $priority
         }
 
-        if ( $PsBoundParameters.ContainsKey('mode') )
-        {
-            switch( $mode ) {
+        if ( $PsBoundParameters.ContainsKey('mode') ) {
+            switch ( $mode ) {
                 mstp {
                     $_mode = "STM_MSTP"
                 }
@@ -104,12 +101,12 @@ function Set-ArubaSWSTP {
                 }
             }
 
-            $_stp | add-member -name "mode" -membertype NoteProperty -Value $_mode
+            $_stp | Add-Member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
 
@@ -141,7 +138,7 @@ function Get-ArubaSWSTPPort {
 
 
     Param(
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$port
     )
 
@@ -153,16 +150,17 @@ function Get-ArubaSWSTPPort {
 
         $url = "rest/v4/stp/ports"
 
-        if($port) {
+        if ($port) {
             $url += "/$port"
         }
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $stp = $response | convertfrom-json
-        if($port) {
+        $stp = $response | ConvertFrom-Json
+        if ($port) {
             $stp
-        } else {
+        }
+        else {
             $stp.stp_port_element
         }
     }
@@ -193,22 +191,22 @@ function Set-ArubaSWSTPPort {
     #>
 
     Param(
-    [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
-    [string]$port,
-    [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "port_stp")]
-    #ValidateScript({ ValidateSTPPort $_ })]
-    [psobject]$port_stp,
-    [Parameter (Mandatory=$false)]
-    [ValidateRange (0,15)]
-    [int]$priority,
-    [Parameter (Mandatory=$false)]
-    [switch]$admin_edge,
-    [Parameter (Mandatory=$false)]
-    [switch]$bpdu_protection,
-    [Parameter (Mandatory=$false)]
-    [switch]$bpdu_filter,
-    [Parameter (Mandatory=$false)]
-    [switch]$root_guard
+        [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
+        [string]$port,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "port_stp")]
+        #ValidateScript({ ValidateSTPPort $_ })]
+        [psobject]$port_stp,
+        [Parameter (Mandatory = $false)]
+        [ValidateRange (0, 15)]
+        [int]$priority,
+        [Parameter (Mandatory = $false)]
+        [switch]$admin_edge,
+        [Parameter (Mandatory = $false)]
+        [switch]$bpdu_protection,
+        [Parameter (Mandatory = $false)]
+        [switch]$bpdu_filter,
+        [Parameter (Mandatory = $false)]
+        [switch]$root_guard
     )
 
     Begin {
@@ -221,60 +219,55 @@ function Set-ArubaSWSTPPort {
             $port = $port_stp.port_id
         }
 
-        $_stp = new-Object -TypeName PSObject
+        $_stp = New-Object -TypeName PSObject
 
-        $_stp | add-member -name "port_id" -membertype NoteProperty -Value $port
+        $_stp | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
         $url = "rest/v4/stp/ports/${port}"
 
-        if ( $PsBoundParameters.ContainsKey('priority') )
-        {
-            $_stp | add-member -name "priority" -membertype NoteProperty -Value $priority
+        if ( $PsBoundParameters.ContainsKey('priority') ) {
+            $_stp | Add-Member -name "priority" -membertype NoteProperty -Value $priority
         }
 
-        if ( $PsBoundParameters.ContainsKey('admin_edge') )
-        {
+        if ( $PsBoundParameters.ContainsKey('admin_edge') ) {
             if ( $admin_edge ) {
-                $_stp | add-member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $true
+                $_stp | Add-Member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $true
             }
             else {
-                $_stp | add-member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $false
+                $_stp | Add-Member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $false
             }
         }
 
-        if ( $PsBoundParameters.ContainsKey('bpdu_protection') )
-        {
+        if ( $PsBoundParameters.ContainsKey('bpdu_protection') ) {
             if ( $bpdu_protection ) {
-                $_stp | add-member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $true
+                $_stp | Add-Member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $true
             }
             else {
-                $_stp | add-member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $false
+                $_stp | Add-Member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $false
             }
         }
 
-        if ( $PsBoundParameters.ContainsKey('bpdu_filter') )
-        {
+        if ( $PsBoundParameters.ContainsKey('bpdu_filter') ) {
             if ( $bpdu_filter ) {
-                $_stp | add-member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $true
+                $_stp | Add-Member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $true
             }
             else {
-                $_stp | add-member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $false
+                $_stp | Add-Member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $false
             }
         }
 
-        if ( $PsBoundParameters.ContainsKey('root_guard') )
-        {
+        if ( $PsBoundParameters.ContainsKey('root_guard') ) {
             if ( $root_guard ) {
-                $_stp | add-member -name "is_enable_root_guard" -membertype NoteProperty -Value $true
+                $_stp | Add-Member -name "is_enable_root_guard" -membertype NoteProperty -Value $true
             }
             else {
-                $_stp | add-member -name "is_enable_root_guard" -membertype NoteProperty -Value $false
+                $_stp | Add-Member -name "is_enable_root_guard" -membertype NoteProperty -Value $false
             }
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
 

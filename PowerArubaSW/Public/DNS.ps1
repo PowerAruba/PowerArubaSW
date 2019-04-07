@@ -26,9 +26,9 @@ function Get-ArubaSWDns {
 
         $url = "rest/v4/dns"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json)
+        $run = ($response | ConvertFrom-Json)
 
         $run
     }
@@ -64,14 +64,14 @@ function Set-ArubaSWDns {
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [ValidateSet ("DHCP", "Manual")]
         [string]$mode,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$server1,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$server2,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string[]]$domain
     )
 
@@ -90,7 +90,7 @@ function Set-ArubaSWDns {
 
         $check = Get-ArubaSWDns
 
-        switch( $mode ) {
+        switch ( $mode ) {
             DHCP {
                 $mode_status = "DCM_DHCP"
             }
@@ -99,42 +99,37 @@ function Set-ArubaSWDns {
             }
         }
 
-        $conf | add-member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
+        $conf | Add-Member -name "dns_config_mode" -membertype NoteProperty -Value $mode_status
 
-        if ($PsBoundParameters.ContainsKey('server1'))
-        {
-            $ip1 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
+        if ($PsBoundParameters.ContainsKey('server1')) {
+            $ip1 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $ip1 | add-member -name "octets" -MemberType NoteProperty -Value $server1
+            $ip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $server1
 
-            $conf | add-member -name "server_1" -membertype NoteProperty -Value $ip1
+            $conf | Add-Member -name "server_1" -membertype NoteProperty -Value $ip1
         }
-        else
-        {
-            $conf | add-member -name "server_1" -membertype NoteProperty -Value $check.server_1
+        else {
+            $conf | Add-Member -name "server_1" -membertype NoteProperty -Value $check.server_1
         }
 
-        if ($PsBoundParameters.ContainsKey('server2'))
-        {
-            $ip2 | add-member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
+        if ($PsBoundParameters.ContainsKey('server2')) {
+            $ip2 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $ip2 | add-member -name "octets" -MemberType NoteProperty -Value $server2
+            $ip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $server2
 
-            $conf | add-member -name "server_2" -membertype NoteProperty -Value $ip2
+            $conf | Add-Member -name "server_2" -membertype NoteProperty -Value $ip2
         }
-        else
-        {
-            $conf | add-member -name "server_2" -membertype NoteProperty -Value $check.server_2
+        else {
+            $conf | Add-Member -name "server_2" -membertype NoteProperty -Value $check.server_2
         }
 
-        if ( $PsBoundParameters.ContainsKey('domain') )
-        {
-            $conf | add-member -name "dns_domain_names" -membertype NoteProperty -Value $domain
+        if ( $PsBoundParameters.ContainsKey('domain') ) {
+            $conf | Add-Member -name "dns_domain_names" -membertype NoteProperty -Value $domain
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
 
-        $run = $response | convertfrom-json
+        $run = $response | ConvertFrom-Json
 
         $run
     }
@@ -167,14 +162,14 @@ function Remove-ArubaSWDns {
 
     Process {
 
-        $dns = new-Object -TypeName PSObject
+        $dns = New-Object -TypeName PSObject
 
-        $dns | add-member -name "dns_config_mode" -membertype NoteProperty -Value "DCM_DISABLED"
+        $dns | Add-Member -name "dns_config_mode" -membertype NoteProperty -Value "DCM_DISABLED"
 
         $url = "rest/v4/dns"
 
         if ( -not ( $noconfirm )) {
-            $message  = "Remove DNS on the switch"
+            $message = "Remove DNS on the switch"
             $question = "Proceed with removal of DNS config ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))

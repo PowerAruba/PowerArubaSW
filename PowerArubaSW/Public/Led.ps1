@@ -26,7 +26,7 @@ function Get-ArubaSWLed {
     #>
 
     Param(
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [int]$member_id
     )
 
@@ -37,13 +37,14 @@ function Get-ArubaSWLed {
 
         $url = "rest/v4/led_locator_info"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).locator_led_info
+        $run = ($response | ConvertFrom-Json).locator_led_info
 
         if ( $member_id ) {
-            $run | where-object { $_.member_id -match $member_id}
-        } else {
+            $run | Where-Object { $_.member_id -match $member_id }
+        }
+        else {
             $run
         }
 
@@ -77,17 +78,17 @@ function Set-ArubaSWLed {
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [ValidateSet("On", "Off", "Blink")]
         [string]$status,
-        [Parameter (Mandatory=$false)] 
-        [ValidateRange(1,1440)]
+        [Parameter (Mandatory = $false)]
+        [ValidateRange(1, 1440)]
         [int]$duration,
-        [Parameter (Mandatory=$false)] 
+        [Parameter (Mandatory = $false)]
         [ValidateSet("Now", "Startup")]
         [String]$when,
-        [Parameter (Mandatory=$false)]
-        [ValidateRange(1,4)]
+        [Parameter (Mandatory = $false)]
+        [ValidateRange(1, 4)]
         [int]$member_id
     )
 
@@ -98,11 +99,11 @@ function Set-ArubaSWLed {
 
         $url = "rest/v4/locator-led-blink"
 
-        $led = new-Object -TypeName PSObject
+        $led = New-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('status') ) {
 
-            switch( $status ) {
+            switch ( $status ) {
                 ON {
                     $led_blink_status = "LS_ON"
                 }
@@ -114,16 +115,16 @@ function Set-ArubaSWLed {
                 }
             }
 
-            $led | add-member -name "led_blink_status" -membertype NoteProperty -Value $led_blink_status
+            $led | Add-Member -name "led_blink_status" -membertype NoteProperty -Value $led_blink_status
         }
 
         if ( $PsBoundParameters.ContainsKey('duration') ) {
-            $led | add-member -name "duration_in_minutes" -membertype NoteProperty -Value $duration
+            $led | Add-Member -name "duration_in_minutes" -membertype NoteProperty -Value $duration
         }
 
         if ( $PsBoundParameters.ContainsKey('when') ) {
 
-            switch( $when ) {
+            switch ( $when ) {
                 NOW {
                     $when_blink = "LBT_NOW"
                 }
@@ -132,14 +133,14 @@ function Set-ArubaSWLed {
                 }
             }
 
-            $led | add-member -name "when" -membertype NoteProperty -Value $when_blink
+            $led | Add-Member -name "when" -membertype NoteProperty -Value $when_blink
         }
 
         if ( $PsBoundParameters.ContainsKey('member_id') ) {
-            $led | add-member -name "member_id" -membertype NoteProperty -Value $member_id
+            $led | Add-Member -name "member_id" -membertype NoteProperty -Value $member_id
         }
-    
-        invoke-ArubaSWWebRequest -method "POST" -body $led -url $url | out-null
+
+        Invoke-ArubaSWWebRequest -method "POST" -body $led -url $url | Out-Null
 
         #Display the led info...
         Get-ArubaSWLed

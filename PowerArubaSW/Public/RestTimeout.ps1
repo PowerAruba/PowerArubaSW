@@ -26,9 +26,9 @@ function Get-ArubaSWRestSessionTimeout {
 
         $url = "rest/v4/session-idle-timeout"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $run = ($response | convertfrom-json).timeout
+        $run = ($response | ConvertFrom-Json).timeout
 
         $run
 
@@ -59,9 +59,9 @@ function Set-ArubaSWRestSessionTimeout {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
-            [ValidateRange(120,7200)]
-            [int]$timeout
+        [Parameter (Mandatory = $true, Position = 1)]
+        [ValidateRange(120, 7200)]
+        [int]$timeout
     )
 
     Begin {
@@ -71,16 +71,15 @@ function Set-ArubaSWRestSessionTimeout {
 
         $url = "rest/v4/session-idle-timeout"
 
-        $time = new-Object -TypeName PSObject
+        $time = New-Object -TypeName PSObject
 
-        if ( $PsBoundParameters.ContainsKey('timeout') )
-        {
-            $time | add-member -name "timeout" -membertype NoteProperty -Value $timeout
+        if ( $PsBoundParameters.ContainsKey('timeout') ) {
+            $time | Add-Member -name "timeout" -membertype NoteProperty -Value $timeout
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $time -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $time -url $url
 
-        $run = ($response | convertfrom-json).timeout
+        $run = ($response | ConvertFrom-Json).timeout
 
         $run
 

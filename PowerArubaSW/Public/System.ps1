@@ -28,9 +28,9 @@ function Get-ArubaSWSystem {
 
         $url = "rest/v4/system"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $response.content | convertfrom-json
+        $response.content | ConvertFrom-Json
     }
 
     End {
@@ -69,23 +69,23 @@ function Set-ArubaSWSystem {
 
         $url = "rest/v4/system"
 
-        $system = new-Object -TypeName PSObject
+        $system = New-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
-            $system | add-member -name "name" -membertype NoteProperty -Value $name
+            $system | Add-Member -name "name" -membertype NoteProperty -Value $name
         }
 
         if ( $PsBoundParameters.ContainsKey('location') ) {
-            $system | add-member -name "location" -membertype NoteProperty -Value $location
+            $system | Add-Member -name "location" -membertype NoteProperty -Value $location
         }
 
         if ( $PsBoundParameters.ContainsKey('contact') ) {
-            $system | add-member -name "contact" -membertype NoteProperty -Value $contact
+            $system | Add-Member -name "contact" -membertype NoteProperty -Value $contact
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -url $url -Body $system
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -url $url -Body $system
 
-        $response.content | convertfrom-json
+        $response.content | ConvertFrom-Json
     }
 
     End {
@@ -119,9 +119,9 @@ function Get-ArubaSWSystemStatus {
 
         $url = "rest/v4/system/status"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $response.content | convertfrom-json
+        $response.content | ConvertFrom-Json
     }
 
     End {
@@ -147,9 +147,9 @@ function Get-ArubaSWSystemStatusSwitch {
 
         $url = "rest/v4/system/status/switch"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $response.content | convertfrom-json
+        $response.content | ConvertFrom-Json
     }
 
     End {
@@ -182,9 +182,9 @@ function Get-ArubaSWSystemStatusGlobal {
         }
         $url = "rest/v4/system/status/global_info"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $response.content | convertfrom-json
+        $response.content | ConvertFrom-Json
     }
 
     End {
