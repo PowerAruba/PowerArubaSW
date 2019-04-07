@@ -14,15 +14,29 @@ function Get-ArubaSWCli {
         .DESCRIPTION
         Get the result of a cli command.
 
-        .EXAMPLE
-        Get-ArubaSWCli -cmd "Show running config"
+        All configuration and execution commands in non-interactive mode are supported.
+        crypto, copy, process-tracking, recopy, redo, repeat, session, end, print, terminal,
+        logout, menu, page, restore, update, upgrade-software, return, setup, screen-length,
+        vlan range and help commands are not supported.
+        Testmode commands are not supported.
+        All show commands are supported except show tech and show history
 
-        This function give you the result of a cli command on the switch.
+        .EXAMPLE
+        Get-ArubaSWCli -cmd "Show running-config"
+
+        This function give you the result (cmd, status, result, error_mesg...) of a cli command on the switch.
+
+        .EXAMPLE
+        Get-ArubaSWCli -cmd "Show running-config" -display_result
+
+        This function give only ther esult of a cli command on the switch.
     #>
 
     Param(
         [Parameter (Mandatory=$true, Position=1)]
-        [string]$cmd
+        [string]$cmd,
+        [Parameter (Mandatory=$false)]
+        [switch]$display_result
     )
 
     Begin {
@@ -38,14 +52,21 @@ function Get-ArubaSWCli {
 
         $response = invoke-ArubaSWWebRequest -method "POST" -body $run -url $url
 
-        $conf = ($response | ConvertFrom-Json).result_base64_encoded
+        $conf = ($response | ConvertFrom-Json)
 
-        $encoded  = [System.Convert]::FromBase64String($conf)
+        $result_base64_encoded = $conf.result_base64_encoded
 
-        $decoded = [System.Text.Encoding]::UTF8.GetString($encoded)
+        $result  = [System.Convert]::FromBase64String($result_base64_encoded)
 
-        $decoded
+        $result = [System.Text.Encoding]::UTF8.GetString($result)
 
+        $conf | add-member -name "result" -membertype NoteProperty -value $result
+
+        if($display_result) { #only display CLI output
+            $conf.result
+        } else {
+            $conf
+        }
     }
 
     End {
