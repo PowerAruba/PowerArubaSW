@@ -33,26 +33,57 @@ Describe  "Get (Any)CLi" {
     }
 }
 
+Describe  "Send Cli Batch command" {
+    It "Send Cli Batch command (disable interface $pester_cli_port and set name)" {
+        Send-ArubaSWCliBatch -command "interface $pester_cli_port disable", "interface $pester_cli_port name PowerArubaSW-int"
+        $cliBatch = Get-ArubaSWCliBatchStatus
+        $cliBatch[0].status | Should -be "CCS_SUCCESS"
+        $cliBatch[0].cmd | Should -Be "interface $pester_cli_port disable"
+        $cliBatch[0].result | Should -BeNullOrEmpty
+        $cliBatch[1].status | Should -Be "CCS_SUCCESS"
+        $cliBatch[1].cmd | Should -Be "interface $pester_cli_port name PowerArubaSW-int"
+        $cliBatch[1].result | Should -BeNullOrEmpty
+        $port = Get-ArubaSWPort $pester_cli_port
+        $port.is_port_enabled | Should -Be $false
+        $port.name | Should -Be "PowerArubaSW-int"
+        }
+
+    It "Send Cli Batch command (enable interface $pester_cli_port and remove name)" {
+        Send-ArubaSWCliBatch -command "interface $pester_cli_port", "enable", "no name"
+        $cliBatch = Get-ArubaSWCliBatchStatus
+        $cliBatch[0].status | Should -be "CCS_SUCCESS"
+        $cliBatch[0].cmd | Should -Be "interface $pester_cli_port"
+        $cliBatch[0].result | Should -BeNullOrEmpty
+        $cliBatch[1].status | Should -Be "CCS_SUCCESS"
+        $cliBatch[1].cmd | Should -Be "enable"
+        $cliBatch[1].result | Should -BeNullOrEmpty
+        $cliBatch[2].status | Should -Be "CCS_SUCCESS"
+        $cliBatch[2].cmd | Should -Be "no name"
+        $cliBatch[2].result | Should -BeNullOrEmpty
+        $port = Get-ArubaSWPort $pester_cli_port
+        $port.is_port_enabled | Should -Be $true
+        $port.name | Should -BeNullOrEmpty
+    }
+
+    It "Send Cli Batch command (Wrong command)" {
+        Send-ArubaSWCliBatch -command "show run"
+        $cliBatch = Get-ArubaSWCliBatchStatus
+        $cliBatch[0].status | Should -be "CCS_FAILURE"
+        $cliBatch[0].cmd | Should -Be "show run"
+        $cliBatch[0].result | Should -Be "Invalid input: show"
+    }
+}
 Describe  "Get-ArubaSWCliBatchStatus" {
-    It "Get ArubaSWCliBatchStatus Does not throw an error" {
-        {
-            Get-ArubaSWCliBatchStatus
-        } | Should Not Throw
-    }
+        It "Get ArubaSWCliBatchStatus Does not throw an error" {
+            {
+                Get-ArubaSWCliBatchStatus
+            } | Should Not Throw
+        }
 
-    It "Get ArubaSWCliBatchStatus" {
-        $cli = Get-ArubaSWCliBatchStatus
-        $cli | Should not be $NULL
+        It "Get ArubaSWCliBatchStatus" {
+            $cli = Get-ArubaSWCliBatchStatus
+            $cli | Should not be $NULL
+        }
     }
-}
-
-Describe  "Write ArubaSWCliBatch" {
-    It "Write ArubaSWCliBatch" {
-        Write-ArubaSWCliBatch -command "interface 4","disable"
-        $cli = Get-ArubaSWCliBatchStatus
-        $cli.status | Should be "CCS_SUCCESS"
-        Write-ArubaSWCliBatch -command "interface 4","enable"
-    }
-}
 
 Disconnect-ArubaSW -noconfirm
