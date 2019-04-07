@@ -9,7 +9,7 @@
 
 Describe  "Get-ArubaSWCli" {
     It "Get-ArubaSWCli Does not throw an error" {
-        { Get-ArubaSWCli -cmd "show run" } | Should Not Throw 
+        { Get-ArubaSWCli -cmd "show run" } | Should Not Throw
     }
     It "Get-ArubaSWCli Should not be null" {
         { Get-ArubaSWCli -cmd "show run" } | Should not be $NULL
@@ -22,4 +22,4 @@ Describe  "Get-ArubaSWCli" {
     }
 }
 
-Disconnect-ArubaSW
+Disconnect-ArubaSW -noconfirm
