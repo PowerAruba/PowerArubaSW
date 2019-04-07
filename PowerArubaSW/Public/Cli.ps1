@@ -73,21 +73,27 @@ function Get-ArubaSWCli {
     }
 }
 
-function Write-ArubaSWCliBatch {
+function Send-ArubaSWCliBatch {
 
     <#
         .SYNOPSIS
-        Write a cli batch command.
+        Send a cli batch command.
 
         .DESCRIPTION
-        Write a cli batch command on Aruba OS Switch.
+        Send a cli batch command on Aruba OS Switch.
         All configuration commands in non-interactive mode  are supported. Exit, configure, erase, startup-config commands are supported.
         Crypto, show, execution and testmode commands are NOT supported.
 
         .EXAMPLE
-        Write-ArubaSWCliBatch -command
-        Write a cli batch command on the switch.
-    #>
+        Send-ArubaSWCliBatch -command "interface 4 disable"
+
+        Send a cli batch command (disable interface 4) on the switch, use Get-ArubaSWCliBatchStatus for get result
+
+        .EXAMPLE
+        Send-ArubaSWCliBatch -command "interface 4", "enable", "name PowerArubaSW-int"
+
+        Send a cli batch command (disable interface 4) on the switch, use Get-ArubaSWCliBatchStatus for get result
+        #>
 
     Param(
         [Parameter (Mandatory=$true)]
@@ -106,8 +112,6 @@ function Write-ArubaSWCliBatch {
             $result = $result + $command[$nb] + "`n"
             $nb = $nb + 1
         }
-
-        [string]$result
 
         $url = "rest/v4/cli_batch"
 
@@ -141,6 +145,7 @@ function Get-ArubaSWCliBatchStatus {
 
         .EXAMPLE
         Get-ArubaSWCliBatchStatus
+
         Get a cli batch command status on the switch.
     #>
 
