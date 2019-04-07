@@ -29,14 +29,14 @@ Describe  "Get Port" {
         $PORT = Get-ArubaSWPort -port_id $pester_port
         $PORT.id | Should be $pester_port
         $PORT.name | Should be "DEFAULT_PORT"
-        $PORT.is_port_enabled | should be $true
-        $PORT.is_port_up | should not be $null
-        $PORT.config_mode | should be "PCM_AUTO"
-        $PORT.trunk_mode | should be "PTT_NONE"
-        $PORT.lacp_status | should be "LAS_DISABLED"
-        $PORT.trunk_group | should be ""
-        $PORT.is_flow_control_enabled | should be $false
-        $PORT.is_dsnoop_port_trusted | should be $false
+        $PORT.is_port_enabled | Should be $true
+        $PORT.is_port_up | Should not be $null
+        $PORT.config_mode | Should be "PCM_AUTO"
+        $PORT.trunk_mode | Should be "PTT_NONE"
+        $PORT.lacp_status | Should be "LAS_DISABLED"
+        $PORT.trunk_group | Should be ""
+        $PORT.is_flow_control_enabled | Should be $false
+        $PORT.is_dsnoop_port_trusted | Should be $false
     }
 }
 
@@ -47,7 +47,7 @@ Describe  "Configure Port" {
         It "Configure Port name" {
             Set-ArubaSWPort -port_id $pester_port -name "PowerArubaSW-Port"
             $PORT = Get-ArubaSWPort -port_id $pester_port
-            $PORT.name | should be "PowerArubaSW-Port"
+            $PORT.name | Should be "PowerArubaSW-Port"
         }
 
         It "Configure disable Port" {
@@ -66,16 +66,16 @@ Describe  "Configure Port" {
             Set-ArubaSWPort -port_id $pester_port -is_flow_control_enabled -is_dsnoop_port_trusted
             $PORT = Get-ArubaSWPort -port_id $pester_port
             $PORT.id | Should Be $pester_port
-            $PORT.is_flow_control_enabled | should be $true
-            $PORT.is_dsnoop_port_trusted | should be $true
+            $PORT.is_flow_control_enabled | Should be $true
+            $PORT.is_dsnoop_port_trusted | Should be $true
         }
 
         It "Configure Port option (disable flow control/dsnoop port trusted)" {
             Set-ArubaSWPort -port_id $pester_port -is_flow_control_enabled:$false -is_dsnoop_port_trusted:$false
             $PORT = Get-ArubaSWPort -port_id $pester_port
             $PORT.id | Should Be $pester_port
-            $PORT.is_flow_control_enabled | should be $false
-            $PORT.is_dsnoop_port_trusted | should be $false
+            $PORT.is_flow_control_enabled | Should be $false
+            $PORT.is_dsnoop_port_trusted | Should be $false
         }
 
         It "Configure Port config mode (10HDX, 100HDX, 10FDX, 100FDX, AUTO...)" {
@@ -88,7 +88,7 @@ Describe  "Configure Port" {
             #Always set name to DEFAULT_PORT (no way to remove Port name/description...)
             Set-ArubaSWPort -port_id $pester_port -name DEFAULT_PORT
             #Set to default config mode
-            Set-ArubaSWPOrt -port_id $pester_port -config PCM_AUTO
+            Set-ArubaSWPort -port_id $pester_port -config PCM_AUTO
         }
     }
 
@@ -98,7 +98,7 @@ Describe  "Configure Port" {
             $PORT = Get-ArubaSWPort -port_id $pester_port
             $PORT | Set-ArubaSWPort -name "PowerArubaSW-Port"
             $PORT = Get-ArubaSWPort -port_id $pester_port
-            $PORT.name | should be "PowerArubaSW-Port"
+            $PORT.name | Should be "PowerArubaSW-Port"
         }
 
         It "Configure disable Port" {
@@ -120,8 +120,8 @@ Describe  "Configure Port" {
             $PORT | Set-ArubaSWPort -is_flow_control_enabled -is_dsnoop_port_trusted
             $PORT = Get-ArubaSWPort -port_id $pester_port
             $PORT.id | Should Be $pester_port
-            $PORT.is_flow_control_enabled | should be $true
-            $PORT.is_dsnoop_port_trusted | should be $true
+            $PORT.is_flow_control_enabled | Should be $true
+            $PORT.is_dsnoop_port_trusted | Should be $true
         }
 
         It "Configure Port option (disable flow control/dsnoop port trusted)" {
@@ -129,8 +129,8 @@ Describe  "Configure Port" {
             $PORT | Set-ArubaSWPort -is_flow_control_enabled:$false -is_dsnoop_port_trusted:$false
             $PORT = Get-ArubaSWPort -port_id $pester_port
             $PORT.id | Should Be $pester_port
-            $PORT.is_flow_control_enabled | should be $false
-            $PORT.is_dsnoop_port_trusted | should be $false
+            $PORT.is_flow_control_enabled | Should be $false
+            $PORT.is_dsnoop_port_trusted | Should be $false
         }
 
         It "Configure Port config mode (10HDX, 100HDX, 10FDX, 100FDX, AUTO...)" {
@@ -144,7 +144,7 @@ Describe  "Configure Port" {
             #Always set name to DEFAULT_PORT (no way to remove Port name/description...)
             Set-ArubaSWPort -port_id $pester_port -name DEFAULT_PORT
             #Set to default config mode
-            Set-ArubaSWPOrt -port_id $pester_port -config PCM_AUTO
+            Set-ArubaSWPort -port_id $pester_port -config PCM_AUTO
         }
 
     }

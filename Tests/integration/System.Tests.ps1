@@ -13,51 +13,51 @@ Describe  "Get System" {
     }
 
     It "Get System (info)" {
-            $SYSTEM = Get-ArubaSWSystem
-            $SYSTEM.name | Should not be $NULL
-            $SYSTEM.location | should not be $NULL
-            $SYSTEM.contact | should not be $NULL
-            $SYSTEM.device_operation_mode | should not be $NULL
+        $SYSTEM = Get-ArubaSWSystem
+        $SYSTEM.name | Should not be $NULL
+        $SYSTEM.location | Should not be $NULL
+        $SYSTEM.contact | Should not be $NULL
+        $SYSTEM.device_operation_mode | Should not be $NULL
     }
 }
 
 Describe  "Configure System" {
-        BeforeAll {
-            $SYSTEM = Get-ArubaSWSystem
-            if ($SYSTEM.location -eq $NULL){
-                Set-ArubaSWSystem -location "My Location"
-            }
-            if ($SYSTEM.contact -eq $NULL){
-                Set-ArubaSWSystem -location "power@aruba"
-            }
+    BeforeAll {
+        $SYSTEM = Get-ArubaSWSystem
+        if ($SYSTEM.location -eq $NULL) {
+            Set-ArubaSWSystem -location "My Location"
         }
+        if ($SYSTEM.contact -eq $NULL) {
+            Set-ArubaSWSystem -location "power@aruba"
+        }
+    }
 
-        It "Configure system name" {
-            $name = (Get-ArubaSWSystem).name
-            Set-ArubaSWSystem -name "PowerAruba-SW-Name"
-            $SYSTEM = Get-ArubaSWSystem
-            $SYSTEM.name | Should be "PowerAruba-SW-Name"
-            #Set Name back
-            Set-ArubaSWSystem -name $name
-        }
+    It "Configure system name" {
+        $name = (Get-ArubaSWSystem).name
+        Set-ArubaSWSystem -name "PowerAruba-SW-Name"
+        $SYSTEM = Get-ArubaSWSystem
+        $SYSTEM.name | Should be "PowerAruba-SW-Name"
+        #Set Name back
+        Set-ArubaSWSystem -name $name
+    }
 
-        It "Configure system location" {
-            $location = (Get-ArubaSWSystem).location
-            Set-ArubaSWSystem -location "PowerAruba-SW-Location"
-            $SYSTEM = Get-ArubaSWSystem
-            $SYSTEM.location | Should be "PowerAruba-SW-Location"
-            #Set Name back
-            Set-ArubaSWSystem -location $location
-        }
+    It "Configure system location" {
+        $location = (Get-ArubaSWSystem).location
+        Set-ArubaSWSystem -location "PowerAruba-SW-Location"
+        $SYSTEM = Get-ArubaSWSystem
+        $SYSTEM.location | Should be "PowerAruba-SW-Location"
+        #Set Name back
+        Set-ArubaSWSystem -location $location
+    }
 
-        It "Configure system contact" {
-            $contact = (Get-ArubaSWSystem).contact
-            Set-ArubaSWSystem -contact "PowerAruba-SW-Contact"
-            $SYSTEM = Get-ArubaSWSystem
-            $SYSTEM.contact | Should be "PowerAruba-SW-Contact"
-            #Set Name back
-            Set-ArubaSWSystem -contact $contact
-        }
+    It "Configure system contact" {
+        $contact = (Get-ArubaSWSystem).contact
+        Set-ArubaSWSystem -contact "PowerAruba-SW-Contact"
+        $SYSTEM = Get-ArubaSWSystem
+        $SYSTEM.contact | Should be "PowerAruba-SW-Contact"
+        #Set Name back
+        Set-ArubaSWSystem -contact $contact
+    }
 }
 
 Describe  "Get System Status Global (Stacked)" {
@@ -68,10 +68,10 @@ Describe  "Get System Status Global (Stacked)" {
     }
 
     It "Get System Status Global (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type)) {
-            $SYSTEM_STATUS = Get-ArubaSWSystemStatusGlobal
-            $SYSTEM_STATUS.name | Should not be $NULL
-            $SYSTEM_STATUS.firmware_version | should not be $NULL
-            $SYSTEM_STATUS.base_ethernet_address | should not be $NULL
+        $SYSTEM_STATUS = Get-ArubaSWSystemStatusGlobal
+        $SYSTEM_STATUS.name | Should not be $NULL
+        $SYSTEM_STATUS.firmware_version | Should not be $NULL
+        $SYSTEM_STATUS.base_ethernet_address | Should not be $NULL
     }
     It "Get System Status (Stacked) Does THROW an error" -Skip:('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type) {
         {
@@ -88,15 +88,15 @@ Describe  "Get System Status (Standalone/Chassis)" {
     }
 
     It "Get System Status (Standalone)" -Skip:(-not ('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
-            $SYSTEM_STATUS = Get-ArubaSWSystemStatus
-            $SYSTEM_STATUS.name | Should not be $NULL
-            $SYSTEM_STATUS.serial_number | should not be $NULL
-            $SYSTEM_STATUS.firmware_version | should not be $NULL
-            $SYSTEM_STATUS.hardware_revision | should not be $NULL
-            $SYSTEM_STATUS.product_model | should not be $NULL
-            $SYSTEM_STATUS.base_ethernet_address | should not be $NULL
-            $SYSTEM_STATUS.total_memory_in_bytes | should not be $NULL
-            $SYSTEM_STATUS.total_poe_consumption | should not be $NULL
+        $SYSTEM_STATUS = Get-ArubaSWSystemStatus
+        $SYSTEM_STATUS.name | Should not be $NULL
+        $SYSTEM_STATUS.serial_number | Should not be $NULL
+        $SYSTEM_STATUS.firmware_version | Should not be $NULL
+        $SYSTEM_STATUS.hardware_revision | Should not be $NULL
+        $SYSTEM_STATUS.product_model | Should not be $NULL
+        $SYSTEM_STATUS.base_ethernet_address | Should not be $NULL
+        $SYSTEM_STATUS.total_memory_in_bytes | Should not be $NULL
+        $SYSTEM_STATUS.total_poe_consumption | Should not be $NULL
     }
     It "Get System Status (Stacked) Does THROW an error" -Skip:(('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
         {
@@ -113,33 +113,33 @@ Describe  "Get System Status Switch" {
         } | Should Not Throw
     }
 
-    It "Get System Status Switch (Standalone)" -Skip:(-Not ('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type)){
-            $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
-            $SYSTEM_STATUS_SWITCH.switch_type | Should be 'ST_STANDALONE'
-            $SYSTEM_STATUS_SWITCH.product_name | should not be $NULL
-            $SYSTEM_STATUS_SWITCH.product_number | should not be $NULL
-            $SYSTEM_STATUS_SWITCH.hardware_info | should not be $NULL
-            $SYSTEM_STATUS_SWITCH.blades | should not be $NULL
+    It "Get System Status Switch (Standalone)" -Skip:(-Not ('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type)) {
+        $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
+        $SYSTEM_STATUS_SWITCH.switch_type | Should be 'ST_STANDALONE'
+        $SYSTEM_STATUS_SWITCH.product_name | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.product_number | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.hardware_info | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades | Should not be $NULL
     }
 
-    It "Get System Status Switch (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type)){
+    It "Get System Status Switch (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type)) {
         $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
         $SYSTEM_STATUS_SWITCH.switch_type | Should be 'ST_STACKED'
-        $SYSTEM_STATUS_SWITCH.blades | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.product_name | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.product_number | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.hardware_info | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.data_ports | should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.product_name | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.product_number | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.hardware_info | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.data_ports | Should not be $NULL
     }
 
-    It "Get System Status Switch (Chassis)" -Skip:(-Not ('ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)){
+    It "Get System Status Switch (Chassis)" -Skip:(-Not ('ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
         $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
         $SYSTEM_STATUS_SWITCH.switch_type | Should be 'ST_CHASSIS'
-        $SYSTEM_STATUS_SWITCH.blades | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.product_name | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.product_number | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.hardware_info | should not be $NULL
-        $SYSTEM_STATUS_SWITCH.blades.data_ports | should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.product_name | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.product_number | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.hardware_info | Should not be $NULL
+        $SYSTEM_STATUS_SWITCH.blades.data_ports | Should not be $NULL
     }
 }
 Disconnect-ArubaSW -noconfirm

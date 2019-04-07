@@ -11,7 +11,7 @@ Describe  "Get RestSessionTimeout" {
     It "Get RestSessionTimeout Does not throw an error" {
         {
             Get-ArubaSWRestSessionTimeout
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get RestSessionTimeout" {
@@ -40,12 +40,12 @@ Describe  "Set RestSessionTimeout" {
 
     It "Check range (min) of RestSessionTimeout value" {
         $change = 90
-        {Set-ArubaSWRestSessionTimeout -timeout $change} | Should Throw
+        { Set-ArubaSWRestSessionTimeout -timeout $change } | Should Throw
     }
 
     It "Check range (max) of RestSessionTimeout value" {
         $change = 8500
-        {Set-ArubaSWRestSessionTimeout -timeout $change} | Should Throw
+        { Set-ArubaSWRestSessionTimeout -timeout $change } | Should Throw
     }
 }
 

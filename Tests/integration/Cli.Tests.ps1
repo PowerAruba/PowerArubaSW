@@ -47,7 +47,7 @@ Describe  "Send Cli Batch command" {
         $port = Get-ArubaSWPort $pester_cli_port
         $port.is_port_enabled | Should -Be $false
         $port.name | Should -Be "PowerArubaSW-int"
-        }
+    }
 
     It "Send Cli Batch command (enable interface $pester_cli_port and remove name)" {
         $batch = Send-ArubaSWCliBatch -command "interface $pester_cli_port", "enable", "no name"
@@ -77,16 +77,16 @@ Describe  "Send Cli Batch command" {
     }
 }
 Describe  "Get-ArubaSWCliBatchStatus" {
-        It "Get ArubaSWCliBatchStatus Does not throw an error" {
-            {
-                Get-ArubaSWCliBatchStatus
-            } | Should Not Throw
-        }
-
-        It "Get ArubaSWCliBatchStatus" {
-            $cli = Get-ArubaSWCliBatchStatus
-            $cli | Should not be $NULL
-        }
+    It "Get ArubaSWCliBatchStatus Does not throw an error" {
+        {
+            Get-ArubaSWCliBatchStatus
+        } | Should Not Throw
     }
+
+    It "Get ArubaSWCliBatchStatus" {
+        $cli = Get-ArubaSWCliBatchStatus
+        $cli | Should not be $NULL
+    }
+}
 
 Disconnect-ArubaSW -noconfirm
