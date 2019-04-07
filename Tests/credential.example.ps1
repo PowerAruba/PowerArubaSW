@@ -26,3 +26,4 @@ $httpOnly = $false
 #$pester_trunk_trk1 = "trk3"
 #$pester_trunk_trk2 = "trk7"
 #$pester_stp_port = 3
+#$pester_cli_port = 3

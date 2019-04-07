@@ -72,3 +72,97 @@ function Get-ArubaSWCli {
     End {
     }
 }
+
+function Send-ArubaSWCliBatch {
+
+    <#
+        .SYNOPSIS
+        Send a cli batch command.
+
+        .DESCRIPTION
+        Send a cli batch command on Aruba OS Switch.
+        All configuration commands in non-interactive mode  are supported. Exit, configure, erase, startup-config commands are supported.
+        Crypto, show, execution and testmode commands are NOT supported.
+
+        .EXAMPLE
+        Send-ArubaSWCliBatch -command "interface 4 disable"
+
+        Send a cli batch command (disable interface 4) on the switch, use Get-ArubaSWCliBatchStatus for get result
+
+        .EXAMPLE
+        Send-ArubaSWCliBatch -command "interface 4", "enable", "name PowerArubaSW-int"
+
+        Send a cli batch command (disable interface 4) on the switch, use Get-ArubaSWCliBatchStatus for get result
+        #>
+
+    Param(
+        [Parameter (Mandatory=$true)]
+        [string[]]$command
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $nb = 0
+
+        foreach ($line in $command)
+        {
+            $result = $result + $command[$nb] + "`n"
+            $nb = $nb + 1
+        }
+
+        $url = "rest/v4/cli_batch"
+
+        $conf = new-Object -TypeName PSObject
+
+        $encode = [System.Text.Encoding]::UTF8.GetBytes($result)
+
+        $EncodedText =[Convert]::ToBase64String($encode)
+
+        $conf | add-member -name "cli_batch_base64_encoded" -membertype NoteProperty -Value $EncodedText
+
+        $response = invoke-ArubaSWWebRequest -method "POST" -body $conf -url $url
+
+        $run = $response | convertfrom-json
+
+        $run
+    }
+
+    End {
+    }
+}
+
+function Get-ArubaSWCliBatchStatus {
+
+    <#
+        .SYNOPSIS
+        Get a cli batch command status.
+
+        .DESCRIPTION
+        Get a cli batch command status on Aruba OS Switch.
+
+        .EXAMPLE
+        Get-ArubaSWCliBatchStatus
+
+        Get a cli batch command status on the switch.
+    #>
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/cli_batch/status"
+
+        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $run = ($response | convertfrom-json).cmd_exec_logs
+
+        $run
+    }
+
+    End {
+    }
+}
