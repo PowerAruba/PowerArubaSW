@@ -21,6 +21,15 @@ Describe  "Get (Any)CLi" {
         $cli.result_base64_encoded | Should not be $NULL
         $cli.result | Should not be $NULL
     }
+
+    It "Get (Any)Cli 'show history' is not supported" {
+        $cli = Get-ArubaSWCli -cmd "show history"
+        $cli.status | Should be "CCS_FAILURE"
+        $cli.cmd | Should be "show history"
+        $cli.error_msg | Should -BeLike "The history commands are not supported via REST interface.*"
+        $cli.result_base64_encoded | Should be "VGhlIGhpc3RvcnkgY29tbWFuZHMgYXJlIG5vdCBzdXBwb3J0ZWQgdmlhIFJFU1QgaW50ZXJmYWNlLgoA"
+        $cli.result | Should -BeLike "The history commands are not supported via REST interface.*"
+    }
 }
 
 Disconnect-ArubaSW -noconfirm
