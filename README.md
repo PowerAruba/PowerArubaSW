@@ -17,6 +17,7 @@ With this module (version 0.7.0) you can manage:
 - Trunk (Add/Configure/Remove)
 - STP (Add/Configure/Remove GlobalConfig or Port)
 - IP Address (Get)
+- Cli (AnyCli and CliBatch for send CLI function)
 
 More functionality will be added later.
 
