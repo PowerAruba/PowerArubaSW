@@ -7,18 +7,19 @@
 
 . ../common.ps1
 
-Describe  "Get-ArubaSWCli" {
-    It "Get-ArubaSWCli Does not throw an error" {
+Describe  "Get (Any)CLi" {
+    It "Get (Any)Cli Does not throw an error" {
         { Get-ArubaSWCli -cmd "show run" } | Should Not Throw
     }
-    It "Get-ArubaSWCli Should not be null" {
+    It "Get (Any)Cli Should not be null" {
         { Get-ArubaSWCli -cmd "show run" } | Should not be $NULL
     }
-    It "Value of status should be a success, sohould not be null, and should have the right command" {
+    It "Get (Any)Cli 'show run' (and return status, cmd, result...)" {
         $cli = Get-ArubaSWCli -cmd "show run"
         $cli.status | Should be "CCS_SUCCESS"
-        $cli.result_base64_encoded | Should not be $NULL
         $cli.cmd | Should be "show run"
+        $cli.result_base64_encoded | Should not be $NULL
+        $cli.result | Should not be $NULL
     }
 }
 
