@@ -17,12 +17,19 @@ function Get-ArubaSWCli {
         .EXAMPLE
         Get-ArubaSWCli -cmd "Show running-config"
 
-        This function give you the result of a cli command on the switch.
+        This function give you the result (cmd, status, result, error_mesg...) of a cli command on the switch.
+
+        .EXAMPLE
+        Get-ArubaSWCli -cmd "Show running-config" -display_result
+
+        This function give only ther esult of a cli command on the switch.
     #>
 
     Param(
         [Parameter (Mandatory=$true, Position=1)]
-        [string]$cmd
+        [string]$cmd,
+        [Parameter (Mandatory=$false)]
+        [switch]$display_result
     )
 
     Begin {
@@ -48,8 +55,11 @@ function Get-ArubaSWCli {
 
         $conf | add-member -name "result" -membertype NoteProperty -value $result
 
-        $conf
-
+        if($display_result) { #only display CLI output
+            $conf.result
+        } else {
+            $conf
+        }
     }
 
     End {
