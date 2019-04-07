@@ -14,6 +14,13 @@ function Get-ArubaSWCli {
         .DESCRIPTION
         Get the result of a cli command.
 
+        All configuration and execution commands in non-interactive mode are supported.
+        crypto, copy, process-tracking, recopy, redo, repeat, session, end, print, terminal,
+        logout, menu, page, restore, update, upgrade-software, return, setup, screen-length,
+        vlan range and help commands are not supported.
+        Testmode commands are not supported.
+        All show commands are supported except show tech and show history
+
         .EXAMPLE
         Get-ArubaSWCli -cmd "Show running-config"
 
