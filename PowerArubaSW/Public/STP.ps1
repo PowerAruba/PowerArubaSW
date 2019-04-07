@@ -38,40 +38,7 @@ function Get-ArubaSWSTP {
     }
 }
 
-function Get-ArubaSWSTPPortStatus {
-
-    <#
-        .SYNOPSIS
-        Get spanning-tree information of all ports on ArubaOS Switch.
-
-        .DESCRIPTION
-        Get spanning-tree configuration of all ports.
-
-        .EXAMPLE
-        Get-ArubaSWSTPPortStatus
-
-        Get the spanning-tree configuration of all the ports.
-    #>
-
-    Begin {
-    }
-
-    Process {
-
-        $url = "rest/v4/stp/ports"
-
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
-
-        $stp = ($response | convertfrom-json).stp_port_element
-
-        $stp
-    }
-
-    End {
-    }
-}
-
-function Set-ArubaSWSTPGlobal {
+function Set-ArubaSWSTP {
 
     <#
         .SYNOPSIS
@@ -81,24 +48,24 @@ function Set-ArubaSWSTPGlobal {
         Set spanning-tree configuration.
 
         .EXAMPLE
-        Set-ArubaSWSTPGlobal -enable on -priority 7 -mode mstp
+        Set-ArubaSWSTPGlobal -enable -priority 7 -mode mstp
 
         Set the spanning-tree protocol on, the priority to 7 and the mode to MSTP
 
         .EXAMPLE
-        Set-ArubaSWSTPGlobal off 4 rpvst
+        Set-ArubaSWSTPGlobal $false 4 rpvst
 
         Set the spanning-tree protocol off, the priority to 4 and the mode to RPVST
     #>
 
     Param(
     [Parameter (Mandatory=$true, Position=1)]
-    [ValidateSet ("On", "Off")]
-    [string]$enable,
+    [switch]$enable,
     [Parameter (Mandatory=$false, Position=2)]
     [ValidateRange (0,15)]
     [int]$priority,
     [Parameter (Mandatory=$false, Position=3)]
+    [ValidateSet ("MSTP", "RPVST")]
     [string]$mode
     )
 
@@ -109,41 +76,38 @@ function Set-ArubaSWSTPGlobal {
 
         $url = "rest/v4/stp"
 
-        $stp = new-Object -TypeName PSObject
+        $_stp = new-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('enable') )
         {
-            switch( $enable ) {
-                ON {
-                    $enable_status = $true
-                }
-                OFF {
-                    $enable_status = $false
-                }
+            if ( $enable ) {
+                $_stp | add-member -name "is_enabled" -membertype NoteProperty -Value $True
             }
-            $stp | add-member -name "is_enabled" -membertype NoteProperty -Value $enable_status
+            else {
+                $_stp | add-member -name "is_enabled" -membertype NoteProperty -Value $false
+            }
         }
 
         if ( $PsBoundParameters.ContainsKey('priority') )
         {
-            $stp | add-member -name "priority" -membertype NoteProperty -Value $priority
+            $_stp | add-member -name "priority" -membertype NoteProperty -Value $priority
         }
 
         if ( $PsBoundParameters.ContainsKey('mode') )
         {
-            If ($mode -eq "mstp")
-            {
-                $mode = "STM_MSTP"
-            }
-            If ($mode -eq "rpvst")
-            {
-                $mode = "STM_RPVST"
+            switch( $mode ) {
+                mstp {
+                    $_mode = "STM_MSTP"
+                }
+                rpvst {
+                    $_mode = "STM_RPVST"
+                }
             }
 
-            $stp | add-member -name "mode" -membertype NoteProperty -Value $mode
+            $_stp | add-member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $stp -url $url
+        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
 
         $run = $response | convertfrom-json
 
@@ -165,14 +129,20 @@ function Get-ArubaSWSTPPort {
         Get spanning-tree configuration per port.
 
         .EXAMPLE
+        Get-ArubaSWSTPPort
+
+        Get the spanning-tree configuration for ALL ports.
+
+        .EXAMPLE
         Get-ArubaSWSTPPort -port 5
 
         Get the spanning-tree configuration for the port 5.
     #>
 
+
     Param(
-        [Parameter (Mandatory=$true)]
-        [int]$port
+        [Parameter (Mandatory=$false)]
+        [string]$port
     )
 
     Begin {
@@ -180,13 +150,21 @@ function Get-ArubaSWSTPPort {
 
     Process {
 
-        $url = "rest/v4/stp/ports/${port}"
+
+        $url = "rest/v4/stp/ports"
+
+        if($port) {
+            $url += "/$port"
+        }
 
         $response = invoke-ArubaSWWebRequest -method "GET" -url $url
 
         $stp = $response | convertfrom-json
-
-        $stp
+        if($port) {
+            $stp
+        } else {
+            $stp.stp_port_element
+        }
     }
 
     End {
@@ -203,29 +181,34 @@ function Set-ArubaSWSTPPort {
         Set spanning-tree configuration per port.
 
         .EXAMPLE
-        Set-ArubaSWSTPPort -port 4 -priority 6 -admin_edge On -bpdu_protection Off -bpdu_filter Off -root_guard off
+        $stp_port = Get-ArubaSWSTPPort -port 5
+        PS C:\>$stp_port | Set-ArubaSWSTPPort -priority 4 -admin_edge:$false -bpdu_protection -bpdu_filter -root_guard
 
-        Set the priority to 6 for port 4, the admin edge on, and turn off bpdu protection, bpdu filter and root guard.
+        Configure the port 5 and set the priority 4, disable admin edge, and enable bpdu protection, bpdu filter and root guard.
+
+        .EXAMPLE
+        Set-ArubaSWSTPPort -port 4 -priority 6 -admin_edge -bpdu_protection:$false -bpdu_filter:$false -root_guard:$false
+
+        Configure the port 4 and set the priority 6, enable admin edge, and disable bpdu protection, bpdu filter and root guard.
     #>
 
     Param(
-    [Parameter (Mandatory=$true)]
+    [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
     [string]$port,
+    [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "port_stp")]
+    #ValidateScript({ ValidateSTPPort $_ })]
+    [psobject]$port_stp,
     [Parameter (Mandatory=$false)]
     [ValidateRange (0,15)]
     [int]$priority,
     [Parameter (Mandatory=$false)]
-    [ValidateSet ("On", "Off")]
-    [string]$admin_edge,
+    [switch]$admin_edge,
     [Parameter (Mandatory=$false)]
-    [ValidateSet ("On", "Off")]
-    [string]$bpdu_protection,
+    [switch]$bpdu_protection,
     [Parameter (Mandatory=$false)]
-    [ValidateSet ("On", "Off")]
-    [string]$bpdu_filter,
+    [switch]$bpdu_filter,
     [Parameter (Mandatory=$false)]
-    [ValidateSet ("On", "Off")]
-    [string]$root_guard
+    [switch]$root_guard
     )
 
     Begin {
@@ -233,72 +216,63 @@ function Set-ArubaSWSTPPort {
 
     Process {
 
-        $stp = new-Object -TypeName PSObject
+        #get port id from port STP ps object
+        if ($port_stp) {
+            $port = $port_stp.port_id
+        }
 
-        $stp | add-member -name "port_id" -membertype NoteProperty -Value $port
+        $_stp = new-Object -TypeName PSObject
 
-        $id = $stp.port_id
+        $_stp | add-member -name "port_id" -membertype NoteProperty -Value $port
 
-        $url = "rest/v4/stp/ports/${id}"
+        $url = "rest/v4/stp/ports/${port}"
 
         if ( $PsBoundParameters.ContainsKey('priority') )
         {
-            $stp | add-member -name "priority" -membertype NoteProperty -Value $priority
+            $_stp | add-member -name "priority" -membertype NoteProperty -Value $priority
         }
 
         if ( $PsBoundParameters.ContainsKey('admin_edge') )
         {
-            switch( $admin_edge ) {
-                ON {
-                    $admin_edge_status = $true
-                }
-                OFF {
-                    $admin_edge_status = $false
-                }
+            if ( $admin_edge ) {
+                $_stp | add-member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $true
             }
-            $stp | add-member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $admin_edge_status
+            else {
+                $_stp | add-member -name "is_enable_admin_edge_port" -membertype NoteProperty -Value $false
+            }
         }
 
         if ( $PsBoundParameters.ContainsKey('bpdu_protection') )
         {
-            switch( $bpdu_protection ) {
-                ON {
-                    $bpdu_protection_status = $true
-                }
-                OFF {
-                    $bpdu_protection_status = $false
-                }
+            if ( $bpdu_protection ) {
+                $_stp | add-member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $true
             }
-            $stp | add-member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $bpdu_protection_status
+            else {
+                $_stp | add-member -name "is_enable_bpdu_protection" -membertype NoteProperty -Value $false
+            }
         }
 
         if ( $PsBoundParameters.ContainsKey('bpdu_filter') )
         {
-            switch( $bpdu_filter ) {
-                ON {
-                    $bpdu_filter_status = $true
-                }
-                OFF {
-                    $bpdu_filter_status = $false
-                }
+            if ( $bpdu_filter ) {
+                $_stp | add-member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $true
             }
-            $stp | add-member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $bpdu_filter_status
+            else {
+                $_stp | add-member -name "is_enable_bpdu_filter" -membertype NoteProperty -Value $false
+            }
         }
 
         if ( $PsBoundParameters.ContainsKey('root_guard') )
         {
-            switch( $root_guard ) {
-                ON {
-                    $root_guard_status = $true
-                }
-                OFF {
-                    $root_guard_status = $false
-                }
+            if ( $root_guard ) {
+                $_stp | add-member -name "is_enable_root_guard" -membertype NoteProperty -Value $true
             }
-            $stp | add-member -name "is_enable_root_guard" -membertype NoteProperty -Value $root_guard_status
+            else {
+                $_stp | add-member -name "is_enable_root_guard" -membertype NoteProperty -Value $false
+            }
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $stp -url $url
+        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
 
         $run = $response | convertfrom-json
 
