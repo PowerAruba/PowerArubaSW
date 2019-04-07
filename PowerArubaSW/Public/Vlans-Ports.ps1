@@ -1,5 +1,5 @@
 #
-# Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -26,11 +26,11 @@ function Add-ArubaSWVlansPorts {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, Position=1)]
+        [Parameter (Mandatory = $true, Position = 1)]
         [int]$vlan_id,
-        [Parameter (Mandatory=$true, Position=2)]
+        [Parameter (Mandatory = $true, Position = 2)]
         [string]$port_id,
-        [Parameter (Mandatory=$true, Position=3)]
+        [Parameter (Mandatory = $true, Position = 3)]
         [ValidateSet("Untagged", "tagged", "Forbidden")]
         [string]$port_mode
     )
@@ -42,20 +42,20 @@ function Add-ArubaSWVlansPorts {
 
         $url = "rest/v4/vlans-ports"
 
-        $vlanports = new-Object -TypeName PSObject
+        $vlanports = New-Object -TypeName PSObject
 
-        $vlanports | add-member -name "vlan_id" -membertype NoteProperty -Value $vlan_id
+        $vlanports | Add-Member -name "vlan_id" -membertype NoteProperty -Value $vlan_id
 
-        $vlanports | add-member -name "port_id" -membertype NoteProperty -Value $port_id
+        $vlanports | Add-Member -name "port_id" -membertype NoteProperty -Value $port_id
 
         switch ($port_mode) {
-           { $_ -eq "Untagged"} { $vlanports | add-member -name "port_mode" -membertype NoteProperty -Value "POM_UNTAGGED" }
-           { $_ -eq "tagged"} { $vlanports | add-member -name "port_mode" -membertype NoteProperty -Value "POM_TAGGED_STATIC" }
-           { $_ -eq "Forbidden"} { $vlanports | add-member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
+            { $_ -eq "Untagged" } { $vlanports | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_UNTAGGED" }
+            { $_ -eq "tagged" } { $vlanports | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_TAGGED_STATIC" }
+            { $_ -eq "Forbidden" } { $vlanports | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vlanports -url $url
-        $rep_vlansports = ($response.Content | convertfrom-json)
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlanports -url $url
+        $rep_vlansports = ($response.Content | ConvertFrom-Json)
 
         $rep_vlansports
     }
@@ -92,9 +92,9 @@ function Get-ArubaSWVlansPorts {
     #[CmdLetBinding(DefaultParameterSetName="Default")]
 
     Param(
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [int]$vlan_id,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$port_id
     )
 
@@ -105,14 +105,14 @@ function Get-ArubaSWVlansPorts {
 
         $url = "rest/v4/vlans-ports"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
-        $vlansports = ($response.Content | convertfrom-json).vlan_port_element
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $vlansports = ($response.Content | ConvertFrom-Json).vlan_port_element
 
-        if ($PsBoundParameters.ContainsKey('vlan_id')){
-            $vlansports = $vlansports | where-object {$_.vlan_id -eq $vlan_id}
+        if ($PsBoundParameters.ContainsKey('vlan_id')) {
+            $vlansports = $vlansports | Where-Object { $_.vlan_id -eq $vlan_id }
         }
-        if ($PsBoundParameters.ContainsKey('port_id')){
-            $vlansports = $vlansports | where-object {$_.port_id -eq $port_id}
+        if ($PsBoundParameters.ContainsKey('port_id')) {
+            $vlansports = $vlansports | Where-Object { $_.port_id -eq $port_id }
         }
         $vlansports
     }
@@ -142,14 +142,14 @@ function Set-ArubaSWVlansPorts {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$vlan_id,
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [string]$port_id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlanports,
-        [Parameter (Mandatory=$true, Position=3)]
+        [Parameter (Mandatory = $true, Position = 3)]
         [ValidateSet("Untagged", "Tagged", "Forbidden")]
         [string]$port_mode
     )
@@ -160,25 +160,25 @@ function Set-ArubaSWVlansPorts {
     Process {
 
         #get vlan id and port id from vlanports ps object
-        if($vlanports){
+        if ($vlanports) {
             $vlan_id = $vlanports.vlan_id
             $port_id = $vlanports.port_id
         }
         $url = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
 
-        $_vlanport = new-Object -TypeName PSObject
+        $_vlanport = New-Object -TypeName PSObject
 
-        $_vlanport | add-member -name "vlan_id" -membertype NoteProperty -Value $vlan_id
-        $_vlanport | add-member -name "port_id" -membertype NoteProperty -Value $port_id
+        $_vlanport | Add-Member -name "vlan_id" -membertype NoteProperty -Value $vlan_id
+        $_vlanport | Add-Member -name "port_id" -membertype NoteProperty -Value $port_id
 
         switch ($port_mode) {
-            { $_ -eq "Untagged"} { $_vlanport | add-member -name "port_mode" -membertype NoteProperty -Value "POM_UNTAGGED" }
-            { $_ -eq "tagged"} { $_vlanport | add-member -name "port_mode" -membertype NoteProperty -Value "POM_TAGGED_STATIC" }
-            { $_ -eq "Forbidden"} { $_vlanport | add-member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
+            { $_ -eq "Untagged" } { $_vlanport | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_UNTAGGED" }
+            { $_ -eq "tagged" } { $_vlanport | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_TAGGED_STATIC" }
+            { $_ -eq "Forbidden" } { $_vlanport | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -url $url
-        $rep_vlanport = ($response.Content | convertfrom-json)
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -url $url
+        $rep_vlanport = ($response.Content | ConvertFrom-Json)
 
         $rep_vlanport
     }
@@ -209,11 +209,11 @@ function Remove-ArubaSWVlansPorts {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$vlan_id,
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [string]$port_id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlanport,
         [Parameter(Mandatory = $false)]
@@ -226,7 +226,7 @@ function Remove-ArubaSWVlansPorts {
     Process {
 
         #get vlan id and port id from vlan ports ps object
-        if($vlanport){
+        if ($vlanport) {
             $vlan_id = $vlanport.vlan_id
             $port_id = $vlanport.port_id
         }
@@ -234,7 +234,7 @@ function Remove-ArubaSWVlansPorts {
         $url = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove Vlan on switch"
+            $message = "Remove Vlan on switch"
             $question = "Proceed with removal of vlan ${vlan_id} on port ${port_id}?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))

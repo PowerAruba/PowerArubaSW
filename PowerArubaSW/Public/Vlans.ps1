@@ -1,5 +1,5 @@
 #
-# Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -21,15 +21,15 @@ function Add-ArubaSWVlans {
     #>
 
     Param(
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [int]$id,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$name,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$is_voice_enabled,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$is_jumbo_enabled,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$is_dsnoop_enabled
     )
 
@@ -40,42 +40,47 @@ function Add-ArubaSWVlans {
 
         $url = "rest/v4/vlans"
 
-        $vlan = new-Object -TypeName PSObject
+        $vlan = New-Object -TypeName PSObject
 
-        $vlan | add-member -name "vlan_id" -membertype NoteProperty -Value $id
+        $vlan | Add-Member -name "vlan_id" -membertype NoteProperty -Value $id
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
-            $vlan | add-member -name "name" -membertype NoteProperty -Value $name
-        } else { #with APIv4, name is mandatory ... Set VLAN with number id
-            $vlan | add-member -name "name" -membertype NoteProperty -Value "VLAN$($id)"
+            $vlan | Add-Member -name "name" -membertype NoteProperty -Value $name
+        }
+        else {
+            #with APIv4, name is mandatory ... Set VLAN with number id
+            $vlan | Add-Member -name "name" -membertype NoteProperty -Value "VLAN$($id)"
         }
 
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
-                $vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $True
-            } else {
-                $vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $false
+                $vlan | Add-Member -name "is_voice_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $vlan | Add-Member -name "is_voice_enabled" -membertype NoteProperty -Value $false
             }
         }
 
         if ( $PsBoundParameters.ContainsKey('is_jumbo_enabled') ) {
             if ( $is_jumbo_enabled ) {
-                $vlan | add-member -name "is_jumbo_enabled" -membertype NoteProperty -Value $True
-            } else {
-                $vlan | add-member -name "is_jumbo_enabled" -membertype NoteProperty -Value $false
+                $vlan | Add-Member -name "is_jumbo_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $vlan | Add-Member -name "is_jumbo_enabled" -membertype NoteProperty -Value $false
             }
         }
 
         if ( $PsBoundParameters.ContainsKey('is_dsnoop_enabled') ) {
             if ( $is_dsnoop_enabled ) {
-                $vlan | add-member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $True
-            } else {
-                $vlan | add-member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $false
+                $vlan | Add-Member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $vlan | Add-Member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $false
             }
         }
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vlan -url $url
-        $vlans = ($response.Content | convertfrom-json)
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -url $url
+        $vlans = ($response.Content | ConvertFrom-Json)
 
         $vlans
     }
@@ -109,12 +114,12 @@ function Get-ArubaSWVlans {
 
     #>
 
-    [CmdLetBinding(DefaultParameterSetName="Default")]
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
-        [Parameter (Mandatory=$false, ParameterSetName="id")]
+        [Parameter (Mandatory = $false, ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory=$false, ParameterSetName="name", Position=1)]
+        [Parameter (Mandatory = $false, ParameterSetName = "name", Position = 1)]
         [string]$Name
     )
 
@@ -125,13 +130,13 @@ function Get-ArubaSWVlans {
 
         $url = "rest/v4/vlans"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        $vlans = ($response.Content | convertfrom-json).vlan_element
+        $vlans = ($response.Content | ConvertFrom-Json).vlan_element
 
         switch ( $PSCmdlet.ParameterSetName ) {
-            "name" { $vlans  | where-object { $_.name -match $name}}
-            "id" { $vlans | where-object { $_.vlan_id -eq $id}}
+            "name" { $vlans | Where-Object { $_.name -match $name } }
+            "id" { $vlans | Where-Object { $_.vlan_id -eq $id } }
             default { $vlans }
         }
     }
@@ -161,18 +166,18 @@ function Set-ArubaSWVlans {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$name,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$is_voice_enabled,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$is_jumbo_enabled,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$is_dsnoop_enabled
     )
 
@@ -182,54 +187,60 @@ function Set-ArubaSWVlans {
     Process {
 
         #get vlan id from vlan ps object
-        if($vlan){
+        if ($vlan) {
             $id = $vlan.vlan_id
             $oldname = $vlan.name
         }
         $url = "rest/v4/vlans/${id}"
 
-        $_vlan = new-Object -TypeName PSObject
+        $_vlan = New-Object -TypeName PSObject
 
         #with APIv4, vlan_id is mandatory...
-        $_vlan | add-member -name "vlan_id" -membertype NoteProperty -Value $id
+        $_vlan | Add-Member -name "vlan_id" -membertype NoteProperty -Value $id
 
         if ( $PsBoundParameters.ContainsKey('name') ) {
-            $_vlan | add-member -name "name" -membertype NoteProperty -Value $name
-        } else { #with APIv4, name is also mandatory... (why ?!!) use already configured name.
-            if (!$oldname) { #if you don't pipelining (and use -id), need to get vlan name...
+            $_vlan | Add-Member -name "name" -membertype NoteProperty -Value $name
+        }
+        else {
+            #with APIv4, name is also mandatory... (why ?!!) use already configured name.
+            if (!$oldname) {
+                #if you don't pipelining (and use -id), need to get vlan name...
                 $oldname = (Get-ArubaSWVlans -id $id).name
             }
 
-            $_vlan | add-member -name "name" -membertype NoteProperty -Value $oldname
+            $_vlan | Add-Member -name "name" -membertype NoteProperty -Value $oldname
         }
         $name
 
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
-                $_vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $True
-            } else {
-                $_vlan | add-member -name "is_voice_enabled" -membertype NoteProperty -Value $false
+                $_vlan | Add-Member -name "is_voice_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_vlan | Add-Member -name "is_voice_enabled" -membertype NoteProperty -Value $false
             }
         }
 
         if ( $PsBoundParameters.ContainsKey('is_jumbo_enabled') ) {
             if ( $is_jumbo_enabled ) {
-                $_vlan | add-member -name "is_jumbo_enabled" -membertype NoteProperty -Value $True
-            } else {
-                $_vlan | add-member -name "is_jumbo_enabled" -membertype NoteProperty -Value $false
+                $_vlan | Add-Member -name "is_jumbo_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_vlan | Add-Member -name "is_jumbo_enabled" -membertype NoteProperty -Value $false
             }
         }
 
         if ( $PsBoundParameters.ContainsKey('is_dsnoop_enabled') ) {
             if ( $is_dsnoop_enabled ) {
-                $_vlan | add-member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $True
-            } else {
-                $_vlan | add-member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $false
+                $_vlan | Add-Member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_vlan | Add-Member -name "is_dsnoop_enabled" -membertype NoteProperty -Value $false
             }
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -url $url
-        $rep_vlan = ($response.Content | convertfrom-json)
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -url $url
+        $rep_vlan = ($response.Content | ConvertFrom-Json)
 
         $rep_vlan
     }
@@ -260,9 +271,9 @@ function Remove-ArubaSWVlans {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="vlan")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
         [Parameter(Mandatory = $false)]
@@ -275,14 +286,14 @@ function Remove-ArubaSWVlans {
     Process {
 
         #get vlan id from vlan ps object
-        if($vlan){
+        if ($vlan) {
             $id = $vlan.vlan_id
         }
 
         $url = "rest/v4/vlans/${id}"
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove Vlan on switch"
+            $message = "Remove Vlan on switch"
             $question = "Proceed with removal of vlan ${id} ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))

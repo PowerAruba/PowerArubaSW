@@ -1,6 +1,6 @@
 
 #
-# Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -28,9 +28,9 @@ function Get-ArubaSWRestVersion {
 
         $url = "rest/version"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
-        ($response.content | convertfrom-json).version_element
+        ($response.content | ConvertFrom-Json).version_element
     }
 
     End {

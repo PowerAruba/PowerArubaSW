@@ -1,13 +1,13 @@
 
 #
-# Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
 function Connect-ArubaSW {
 
-  <#
+    <#
       .SYNOPSIS
       Connect to an ArubaOS Switches (Provision)
 
@@ -49,7 +49,7 @@ function Connect-ArubaSW {
   #>
 
     Param(
-        [Parameter(Mandatory = $true, position=1)]
+        [Parameter(Mandatory = $true, position = 1)]
         [String]$Server,
         [Parameter(Mandatory = $false)]
         [String]$Username,
@@ -58,11 +58,11 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [PSCredential]$Credentials,
         [Parameter(Mandatory = $false)]
-        [switch]$noverbose=$false,
+        [switch]$noverbose = $false,
         [Parameter(Mandatory = $false)]
-        [switch]$httpOnly=$false,
+        [switch]$httpOnly = $false,
         [Parameter(Mandatory = $false)]
-        [switch]$SkipCertificateCheck=$false,
+        [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
         [int]$port
@@ -73,37 +73,39 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server="";session="";cookie="";httpOnly=$false;port="";invokeParams="";switch_type=""}
+        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" }
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
             $Credentials = New-Object System.Management.Automation.PSCredential($Username, $Password)
         }
         #Not Credentials (and no password)
-        if ($NULL -eq $Credentials)
-        {
+        if ($NULL -eq $Credentials) {
             $Credentials = Get-Credential -Message 'Please enter administrative credentials for your ArubaOS Switch'
         }
 
-        $postParams = @{userName=$Credentials.username;password=$Credentials.GetNetworkCredential().Password}
-        $invokeParams = @{DisableKeepAlive = $true; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck}
+        $postParams = @{userName = $Credentials.username; password = $Credentials.GetNetworkCredential().Password }
+        $invokeParams = @{DisableKeepAlive = $true; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
         if ("Desktop" -eq $PSVersionTable.PsEdition) {
             #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
             $invokeParams.remove("SkipCertificateCheck")
-        } else { #Core Edition
+        }
+        else {
+            #Core Edition
             #Remove -UseBasicParsing (Enable by default with PowerShell 6/Core)
             $invokeParams.remove("UseBasicParsing")
         }
 
-        if($httpOnly) {
-            if(!$port){
+        if ($httpOnly) {
+            if (!$port) {
                 $port = 80
             }
             $connection.httpOnly = $true
             $url = "http://${Server}:${port}/rest/v3/login-sessions"
-        } else {
-            if(!$port){
+        }
+        else {
+            if (!$port) {
                 $port = 443
             }
 
@@ -111,7 +113,7 @@ function Connect-ArubaSW {
             if ("Desktop" -eq $PSVersionTable.PsEdition) {
                 #Enable TLS 1.1 and 1.2
                 Set-ArubaSWCipherSSL
-                if($SkipCertificateCheck) {
+                if ($SkipCertificateCheck) {
                     #Disable SSL chain trust...
                     Set-ArubaSWuntrustedSSL
                 }
@@ -120,7 +122,7 @@ function Connect-ArubaSW {
         }
 
         try {
-            $response = Invoke-WebRequest -uri $url -Method POST -Body ($postParams | Convertto-Json ) -SessionVariable arubasw @invokeParams
+            $response = Invoke-WebRequest -uri $url -Method POST -Body ($postParams | ConvertTo-Json ) -SessionVariable arubasw @invokeParams
         }
         catch {
             Show-ArubaSWException -Exception $_
@@ -136,29 +138,30 @@ function Connect-ArubaSW {
         $connection.port = $port
         $connection.invokeParams = $invokeParams
 
-        set-variable -name DefaultArubaSWConnection -value $connection -scope Global
+        Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
 
         $switchstatus = Get-ArubaSWSystemStatusSwitch
         $connection.switch_type = $switchstatus.switch_type
 
         if (-not $noverbose) {
-            $switchsystem = Get-ArubaSwSystem
+            $switchsystem = Get-ArubaSWSystem
 
 
             if ($switchstatus.switch_type -eq "ST_STACKED") {
                 $product_name = $NULL;
                 foreach ($blades in $switchstatus.blades) {
-                    if($blades.product_name) {
+                    if ($blades.product_name) {
                         if ($product_name) {
                             $product_name += ", "
                         }
                         $product_name += $blades.product_name
                     }
                 }
-            } else {
+            }
+            else {
                 $product_name = $switchstatus.product_name
             }
-            write-host "Welcome on"$switchsystem.name"-"$product_name
+            Write-Host "Welcome on"$switchsystem.name"-"$product_name
 
         }
     }
@@ -201,7 +204,7 @@ function Disconnect-ArubaSW {
         $url = "rest/v3/login-sessions"
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove Aruba Switch connection."
+            $message = "Remove Aruba Switch connection."
             $question = "Proceed with removal of Aruba Switch connection ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
@@ -212,8 +215,8 @@ function Disconnect-ArubaSW {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Aruba SW connection"
-            $null = invoke-ArubaSWWebRequest -method "DELETE" -url $url
-            write-progress -activity "Remove Aruba SW connection" -completed
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -url $url
+            Write-Progress -activity "Remove Aruba SW connection" -completed
             if (Get-Variable -Name DefaultArubaSWConnection -scope global ) {
                 Remove-Variable -name DefaultArubaSWConnection -scope global
             }

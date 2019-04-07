@@ -1,5 +1,5 @@
 #
-# Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -38,22 +38,25 @@ If ($module) {
         Remove-Module $Module
         Import-Module "$here\..\PowerArubaSW" -Version $manifest.version -force
     }
-} else {
+}
+else {
     Import-Module "$here\..\PowerArubaSW" -Version $manifest.version -force
 }
 
 $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
-if($httpOnly){
+if ($httpOnly) {
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
-} else {
+}
+else {
     Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck
 }
 
 $status = Get-ArubaSWSystemStatusSwitch
 
-if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type){
+if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type) {
     $product_number = $status.blades.product_number[0]
-} else {
+}
+else {
     $product_number = $status.product_number
 }
 #Add chassis module (letter) to port number if it is a HP 5406Rzl2 (J9850A) or HP 5412Rzl2 (J9851A)
@@ -67,7 +70,7 @@ if ($product_number -eq 'J9850A' -or $product_number -eq 'J9851A') {
 }
 
 #Add stack module to port number (if it is a stacked switch)
-if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type){
+if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type) {
     $pester_vlanport = "$pester_stack_module/$pester_vlanport"
     $pester_lacp_port = "$pester_stack_module/$pester_lacp_port"
     $pester_port = "$pester_stack_module/$pester_port"
