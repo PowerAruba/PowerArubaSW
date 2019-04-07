@@ -35,7 +35,8 @@ Describe  "Get (Any)CLi" {
 
 Describe  "Send Cli Batch command" {
     It "Send Cli Batch command (disable interface $pester_cli_port and set name)" {
-        Send-ArubaSWCliBatch -command "interface $pester_cli_port disable", "interface $pester_cli_port name PowerArubaSW-int"
+        $batch = Send-ArubaSWCliBatch -command "interface $pester_cli_port disable", "interface $pester_cli_port name PowerArubaSW-int"
+        $batch.status | Should -be "CBS_INITIATED"
         $cliBatch = Get-ArubaSWCliBatchStatus
         $cliBatch[0].status | Should -be "CCS_SUCCESS"
         $cliBatch[0].cmd | Should -Be "interface $pester_cli_port disable"
@@ -49,7 +50,8 @@ Describe  "Send Cli Batch command" {
         }
 
     It "Send Cli Batch command (enable interface $pester_cli_port and remove name)" {
-        Send-ArubaSWCliBatch -command "interface $pester_cli_port", "enable", "no name"
+        $batch = Send-ArubaSWCliBatch -command "interface $pester_cli_port", "enable", "no name"
+        $batch.status | Should -be "CBS_INITIATED"
         $cliBatch = Get-ArubaSWCliBatchStatus
         $cliBatch[0].status | Should -be "CCS_SUCCESS"
         $cliBatch[0].cmd | Should -Be "interface $pester_cli_port"
@@ -66,7 +68,8 @@ Describe  "Send Cli Batch command" {
     }
 
     It "Send Cli Batch command (Wrong command)" {
-        Send-ArubaSWCliBatch -command "show run"
+        $batch = Send-ArubaSWCliBatch -command "show run"
+        $batch.status | Should -be "CBS_INITIATED"
         $cliBatch = Get-ArubaSWCliBatchStatus
         $cliBatch[0].status | Should -be "CCS_FAILURE"
         $cliBatch[0].cmd | Should -Be "show run"
