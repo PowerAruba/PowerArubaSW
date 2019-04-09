@@ -28,7 +28,7 @@ function Get-ArubaSWSystem {
 
         $url = "rest/v4/system"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $response.content | ConvertFrom-Json
     }
@@ -83,7 +83,7 @@ function Set-ArubaSWSystem {
             $system | Add-Member -name "contact" -membertype NoteProperty -Value $contact
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -url $url -Body $system
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -uri $url -Body $system
 
         $response.content | ConvertFrom-Json
     }
@@ -119,7 +119,7 @@ function Get-ArubaSWSystemStatus {
 
         $url = "rest/v4/system/status"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $response.content | ConvertFrom-Json
     }
@@ -147,7 +147,7 @@ function Get-ArubaSWSystemStatusSwitch {
 
         $url = "rest/v4/system/status/switch"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $response.content | ConvertFrom-Json
     }
@@ -182,7 +182,7 @@ function Get-ArubaSWSystemStatusGlobal {
         }
         $url = "rest/v4/system/status/global_info"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $response.content | ConvertFrom-Json
     }

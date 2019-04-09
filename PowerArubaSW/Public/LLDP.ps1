@@ -26,7 +26,7 @@ function Get-ArubaSWLLDPRemote {
 
         $url = "rest/v4/lldp/remote-device"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).lldp_remote_device_element
 
@@ -58,7 +58,7 @@ function Get-ArubaSWLLDPGlobalStatus {
 
         $url = "rest/v4/lldp"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -133,7 +133,7 @@ function Set-ArubaSWLLDPGlobalStatus {
             $conf | Add-Member -name "fast_start_count" -membertype NoteProperty -Value $faststart
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -166,7 +166,7 @@ function Get-ArubaSWLLDPNeighborStats {
 
         $url = "rest/v4/lldp/stats/device"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -207,7 +207,7 @@ function Get-ArubaSWLLDPPortStats {
 
         $url = "rest/v4/lldp/stats/ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).lldp_port_stats_element
 

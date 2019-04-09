@@ -79,7 +79,7 @@ function Add-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -uri $url
         $vlans = ($response.Content | ConvertFrom-Json)
 
         $vlans
@@ -130,7 +130,7 @@ function Get-ArubaSWVlans {
 
         $url = "rest/v4/vlans"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $vlans = ($response.Content | ConvertFrom-Json).vlan_element
 
@@ -239,7 +239,7 @@ function Set-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $url
         $rep_vlan = ($response.Content | ConvertFrom-Json)
 
         $rep_vlan
@@ -304,7 +304,7 @@ function Remove-ArubaSWVlans {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Vlan"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $url
             Write-Progress -activity "Remove Vlan" -completed
         }
     }

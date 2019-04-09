@@ -27,7 +27,7 @@ function Get-ArubaSWSTP {
 
         $url = "rest/v4/stp"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $stp = $response | ConvertFrom-Json
 
@@ -104,7 +104,7 @@ function Set-ArubaSWSTP {
             $_stp | Add-Member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -154,7 +154,7 @@ function Get-ArubaSWSTPPort {
             $url += "/$port"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $stp = $response | ConvertFrom-Json
         if ($port) {
@@ -265,7 +265,7 @@ function Set-ArubaSWSTPPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $url
 
         $run = $response | ConvertFrom-Json
 

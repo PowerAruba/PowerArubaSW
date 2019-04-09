@@ -26,7 +26,7 @@ function Get-ArubaSWDns {
 
         $url = "rest/v4/dns"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json)
 
@@ -127,7 +127,7 @@ function Set-ArubaSWDns {
             $conf | Add-Member -name "dns_domain_names" -membertype NoteProperty -Value $domain
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -180,7 +180,7 @@ function Remove-ArubaSWDns {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove DNS"
-            $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -url $url
+            $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -uri $url
             Write-Progress -activity "Remove DNS" -completed
         }
     }

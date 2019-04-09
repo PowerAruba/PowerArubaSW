@@ -27,7 +27,7 @@ function Get-ArubaSWLACP {
 
         $url = "rest/v4/lacp/port"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).lacp_element
 
@@ -84,7 +84,7 @@ function Add-ArubaSWLACP {
 
         $lacp | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -153,7 +153,7 @@ function Remove-ArubaSWLACP {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove LACP"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -uri $url
             Write-Progress -activity "Remove LACP" -completed
         }
     }

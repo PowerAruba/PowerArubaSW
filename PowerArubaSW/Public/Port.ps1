@@ -36,7 +36,7 @@ function Get-ArubaSWPort {
 
         $url = "rest/v4/ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).port_element
 
@@ -85,7 +85,7 @@ function Get-ArubaSWPortStatistics {
 
         $url = "rest/v4/port-statistics"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).port_statistics_element
 
@@ -202,7 +202,7 @@ function Set-ArubaSWPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $url
 
         $response | ConvertFrom-Json
     }

@@ -27,7 +27,7 @@ function Get-ArubaSWTrunk {
 
         $url = "rest/v4/trunk/port"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).trunk_element
 
@@ -86,7 +86,7 @@ function Add-ArubaSWTrunk {
 
         $trunk | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $trunk -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $trunk -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -154,7 +154,7 @@ function Remove-ArubaSWTrunk {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove trunk group"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -uri $url
             Write-Progress -activity "Remove trunk group" -completed
         }
     }

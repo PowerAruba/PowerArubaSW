@@ -50,7 +50,7 @@ function Get-ArubaSWCli {
 
         $run | Add-Member -name "cmd" -membertype NoteProperty -Value "$cmd"
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $run -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $run -uri $url
 
         $conf = ($response | ConvertFrom-Json)
 
@@ -124,7 +124,7 @@ function Send-ArubaSWCliBatch {
 
         $conf | Add-Member -name "cli_batch_base64_encoded" -membertype NoteProperty -Value $EncodedText
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $conf -uri $url
 
         $run = $response | ConvertFrom-Json
 
@@ -157,7 +157,7 @@ function Get-ArubaSWCliBatchStatus {
 
         $url = "rest/v4/cli_batch/status"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
 
         $run = ($response | ConvertFrom-Json).cmd_exec_logs
 
