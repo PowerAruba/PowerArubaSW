@@ -24,9 +24,9 @@ function Get-ArubaSWIpAddress {
 
     Process {
 
-        $url = "rest/v4/ipaddresses"
+        $uri = "rest/v4/ipaddresses"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $run = ($response | ConvertFrom-Json)
 

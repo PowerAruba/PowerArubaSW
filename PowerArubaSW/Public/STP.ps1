@@ -25,9 +25,9 @@ function Get-ArubaSWSTP {
 
     Process {
 
-        $url = "rest/v4/stp"
+        $uri = "rest/v4/stp"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $stp = $response | ConvertFrom-Json
 
@@ -74,7 +74,7 @@ function Set-ArubaSWSTP {
 
     Process {
 
-        $url = "rest/v4/stp"
+        $uri = "rest/v4/stp"
 
         $_stp = New-Object -TypeName PSObject
 
@@ -104,7 +104,7 @@ function Set-ArubaSWSTP {
             $_stp | Add-Member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri
 
         $run = $response | ConvertFrom-Json
 
@@ -148,13 +148,13 @@ function Get-ArubaSWSTPPort {
     Process {
 
 
-        $url = "rest/v4/stp/ports"
+        $uri = "rest/v4/stp/ports"
 
         if ($port) {
-            $url += "/$port"
+            $uri += "/$port"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $stp = $response | ConvertFrom-Json
         if ($port) {
@@ -223,7 +223,7 @@ function Set-ArubaSWSTPPort {
 
         $_stp | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
-        $url = "rest/v4/stp/ports/${port}"
+        $uri = "rest/v4/stp/ports/${port}"
 
         if ( $PsBoundParameters.ContainsKey('priority') ) {
             $_stp | Add-Member -name "priority" -membertype NoteProperty -Value $priority
@@ -265,7 +265,7 @@ function Set-ArubaSWSTPPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri
 
         $run = $response | ConvertFrom-Json
 

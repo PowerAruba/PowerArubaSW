@@ -34,9 +34,9 @@ function Get-ArubaSWPort {
 
     Process {
 
-        $url = "rest/v4/ports"
+        $uri = "rest/v4/ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $run = ($response | ConvertFrom-Json).port_element
 
@@ -83,9 +83,9 @@ function Get-ArubaSWPortStatistics {
 
     Process {
 
-        $url = "rest/v4/port-statistics"
+        $uri = "rest/v4/port-statistics"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $run = ($response | ConvertFrom-Json).port_statistics_element
 
@@ -161,7 +161,7 @@ function Set-ArubaSWPort {
             $port_id = $port.id
         }
 
-        $url = "rest/v4/ports/${port_id}"
+        $uri = "rest/v4/ports/${port_id}"
 
         $_port = New-Object -TypeName PSObject
 
@@ -202,7 +202,7 @@ function Set-ArubaSWPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $uri
 
         $response | ConvertFrom-Json
     }
