@@ -179,3 +179,54 @@ function Set-ArubaSWPoE {
     End {
     }
 }
+
+function Get-ArubaSWPoEStats {
+
+    <#
+        .SYNOPSIS
+        Get PoE statistics about ArubaOS Switch (Provision)
+
+        .DESCRIPTION
+        Get PoE statistics (Voltage, Class ...)
+
+        .EXAMPLE
+        Get-ArubaSWPoEStats
+
+        Get ALL PoE ports statistics on the switch
+
+        .EXAMPLE
+        Get-ArubaSWPoEstats -port 3
+
+        Get Poe statistics on port 3
+    #>
+    Param(
+        [Parameter (Mandatory = $false, position = 1)]
+        [string]$port
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "rest/v4/poe/ports/stats"
+
+        if ( $port ) {
+            $url = "rest/v4/ports/$port/poe/stats"
+        }
+
+        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+
+        $poe = ($response.Content | ConvertFrom-Json)
+
+        if ( $port ) {
+            $poe
+        }
+        else {
+            $poe.port_poe_stats
+        }
+    }
+
+    End {
+    }
+}
