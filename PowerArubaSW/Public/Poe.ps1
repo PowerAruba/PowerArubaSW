@@ -79,7 +79,7 @@ function Set-ArubaSWPoE {
 
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
-        [int]$port_id,
+        [string]$port_id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "port_poe")]
         #ValidateScript({ ValidatePoE $_ })]
         [psobject]$port_poe,
