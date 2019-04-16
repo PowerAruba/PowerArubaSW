@@ -15,14 +15,14 @@ function Get-ArubaSWPoE {
         Get PoE Info (Status, Priority, Allocation...)
 
         .EXAMPLE
-        Get-ArubaSWVlans
+        Get-ArubaSWPoE
 
         Get ALL PoE Settings on the switch
 
         .EXAMPLE
-        Get-ArubaSWPoe -port 3
+        Get-ArubaSWPoE -port 3
 
-        Get Poe settings on port 3
+        Get PoE settings on port 3
     #>
     Param(
         [Parameter (Mandatory = $false, position = 1)]
@@ -105,7 +105,7 @@ function Set-ArubaSWPoE {
 
     Process {
 
-        #get vlan id from vlan ps object
+        #get port id from poe ps object
         if ($port_poe) {
             $port_id = $port_poe.port_id
         }
@@ -197,7 +197,7 @@ function Get-ArubaSWPoEStats {
         .EXAMPLE
         Get-ArubaSWPoEstats -port 3
 
-        Get Poe statistics on port 3
+        Get PoE statistics on port 3
     #>
     Param(
         [Parameter (Mandatory = $false, position = 1)]
