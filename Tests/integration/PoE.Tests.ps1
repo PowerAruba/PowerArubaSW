@@ -39,6 +39,9 @@ Describe  "Get PoE" {
 
 Describe  "Configure PoE" {
     Context "Configure PoE via Port ID" {
+        BeforeAll {
+            $script:poe_default = Get-ArubaSWPoE -port $pester_poe_port
+        }
         It "Configure PoE Port $pester_poe_port : status, priority, allocation Method/Power in Watt, pre standard detect" {
             Set-ArubaSWPoE -port_id $pester_poe_port -is_poe_enabled:$false -poe_priority critical -poe_allocation_method value -allocated_power_in_watt 1 -pre_standard_detect_enabled:$true
             $poe = Get-ArubaSWPoE -port $pester_poe_port
@@ -58,7 +61,7 @@ Describe  "Configure PoE" {
             $poe.is_poe_enabled | Should -Be $false
             $poe.poe_priority | Should -Be "PPP_LOW"
             $poe.poe_allocation_method | Should -Be "PPAM_USAGE"
-            $poe.allocated_power_in_watts | Should -Be 17
+            $poe.allocated_power_in_watts | Should -Be $poe_default.allocated_power_in_watts
             $poe.pre_standard_detect_enabled | Should -Be $false
         }
     }
