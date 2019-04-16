@@ -26,7 +26,7 @@ function Get-ArubaSWPoE {
     #>
     Param(
         [Parameter (Mandatory = $false, position = 1)]
-        [string]$port
+        [string]$port_id
     )
 
     Begin {
@@ -36,15 +36,15 @@ function Get-ArubaSWPoE {
 
         $url = "rest/v4/poe/ports"
 
-        if ( $port ) {
-            $url = "rest/v4/ports/$port/poe"
+        if ( $port_id ) {
+            $url = "rest/v4/ports/$port_id/poe"
         }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
         $poe = ($response.Content | ConvertFrom-Json)
 
-        if ( $port ) {
+        if ( $port_id ) {
             $poe
         }
         else {
@@ -201,7 +201,7 @@ function Get-ArubaSWPoEStats {
     #>
     Param(
         [Parameter (Mandatory = $false, position = 1)]
-        [string]$port
+        [string]$port_id
     )
 
     Begin {
@@ -211,15 +211,15 @@ function Get-ArubaSWPoEStats {
 
         $url = "rest/v4/poe/ports/stats"
 
-        if ( $port ) {
-            $url = "rest/v4/ports/$port/poe/stats"
+        if ( $port_id ) {
+            $url = "rest/v4/ports/$port_id/poe/stats"
         }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
 
         $poe = ($response.Content | ConvertFrom-Json)
 
-        if ( $port ) {
+        if ( $port_id ) {
             $poe
         }
         else {
