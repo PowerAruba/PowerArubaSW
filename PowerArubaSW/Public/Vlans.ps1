@@ -38,7 +38,7 @@ function Add-ArubaSWVlans {
 
     Process {
 
-        $url = "rest/v4/vlans"
+        $uri = "rest/v4/vlans"
 
         $vlan = New-Object -TypeName PSObject
 
@@ -79,7 +79,7 @@ function Add-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -uri $uri
         $vlans = ($response.Content | ConvertFrom-Json)
 
         $vlans
@@ -128,9 +128,9 @@ function Get-ArubaSWVlans {
 
     Process {
 
-        $url = "rest/v4/vlans"
+        $uri = "rest/v4/vlans"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $vlans = ($response.Content | ConvertFrom-Json).vlan_element
 
@@ -191,7 +191,7 @@ function Set-ArubaSWVlans {
             $id = $vlan.vlan_id
             $oldname = $vlan.name
         }
-        $url = "rest/v4/vlans/${id}"
+        $uri = "rest/v4/vlans/${id}"
 
         $_vlan = New-Object -TypeName PSObject
 
@@ -239,7 +239,7 @@ function Set-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri
         $rep_vlan = ($response.Content | ConvertFrom-Json)
 
         $rep_vlan
@@ -290,7 +290,7 @@ function Remove-ArubaSWVlans {
             $id = $vlan.vlan_id
         }
 
-        $url = "rest/v4/vlans/${id}"
+        $uri = "rest/v4/vlans/${id}"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove Vlan on switch"
@@ -304,7 +304,7 @@ function Remove-ArubaSWVlans {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Vlan"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
             Write-Progress -activity "Remove Vlan" -completed
         }
     }

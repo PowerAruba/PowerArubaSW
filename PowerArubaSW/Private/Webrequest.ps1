@@ -6,11 +6,10 @@
 function Invoke-ArubaSWWebRequest() {
 
     Param(
-        [Parameter(Mandatory = $true)]
-        [String]$url,
-        [Parameter(Mandatory = $true)]
-        #Valid POST, GET...
-        [String]$method,
+        [Parameter(Mandatory = $true, position = 1)]
+        [String]$uri,
+        [ValidateSet("GET", "POST", "DELETE", "PUT")]
+        [String]$method="get",
         [Parameter(Mandatory = $false)]
         [psobject]$body,
         [Parameter(Mandatory = $false)]
@@ -28,10 +27,10 @@ function Invoke-ArubaSWWebRequest() {
         $invokeParams = ${DefaultArubaSWConnection}.InvokeParams
 
         if ($httpOnly) {
-            $fullurl = "http://${Server}:${port}/${url}"
+            $fullurl = "http://${Server}:${port}/${uri}"
         }
         else {
-            $fullurl = "https://${Server}:${port}/${url}"
+            $fullurl = "https://${Server}:${port}/${uri}"
         }
 
         if ( -Not $PsBoundParameters.ContainsKey('sessionvariable') ) {

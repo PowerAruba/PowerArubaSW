@@ -26,9 +26,9 @@ function Get-ArubaSWRestVersion {
 
     Process {
 
-        $url = "rest/version"
+        $uri = "rest/version"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         ($response.content | ConvertFrom-Json).version_element
     }

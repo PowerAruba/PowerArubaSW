@@ -102,7 +102,7 @@ function Connect-ArubaSW {
                 $port = 80
             }
             $connection.httpOnly = $true
-            $url = "http://${Server}:${port}/rest/v3/login-sessions"
+            $uri = "http://${Server}:${port}/rest/v3/login-sessions"
         }
         else {
             if (!$port) {
@@ -118,11 +118,11 @@ function Connect-ArubaSW {
                     Set-ArubaSWuntrustedSSL
                 }
             }
-            $url = "https://${Server}:${port}/rest/v3/login-sessions"
+            $uri = "https://${Server}:${port}/rest/v3/login-sessions"
         }
 
         try {
-            $response = Invoke-WebRequest -uri $url -Method POST -Body ($postParams | ConvertTo-Json ) -SessionVariable arubasw @invokeParams
+            $response = Invoke-WebRequest -uri $uri -Method POST -Body ($postParams | ConvertTo-Json ) -SessionVariable arubasw @invokeParams
         }
         catch {
             Show-ArubaSWException -Exception $_
@@ -201,7 +201,7 @@ function Disconnect-ArubaSW {
 
     Process {
 
-        $url = "rest/v3/login-sessions"
+        $uri = "rest/v3/login-sessions"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove Aruba Switch connection."
@@ -215,7 +215,7 @@ function Disconnect-ArubaSW {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Aruba SW connection"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
             Write-Progress -activity "Remove Aruba SW connection" -completed
             if (Get-Variable -Name DefaultArubaSWConnection -scope global ) {
                 Remove-Variable -name DefaultArubaSWConnection -scope global

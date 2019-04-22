@@ -24,9 +24,9 @@ function Get-ArubaSWDns {
 
     Process {
 
-        $url = "rest/v4/dns"
+        $uri = "rest/v4/dns"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $run = ($response | ConvertFrom-Json)
 
@@ -80,7 +80,7 @@ function Set-ArubaSWDns {
 
     Process {
 
-        $url = "rest/v4/dns"
+        $uri = "rest/v4/dns"
 
         $conf = New-Object -TypeName PSObject
 
@@ -127,7 +127,7 @@ function Set-ArubaSWDns {
             $conf | Add-Member -name "dns_domain_names" -membertype NoteProperty -Value $domain
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri
 
         $run = $response | ConvertFrom-Json
 
@@ -166,7 +166,7 @@ function Remove-ArubaSWDns {
 
         $dns | Add-Member -name "dns_config_mode" -membertype NoteProperty -Value "DCM_DISABLED"
 
-        $url = "rest/v4/dns"
+        $uri = "rest/v4/dns"
 
         if ( -not ( $noconfirm )) {
             $message = "Remove DNS on the switch"
@@ -180,7 +180,7 @@ function Remove-ArubaSWDns {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove DNS"
-            $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -url $url
+            $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -uri $uri
             Write-Progress -activity "Remove DNS" -completed
         }
     }

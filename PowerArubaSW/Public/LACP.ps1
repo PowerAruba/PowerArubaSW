@@ -25,9 +25,9 @@ function Get-ArubaSWLACP {
 
     Process {
 
-        $url = "rest/v4/lacp/port"
+        $uri = "rest/v4/lacp/port"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $run = ($response | ConvertFrom-Json).lacp_element
 
@@ -76,7 +76,7 @@ function Add-ArubaSWLACP {
 
     Process {
 
-        $url = "rest/v4/lacp/port"
+        $uri = "rest/v4/lacp/port"
 
         $lacp = New-Object -TypeName PSObject
 
@@ -84,7 +84,7 @@ function Add-ArubaSWLACP {
 
         $lacp | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -uri $uri
 
         $run = $response | ConvertFrom-Json
 
@@ -139,7 +139,7 @@ function Remove-ArubaSWLACP {
 
         $id = $lacp.port_id
 
-        $url = "rest/v4/lacp/port/${id}"
+        $uri = "rest/v4/lacp/port/${id}"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove LACP on switch"
@@ -153,7 +153,7 @@ function Remove-ArubaSWLACP {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove LACP"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -uri $uri
             Write-Progress -activity "Remove LACP" -completed
         }
     }

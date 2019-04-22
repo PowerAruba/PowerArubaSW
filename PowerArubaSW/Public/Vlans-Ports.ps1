@@ -40,7 +40,7 @@ function Add-ArubaSWVlansPorts {
 
     Process {
 
-        $url = "rest/v4/vlans-ports"
+        $uri = "rest/v4/vlans-ports"
 
         $vlanports = New-Object -TypeName PSObject
 
@@ -54,7 +54,7 @@ function Add-ArubaSWVlansPorts {
             { $_ -eq "Forbidden" } { $vlanports | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlanports -url $url
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlanports -uri $uri
         $rep_vlansports = ($response.Content | ConvertFrom-Json)
 
         $rep_vlansports
@@ -103,9 +103,9 @@ function Get-ArubaSWVlansPorts {
 
     Process {
 
-        $url = "rest/v4/vlans-ports"
+        $uri = "rest/v4/vlans-ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
         $vlansports = ($response.Content | ConvertFrom-Json).vlan_port_element
 
         if ($PsBoundParameters.ContainsKey('vlan_id')) {
@@ -164,7 +164,7 @@ function Set-ArubaSWVlansPorts {
             $vlan_id = $vlanports.vlan_id
             $port_id = $vlanports.port_id
         }
-        $url = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
+        $uri = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
 
         $_vlanport = New-Object -TypeName PSObject
 
@@ -177,7 +177,7 @@ function Set-ArubaSWVlansPorts {
             { $_ -eq "Forbidden" } { $_vlanport | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -uri $uri
         $rep_vlanport = ($response.Content | ConvertFrom-Json)
 
         $rep_vlanport
@@ -231,7 +231,7 @@ function Remove-ArubaSWVlansPorts {
             $port_id = $vlanport.port_id
         }
 
-        $url = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
+        $uri = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove Vlan on switch"
@@ -245,7 +245,7 @@ function Remove-ArubaSWVlansPorts {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Vlan Port"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -url $url
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
             Write-Progress -activity "Remove Vlan Port" -completed
         }
     }

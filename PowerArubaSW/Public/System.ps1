@@ -26,9 +26,9 @@ function Get-ArubaSWSystem {
 
     Process {
 
-        $url = "rest/v4/system"
+        $uri = "rest/v4/system"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $response.content | ConvertFrom-Json
     }
@@ -67,7 +67,7 @@ function Set-ArubaSWSystem {
 
     Process {
 
-        $url = "rest/v4/system"
+        $uri = "rest/v4/system"
 
         $system = New-Object -TypeName PSObject
 
@@ -83,7 +83,7 @@ function Set-ArubaSWSystem {
             $system | Add-Member -name "contact" -membertype NoteProperty -Value $contact
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -url $url -Body $system
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -uri $uri -Body $system
 
         $response.content | ConvertFrom-Json
     }
@@ -117,9 +117,9 @@ function Get-ArubaSWSystemStatus {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatusGlobal"
         }
 
-        $url = "rest/v4/system/status"
+        $uri = "rest/v4/system/status"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $response.content | ConvertFrom-Json
     }
@@ -145,9 +145,9 @@ function Get-ArubaSWSystemStatusSwitch {
 
     Process {
 
-        $url = "rest/v4/system/status/switch"
+        $uri = "rest/v4/system/status/switch"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $response.content | ConvertFrom-Json
     }
@@ -180,9 +180,9 @@ function Get-ArubaSWSystemStatusGlobal {
         if ('ST_STANDALONE' -eq $DefaultArubaSWConnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWConnection.switch_type) {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatus"
         }
-        $url = "rest/v4/system/status/global_info"
+        $uri = "rest/v4/system/status/global_info"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $response.content | ConvertFrom-Json
     }
