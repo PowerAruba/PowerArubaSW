@@ -18,6 +18,7 @@ With this module (version 0.7.0) you can manage:
 - STP (Add/Configure/Remove GlobalConfig or Port)
 - IP Address (Get)
 - Cli (AnyCli and CliBatch for send CLI function)
+- PoE (Get/Configure PoE Settings and Get Poe Stats)
 
 More functionality will be added later.
 
