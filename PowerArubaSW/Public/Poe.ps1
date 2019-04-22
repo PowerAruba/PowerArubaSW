@@ -34,13 +34,13 @@ function Get-ArubaSWPoE {
 
     Process {
 
-        $url = "rest/v4/poe/ports"
+        $uri = "rest/v4/poe/ports"
 
         if ( $port_id ) {
-            $url = "rest/v4/ports/$port_id/poe"
+            $uri = "rest/v4/ports/$port_id/poe"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $poe = ($response.Content | ConvertFrom-Json)
 
@@ -109,7 +109,7 @@ function Set-ArubaSWPoE {
         if ($port_poe) {
             $port_id = $port_poe.port_id
         }
-        $url = "rest/v4/ports/${port_id}/poe"
+        $uri = "rest/v4/ports/${port_id}/poe"
 
         $_poe = New-Object -TypeName PSObject
 
@@ -170,7 +170,7 @@ function Set-ArubaSWPoE {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_poe -url $url
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_poe -uri $uri
         $rep_poe = ($response.Content | ConvertFrom-Json)
 
         $rep_poe
@@ -209,13 +209,13 @@ function Get-ArubaSWPoEStats {
 
     Process {
 
-        $url = "rest/v4/poe/ports/stats"
+        $uri = "rest/v4/poe/ports/stats"
 
         if ( $port_id ) {
-            $url = "rest/v4/ports/$port_id/poe/stats"
+            $uri = "rest/v4/ports/$port_id/poe/stats"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
         $poe = ($response.Content | ConvertFrom-Json)
 
