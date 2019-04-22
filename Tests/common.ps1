@@ -18,7 +18,7 @@ $pester_trunk_trk1 = "trk3" #Port trunk 1 name of Trunk test
 $pester_trunk_trk2 = "trk7" #Port trunk 2 name of Trunk test
 $pester_stp_port = 3 #Port Number of STP test
 $pester_cli_port = 3 #Port Number of CLI test
-$pester_poe_port = 4 #Port Number of CLI test
+$pester_poe_port = 4 #Port Number of PoE test
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 

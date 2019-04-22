@@ -53,9 +53,9 @@ Describe  "Configure PoE" {
             $poe.pre_standard_detect_enabled | Should -Be $true
         }
     }
-    Context "Configure POE Port via pipeline" {
-        It "Configure POE Port $pester_poe_port : status, priority, allocation Method/Power in Watt, pre standard detect" {
-            Get-ArubaSWSTPPort $pester_poe_port | Set-ArubaSWPoE -is_poe_enabled:$enable -poe_priority low -poe_allocation_method usage -pre_standard_detect_enabled:$false
+    Context "Configure PoE Port via pipeline" {
+        It "Configure PoE Port $pester_poe_port : status, priority, allocation Method/Power in Watt, pre standard detect" {
+            Get-ArubaSWSTPPort $pester_poe_port | Set-ArubaSWPoE -is_poe_enabled:$true -poe_priority low -poe_allocation_method usage -pre_standard_detect_enabled:$false
             $poe = Get-ArubaSWPoE -port $pester_poe_port
             $poe.port_id | Should -Be $pester_poe_port
             $poe.is_poe_enabled | Should -Be $false
