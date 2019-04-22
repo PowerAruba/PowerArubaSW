@@ -66,14 +66,14 @@ function Set-ArubaSWPoE {
 
         .EXAMPLE
         $port_poe = Get-ArubaSWPoE -port 3
-        PS C:\>$port_poe | Set-ArubaSWPoE -is_poe_enabled:$disabled -priority high -poe_allocation_method class
+        PS C:\>$port_poe | Set-ArubaSWPoE -is_poe_enabled:$false -poe_priority high -poe_allocation_method class
 
         Configure port 3 and disable PoE with priority high and allocation method class
 
         .EXAMPLE
-        Set-ArubaSWPoE -port_id 3 -allocated_power_in_watts 33 -pre_standard_detect_enabled:$disable
+        Set-ArubaSWPoE -port_id 3 -poe_allocation_method value -allocated_power_in_watts 33 -pre_standard_detect_enabled:$false
 
-        Configure port 3 and set allocated power to 33 and disable pre_standard_detect
+        Configure port 3 and set allocated method and allocated power to 33 (Watts) and disable pre_standard_detect
 
     #>
 
@@ -92,7 +92,7 @@ function Set-ArubaSWPoE {
         [ValidateSet ("usage", "class", "value")]
         [string]$poe_allocation_method,
         [Parameter (Mandatory = $false)]
-        [ValidateRange (1,33)]
+        [ValidateRange (1, 33)]
         [int]$allocated_power_in_watts,
         [Parameter (Mandatory = $false)]
         [string]$port_configured_type,
