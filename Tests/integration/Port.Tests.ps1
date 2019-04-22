@@ -158,12 +158,12 @@ Describe  "Get Port Statistics" {
         } | Should Not Throw
     }
 
-    It "Get ALL Ports Stastistics" {
+    It "Get ALL Ports Statistics" {
         $PORTS = Get-ArubaSWPortStatistics
         $PORTS.count | Should not be $NULL
     }
 
-    It "Get the Port Stastistics ($pester_port)" {
+    It "Get the Port Statistics ($pester_port)" {
         $PORT = Get-ArubaSWPortStatistics -port_id $pester_port
         $PORT.id | Should be $pester_port
         $PORT.name | Should -Not -BeNullOrEmpty

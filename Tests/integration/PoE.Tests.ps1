@@ -58,7 +58,7 @@ Describe  "Configure PoE" {
             Get-ArubaSWSTPPort $pester_poe_port | Set-ArubaSWPoE -is_poe_enabled:$true -poe_priority low -poe_allocation_method usage -pre_standard_detect_enabled:$false
             $poe = Get-ArubaSWPoE -port $pester_poe_port
             $poe.port_id | Should -Be $pester_poe_port
-            $poe.is_poe_enabled | Should -Be $false
+            $poe.is_poe_enabled | Should -Be $true
             $poe.poe_priority | Should -Be "PPP_LOW"
             $poe.poe_allocation_method | Should -Be "PPAM_USAGE"
             $poe.allocated_power_in_watts | Should -Be $poe_default.allocated_power_in_watts
