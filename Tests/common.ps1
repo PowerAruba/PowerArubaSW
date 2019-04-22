@@ -18,6 +18,7 @@ $pester_trunk_trk1 = "trk3" #Port trunk 1 name of Trunk test
 $pester_trunk_trk2 = "trk7" #Port trunk 2 name of Trunk test
 $pester_stp_port = 3 #Port Number of STP test
 $pester_cli_port = 3 #Port Number of CLI test
+$pester_poe_port = 4 #Port Number of PoE test
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -67,6 +68,7 @@ if ($product_number -eq 'J9850A' -or $product_number -eq 'J9851A') {
     $pester_trunk_port = "$pester_chassis_module$pester_trunk_port"
     $pester_stp_port = "$pester_chassis_module$pester_stp_port"
     $pester_cli_port = "$pester_chassis_module$pester_cli_port"
+    $pester_poe_port = "$pester_chassis_module$pester_poe_port"
 }
 
 #Add stack module to port number (if it is a stacked switch)
@@ -77,4 +79,5 @@ if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type) {
     $pester_trunk_port = "$pester_stack_module/$pester_trunk_port"
     $pester_stp_port = "$pester_stack_module/$pester_stp_port"
     $pester_cli_port = "$pester_stack_module/$pester_cli_port"
+    $pester_poe_port = "$pester_stack_module/$pester_poe_port"
 }
