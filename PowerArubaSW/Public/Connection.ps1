@@ -200,7 +200,10 @@ function Disconnect-ArubaSW {
 
     Param(
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -222,7 +225,7 @@ function Disconnect-ArubaSW {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Aruba SW connection"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Aruba SW connection" -completed
             if (Get-Variable -Name DefaultArubaSWConnection -scope global ) {
                 Remove-Variable -name DefaultArubaSWConnection -scope global
