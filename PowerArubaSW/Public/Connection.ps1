@@ -65,7 +65,9 @@ function Connect-ArubaSW {
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
-        [int]$port
+        [int]$port,
+        [Parameter(Mandatory = $false)]
+        [boolean]$DefaultConnection=$true
     )
 
     Begin {
@@ -138,7 +140,9 @@ function Connect-ArubaSW {
         $connection.port = $port
         $connection.invokeParams = $invokeParams
 
-        Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
+        if ( $DefaultConnection ) {
+            Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
+        }
 
         $switchstatus = Get-ArubaSWSystemStatusSwitch
         $connection.switch_type = $switchstatus.switch_type
@@ -164,6 +168,9 @@ function Connect-ArubaSW {
             Write-Host "Welcome on"$switchsystem.name"-"$product_name
 
         }
+
+        #Return connection info
+        $connection
     }
 
     End {

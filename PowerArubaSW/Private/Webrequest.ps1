@@ -13,7 +13,7 @@ function Invoke-ArubaSWWebRequest() {
         [Parameter(Mandatory = $false)]
         [psobject]$body,
         [Parameter(Mandatory = $false)]
-        [Microsoft.PowerShell.Commands.WebRequestSession]$sessionvariable
+        [psobject]$connection
     )
 
     Begin {
@@ -21,20 +21,21 @@ function Invoke-ArubaSWWebRequest() {
 
     Process {
 
-        $Server = ${DefaultArubaSWConnection}.Server
-        $httpOnly = ${DefaultArubaSWConnection}.httpOnly
-        $port = ${DefaultArubaSWConnection}.port
-        $invokeParams = ${DefaultArubaSWConnection}.InvokeParams
+        if ($null -eq $connection ) {
+            $connection = $DefaultArubaSWConnection
+        }
+
+        $Server = $connection.Server
+        $httpOnly = $connection.httpOnly
+        $port = $connection.port
+        $invokeParams = $connection.InvokeParams
+        $sessionvariable = $connection.session
 
         if ($httpOnly) {
             $fullurl = "http://${Server}:${port}/${uri}"
         }
         else {
             $fullurl = "https://${Server}:${port}/${uri}"
-        }
-
-        if ( -Not $PsBoundParameters.ContainsKey('sessionvariable') ) {
-            $sessionvariable = $DefaultArubaSWConnection.session
         }
 
         try {
