@@ -144,11 +144,11 @@ function Connect-ArubaSW {
             Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
         }
 
-        $switchstatus = Get-ArubaSWSystemStatusSwitch
+        $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
 
         if (-not $noverbose) {
-            $switchsystem = Get-ArubaSWSystem
+            $switchsystem = Get-ArubaSWSystem -connection $connection
 
 
             if ($switchstatus.switch_type -eq "ST_STACKED") {
