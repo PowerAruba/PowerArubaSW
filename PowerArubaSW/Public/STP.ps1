@@ -20,6 +20,11 @@ function Get-ArubaSWSTP {
         This function give you the spanning-tree configuration
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
     Begin {
     }
 
@@ -27,7 +32,7 @@ function Get-ArubaSWSTP {
 
         $uri = "rest/v4/stp"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $stp = $response | ConvertFrom-Json
 
@@ -66,7 +71,10 @@ function Set-ArubaSWSTP {
         [int]$priority,
         [Parameter (Mandatory = $false, Position = 3)]
         [ValidateSet ("MSTP", "RPVST")]
-        [string]$mode
+        [string]$mode,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -104,7 +112,7 @@ function Set-ArubaSWSTP {
             $_stp | Add-Member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -139,7 +147,10 @@ function Get-ArubaSWSTPPort {
 
     Param(
         [Parameter (Mandatory = $false)]
-        [string]$port
+        [string]$port,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -154,7 +165,7 @@ function Get-ArubaSWSTPPort {
             $uri += "/$port"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $stp = $response | ConvertFrom-Json
         if ($port) {
@@ -206,7 +217,10 @@ function Set-ArubaSWSTPPort {
         [Parameter (Mandatory = $false)]
         [switch]$bpdu_filter,
         [Parameter (Mandatory = $false)]
-        [switch]$root_guard
+        [switch]$root_guard,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -265,7 +279,7 @@ function Set-ArubaSWSTPPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 

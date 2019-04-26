@@ -32,7 +32,10 @@ function Add-ArubaSWVlansPorts {
         [string]$port_id,
         [Parameter (Mandatory = $true, Position = 3)]
         [ValidateSet("Untagged", "tagged", "Forbidden")]
-        [string]$port_mode
+        [string]$port_mode,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -54,7 +57,7 @@ function Add-ArubaSWVlansPorts {
             { $_ -eq "Forbidden" } { $vlanports | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlanports -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlanports -uri $uri -connection $connection
         $rep_vlansports = ($response.Content | ConvertFrom-Json)
 
         $rep_vlansports
@@ -95,7 +98,10 @@ function Get-ArubaSWVlansPorts {
         [Parameter (Mandatory = $false)]
         [int]$vlan_id,
         [Parameter (Mandatory = $false)]
-        [string]$port_id
+        [string]$port_id,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -105,7 +111,7 @@ function Get-ArubaSWVlansPorts {
 
         $uri = "rest/v4/vlans-ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
         $vlansports = ($response.Content | ConvertFrom-Json).vlan_port_element
 
         if ($PsBoundParameters.ContainsKey('vlan_id')) {
@@ -151,7 +157,10 @@ function Set-ArubaSWVlansPorts {
         [psobject]$vlanports,
         [Parameter (Mandatory = $true, Position = 3)]
         [ValidateSet("Untagged", "Tagged", "Forbidden")]
-        [string]$port_mode
+        [string]$port_mode,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -177,7 +186,7 @@ function Set-ArubaSWVlansPorts {
             { $_ -eq "Forbidden" } { $_vlanport | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -uri $uri -connection $connection
         $rep_vlanport = ($response.Content | ConvertFrom-Json)
 
         $rep_vlanport
@@ -217,7 +226,10 @@ function Remove-ArubaSWVlansPorts {
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlanport,
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -245,7 +257,7 @@ function Remove-ArubaSWVlansPorts {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Vlan Port"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Vlan Port" -completed
         }
     }

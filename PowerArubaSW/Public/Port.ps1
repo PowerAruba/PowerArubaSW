@@ -26,7 +26,10 @@ function Get-ArubaSWPort {
 
     Param(
         [Parameter (Mandatory = $false)]
-        [string]$port_id
+        [string]$port_id,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -36,7 +39,7 @@ function Get-ArubaSWPort {
 
         $uri = "rest/v4/ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).port_element
 
@@ -75,7 +78,10 @@ function Get-ArubaSWPortStatistics {
 
     Param(
         [Parameter (Mandatory = $false)]
-        [string]$port_id
+        [string]$port_id,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -85,7 +91,7 @@ function Get-ArubaSWPortStatistics {
 
         $uri = "rest/v4/port-statistics"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).port_statistics_element
 
@@ -148,7 +154,10 @@ function Set-ArubaSWPort {
         [Parameter (Mandatory = $false)]
         [switch]$is_flow_control_enabled,
         [Parameter (Mandatory = $false)]
-        [switch]$is_dsnoop_port_trusted
+        [switch]$is_dsnoop_port_trusted,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -202,7 +211,7 @@ function Set-ArubaSWPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $uri -connection $connection
 
         $response | ConvertFrom-Json
     }

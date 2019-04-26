@@ -20,6 +20,11 @@ function Get-ArubaSWLACP {
         Get the list of ports in a lacp configuration with the link aggregation interface and the name of ports in this interface.
     #>
 
+    param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
     Begin {
     }
 
@@ -27,7 +32,7 @@ function Get-ArubaSWLACP {
 
         $uri = "rest/v4/lacp/port"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).lacp_element
 
@@ -68,7 +73,10 @@ function Add-ArubaSWLACP {
         [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
         [Parameter (Mandatory = $true, Position = 2)]
-        [string]$port
+        [string]$port,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -84,7 +92,7 @@ function Add-ArubaSWLACP {
 
         $lacp | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $lacp -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -123,7 +131,10 @@ function Remove-ArubaSWLACP {
         [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -153,7 +164,7 @@ function Remove-ArubaSWLACP {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove LACP"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -uri $uri -connection $connection
             Write-Progress -activity "Remove LACP" -completed
         }
     }

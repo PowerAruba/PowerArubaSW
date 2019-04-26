@@ -19,6 +19,12 @@ function Get-ArubaSWDns {
         This function give you all the informations about the dns parameters configured on the switch
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -26,7 +32,7 @@ function Get-ArubaSWDns {
 
         $uri = "rest/v4/dns"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json)
 
@@ -72,7 +78,10 @@ function Set-ArubaSWDns {
         [Parameter (Mandatory = $false)]
         [string]$server2,
         [Parameter (Mandatory = $false)]
-        [string[]]$domain
+        [string[]]$domain,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -127,7 +136,7 @@ function Set-ArubaSWDns {
             $conf | Add-Member -name "dns_domain_names" -membertype NoteProperty -Value $domain
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -154,7 +163,10 @@ function Remove-ArubaSWDns {
 
     Param(
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -180,7 +192,7 @@ function Remove-ArubaSWDns {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove DNS"
-            $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -uri $uri -connection $connection
             Write-Progress -activity "Remove DNS" -completed
         }
     }

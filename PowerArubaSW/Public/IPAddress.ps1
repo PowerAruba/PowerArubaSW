@@ -19,6 +19,12 @@ function Get-ArubaSWIpAddress {
         This function give you all the informations about the ip parameters configured on the switch
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -26,7 +32,7 @@ function Get-ArubaSWIpAddress {
 
         $uri = "rest/v4/ipaddresses"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json)
 

@@ -36,7 +36,10 @@ function Get-ArubaSWCli {
         [Parameter (Mandatory = $true, Position = 1)]
         [string]$cmd,
         [Parameter (Mandatory = $false)]
-        [switch]$display_result
+        [switch]$display_result,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -50,7 +53,7 @@ function Get-ArubaSWCli {
 
         $run | Add-Member -name "cmd" -membertype NoteProperty -Value "$cmd"
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $run -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $run -uri $uri -connection $connection
 
         $conf = ($response | ConvertFrom-Json)
 
@@ -99,7 +102,10 @@ function Send-ArubaSWCliBatch {
 
     Param(
         [Parameter (Mandatory = $true)]
-        [string[]]$command
+        [string[]]$command,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -124,7 +130,7 @@ function Send-ArubaSWCliBatch {
 
         $conf | Add-Member -name "cli_batch_base64_encoded" -membertype NoteProperty -Value $EncodedText
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $conf -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $conf -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -150,6 +156,12 @@ function Get-ArubaSWCliBatchStatus {
         Get a cli batch command status on the switch.
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -157,7 +169,7 @@ function Get-ArubaSWCliBatchStatus {
 
         $uri = "rest/v4/cli_batch/status"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).cmd_exec_logs
 
