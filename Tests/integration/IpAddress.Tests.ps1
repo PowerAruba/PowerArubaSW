@@ -16,7 +16,7 @@ Describe  "Get-ArubaSWIPAddress" {
         $ipaddress = Get-ArubaSWIPAddress
         $ipaddress | Should not be $NULL
         $ipaddress.ip_address_mode | Should -BeOfType string
-        $ipaddress.vlan_id | Should -BeOfType long
+        $ipaddress.vlan_id | Should -BeOfType $pester_longint
     }
 }
 
