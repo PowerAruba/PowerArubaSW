@@ -19,6 +19,7 @@ With this module (version 0.7.0) you can manage:
 - IP Address (Get)
 - Cli (AnyCli and CliBatch for send CLI function)
 - PoE (Get/Configure PoE Settings and Get Poe Stats)
+- [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
 
@@ -141,6 +142,47 @@ if it is not enabled you can enable using
 ```
 
 You can use also `Connect-ArubaSW -httpOnly` for connect using HTTP (NOT RECOMMENDED !)
+
+# MultiConnection
+
+From release 0.8.0, it is possible to connect on same times to multi switch
+You need to use -connection parameter to cmdlet
+
+For example to get Vlan Ports of 2 switchs
+
+```powershell
+# Connect to first switch
+    $sw1 = Connect-ArubaSW 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+#DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
+
+# Connect to second switch
+    $sw2 = Connect-ArubaSW 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+# Get Vlan Ports for first switch
+    Get-ArubaSWVlanPorts -connection $sw1
+
+    uri                  vlan_id port_id port_mode
+    ---                  ------- ------- ---------
+    /vlans-ports/1-1/1         1 1/1     POM_UNTAGGED
+    /vlans-ports/23-1/2       23 1/2     POM_UNTAGGED
+    /vlans-ports/1-1/3         1 1/3     POM_UNTAGGED
+    /vlans-ports/23-1/3       23 1/3     POM_TAGGED_STATIC
+....
+# Get Vlan Ports for second switch
+    Get-ArubaSWVlanPorts -connection $sw2
+
+    uri                  vlan_id port_id port_mode
+    ---                  ------- ------- ---------
+    /vlans-ports/1-1/1         1 1/1     POM_UNTAGGED
+    /vlans-ports/23-1/1       23 1/1     POM_TAGGED_STATIC
+    /vlans-ports/1-1/2         1 1/2     POM_UNTAGGED
+    /vlans-ports/23-1/3       23 1/3     POM_UNTAGGED
+...
+
+#Each cmdlet can use -connection parameter
+
+```
 
 # List of available command
 ```powershell
