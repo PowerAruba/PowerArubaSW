@@ -18,7 +18,7 @@ Describe  "Get Spanning Tree" {
         $stp = Get-ArubaSWSTP
         $stp | Should not be $NULL
         $stp.is_enabled | Should -BeOfType boolean
-        $stp.priority | Should -BeOfType long
+        $stp.priority | Should -BeOfType $pester_longint
         $stp.mode | Should -BeOfType string
     }
 }
@@ -53,7 +53,7 @@ Describe  "Get Spanning Tree Port" {
         $stp_port = Get-ArubaSWSTPPort
         $stp_port | Should not be $NULL
         $stp_port.port_id | Should -BeOfType string
-        $stp_port.priority | Should -BeOfType long
+        $stp_port.priority | Should -BeOfType $pester_longint
         $stp_port.is_enable_admin_edge_port | Should -BeOfType boolean
         $stp_port.is_enable_bpdu_protection | Should -BeOfType boolean
         $stp_port.is_enable_bpdu_filter | Should -BeOfType boolean
@@ -64,7 +64,7 @@ Describe  "Get Spanning Tree Port" {
         $stp_port = Get-ArubaSWSTPPort -port $pester_stp_port
         $stp_port | Should not be $NULL
         $stp_port.port_id | Should -Be $pester_stp_port
-        $stp_port.priority | Should -BeOfType long
+        $stp_port.priority | Should -BeOfType $pester_longint
         $stp_port.is_enable_admin_edge_port | Should -BeOfType boolean
         $stp_port.is_enable_bpdu_protection | Should -BeOfType boolean
         $stp_port.is_enable_bpdu_filter | Should -BeOfType boolean

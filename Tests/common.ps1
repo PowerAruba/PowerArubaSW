@@ -20,6 +20,13 @@ $pester_stp_port = 3 #Port Number of STP test
 $pester_cli_port = 3 #Port Number of CLI test
 $pester_poe_port = 4 #Port Number of PoE test
 
+
+if ("Desktop" -eq $PSVersionTable.PsEdition) { # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
+    $script:pester_longint = "int"
+}
+else {
+    $script:pester_longint = "long"
+}
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 . ../credential.ps1

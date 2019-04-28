@@ -19,7 +19,7 @@ Describe  "Get PoE" {
         $poe.is_poe_enabled | Should -BeOfType boolean
         $poe.poe_priority | Should -BeOfType string
         $poe.poe_allocation_method | Should -BeOfType string
-        $poe.allocated_power_in_watts | Should -BeOfType long
+        $poe.allocated_power_in_watts | Should -BeOfType $pester_longint
         $poe.port_configured_type | Should -BeOfType string
         $poe.pre_standard_detect_enabled | Should -BeOfType boolean
     }
@@ -31,7 +31,7 @@ Describe  "Get PoE" {
         $poe.is_poe_enabled | Should -BeOfType boolean
         $poe.poe_priority | Should -BeOfType string
         $poe.poe_allocation_method | Should -BeOfType string
-        $poe.allocated_power_in_watts | Should -BeOfType long
+        $poe.allocated_power_in_watts | Should -BeOfType $pester_longint
         $poe.port_configured_type | Should -BeOfType string
         $poe.pre_standard_detect_enabled | Should -BeOfType boolean
     }
@@ -79,26 +79,26 @@ Describe  "Get PoE Stats" {
         $poe = Get-ArubaSWPoEStats
         $poe | Should not be $NULL
         $poe.port_id | Should -BeOfType string
-        $poe.port_voltage_in_volts | Should -BeOfType long
-        $poe.power_denied_count | Should -BeOfType long
-        $poe.over_current_count | Should -BeOfType long
-        $poe.mps_absent_count | Should -BeOfType long
-        $poe.short_count | Should -BeOfType long
-        $poe.actual_power_in_watts | Should -BeOfType long
-        $poe.power_class | Should -BeOfType long
+        $poe.port_voltage_in_volts | Should -BeOfType $pester_longint
+        $poe.power_denied_count | Should -BeOfType $pester_longint
+        $poe.over_current_count | Should -BeOfType $pester_longint
+        $poe.mps_absent_count | Should -BeOfType $pester_longint
+        $poe.short_count | Should -BeOfType $pester_longint
+        $poe.actual_power_in_watts | Should -BeOfType $pester_longint
+        $poe.power_class | Should -BeOfType $pester_longint
     }
 
     It "Get PoE Port Stats $pester_poe_port" {
         $poe = Get-ArubaSWPoEStats -port $pester_poe_port
         $poe | Should not be $NULL
         $poe.port_id | Should -Be $pester_poe_port
-        $poe.port_voltage_in_volts | Should -BeOfType long
-        $poe.power_denied_count | Should -BeOfType long
-        $poe.over_current_count | Should -BeOfType long
-        $poe.mps_absent_count | Should -BeOfType long
-        $poe.short_count | Should -BeOfType long
-        $poe.actual_power_in_watts | Should -BeOfType long
-        $poe.power_class | Should -BeOfType long
+        $poe.port_voltage_in_volts | Should -BeOfType $pester_longint
+        $poe.power_denied_count | Should -BeOfType $pester_longint
+        $poe.over_current_count | Should -BeOfType $pester_longint
+        $poe.mps_absent_count | Should -BeOfType $pester_longint
+        $poe.short_count | Should -BeOfType $pester_longint
+        $poe.actual_power_in_watts | Should -BeOfType $pester_longint
+        $poe.power_class | Should -BeOfType $pester_longint
     }
 }
 

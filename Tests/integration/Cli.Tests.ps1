@@ -38,6 +38,10 @@ Describe  "Send Cli Batch command" {
         $batch = Send-ArubaSWCliBatch -command "interface $pester_cli_port disable", "interface $pester_cli_port name PowerArubaSW-int"
         $batch.status | Should -be "CBS_INITIATED"
         $cliBatch = Get-ArubaSWCliBatchStatus
+        if ($null -eq $cliBatch) {
+            Start-Sleep 0.5
+            $cliBatch = Get-ArubaSWCliBatchStatus
+        }
         $cliBatch[0].status | Should -be "CCS_SUCCESS"
         $cliBatch[0].cmd | Should -Be "interface $pester_cli_port disable"
         $cliBatch[0].result | Should -BeNullOrEmpty
@@ -53,6 +57,10 @@ Describe  "Send Cli Batch command" {
         $batch = Send-ArubaSWCliBatch -command "interface $pester_cli_port", "enable", "no name"
         $batch.status | Should -be "CBS_INITIATED"
         $cliBatch = Get-ArubaSWCliBatchStatus
+        if ($null -eq $cliBatch) {
+            Start-Sleep 0.5
+            $cliBatch = Get-ArubaSWCliBatchStatus
+        }
         $cliBatch[0].status | Should -be "CCS_SUCCESS"
         $cliBatch[0].cmd | Should -Be "interface $pester_cli_port"
         $cliBatch[0].result | Should -BeNullOrEmpty
