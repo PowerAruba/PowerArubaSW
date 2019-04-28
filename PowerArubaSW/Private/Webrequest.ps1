@@ -5,6 +5,36 @@
 #
 function Invoke-ArubaSWWebRequest() {
 
+    <#
+      .SYNOPSIS
+      Invoke WebRequest with ArubaSW connection (internal) variable
+
+      .DESCRIPTION
+       Invoke WebRequest with ArubaSW connection variable (IP Address, cookie, port...)
+
+      .EXAMPLE
+      Invoke-ArubaSWWebRequest -method "get" -uri "rest/v4/vlan"
+
+      Invoke-WebRequest with ArubaSW connection for get rest/v4/vlan
+
+      .EXAMPLE
+      Invoke-ArubaSWWebRequest "rest/v1/system"
+
+      Invoke-WebRequest with ArubaSW connection for get rest/v1/system uri with default GET method parameter
+
+      .EXAMPLE
+      Invoke-ArubaSWWebRequest -method "post" -uri "rest/v1/system" -body $body
+
+      Invoke-WebRequest with ArubaSW connection for post rest/v1/system uri with $body payload
+
+      .EXAMPLE
+      Invoke-ArubaSWWebRequest -method "get" -uri "rest/v1/system" -depth 1 -selector configuration
+
+      Invoke-WebRequest with ArubaSW connection for get rest/v1/system with depth 1 and select only configuration
+
+    #>
+
+
     Param(
         [Parameter(Mandatory = $true, position = 1)]
         [String]$uri,
