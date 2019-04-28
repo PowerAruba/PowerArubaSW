@@ -16,9 +16,19 @@ function Get-ArubaSWLLDPRemote {
 
         .EXAMPLE
         Get-ArubaSWLLDPRemote
+
         Get all the informations about the remote devices connected to the ports of the switch you are log on.
+
+        .EXAMPLE
+        Get-ArubaSWLLDPRemote -port_id 5
+
+        Get LLDP neighbor informations on port 5
     #>
 
+    Param(
+        [Parameter (Mandatory = $false, Position = 1)]
+        [string]$port_id
+    )
     Begin {
     }
 
@@ -26,11 +36,20 @@ function Get-ArubaSWLLDPRemote {
 
         $uri = "rest/v4/lldp/remote-device"
 
+        if ($port_id) {
+            $uri += "/$port_id"
+        }
+
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
 
-        $run = ($response | ConvertFrom-Json).lldp_remote_device_element
+        $run = ($response.content | ConvertFrom-Json)
 
-        $run
+        if ($port_id) {
+            $run
+        }
+        else {
+            $run.lldp_remote_device_element
+        }
     }
 
     End {
