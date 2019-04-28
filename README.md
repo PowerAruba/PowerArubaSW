@@ -23,7 +23,7 @@ With this module (version 0.7.0) you can manage:
 More functionality will be added later.
 
 Connection can use HTTPS (default) or HTTP
-Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware) on Windows/Linux/macOS
+Tested with Aruba OS 2530, 2930F, 2930M, 3810, 54xxRzl (using 16.05.x firmware and later...) on Windows/Linux/macOS
 
 # Usage
 
