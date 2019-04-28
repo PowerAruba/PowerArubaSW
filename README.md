@@ -3,7 +3,7 @@
 
 This is a Powershell module for configure a ArubaOS Switch.
 
-With this module (version 0.7.0) you can manage:
+With this module (version 0.8.0) you can manage:
 
 - System (Name, Location, Contact) & Switch Status (Product and Hardware info)
 - Vlans (Add/Configure/Remove)
@@ -13,12 +13,18 @@ With this module (version 0.7.0) you can manage:
 - LACP (Add/Configure/Remove)
 - Led Locator (Get|Set Led indicator)
 - Ports (Information (name, status, config_mode...) and Statistics)
-- DNS (Add/configure/remove IP Address and domain names )
+- DNS (Add/configure/remove IP Address and domain names)
+- Trunk (Add/Configure/Remove)
+- STP (Add/Configure/Remove GlobalConfig or Port)
+- IP Address (Get)
+- Cli (AnyCli and CliBatch for send CLI function)
+- PoE (Get/Configure PoE Settings and Get Poe Stats)
+- [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
 
 Connection can use HTTPS (default) or HTTP
-Tested with Aruba OS 2530 and 2930F (using 16.05.x firmware) on Windows/Linux/macOS
+Tested with Aruba OS 2530, 2930F, 2930M, 3810, 54xxRzl (using 16.05.x firmware and later...) on Windows/Linux/macOS
 
 # Usage
 
@@ -29,7 +35,6 @@ For example, you can manage Vlans with the following commands:
 - `Set-ArubaSWVlans`
 - `Remove-ArubaSWVlans`
 
-
 # Requirements
 
 - Powershell 5 or 6 (Core) (If possible get the latest version)
@@ -38,7 +43,7 @@ For example, you can manage Vlans with the following commands:
 # Instructions
 ### Install the module
 ```powershell
-# Automated installation (Powershell 5):
+# Automated installation (Powershell 5 or later):
     Install-Module PowerArubaSW
 
 # Import the module
@@ -138,41 +143,96 @@ if it is not enabled you can enable using
 
 You can use also `Connect-ArubaSW -httpOnly` for connect using HTTP (NOT RECOMMENDED !)
 
+# MultiConnection
+
+From release 0.8.0, it is possible to connect on same times to multi switch
+You need to use -connection parameter to cmdlet
+
+For example to get Vlan Ports of 2 switchs
+
+```powershell
+# Connect to first switch
+    $sw1 = Connect-ArubaSW 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+#DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
+
+# Connect to second switch
+    $sw2 = Connect-ArubaSW 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+# Get Vlan Ports for first switch
+    Get-ArubaSWVlanPorts -connection $sw1
+
+    uri                  vlan_id port_id port_mode
+    ---                  ------- ------- ---------
+    /vlans-ports/1-1/1         1 1/1     POM_UNTAGGED
+    /vlans-ports/23-1/2       23 1/2     POM_UNTAGGED
+    /vlans-ports/1-1/3         1 1/3     POM_UNTAGGED
+    /vlans-ports/23-1/3       23 1/3     POM_TAGGED_STATIC
+....
+# Get Vlan Ports for second switch
+    Get-ArubaSWVlanPorts -connection $sw2
+
+    uri                  vlan_id port_id port_mode
+    ---                  ------- ------- ---------
+    /vlans-ports/1-1/1         1 1/1     POM_UNTAGGED
+    /vlans-ports/23-1/1       23 1/1     POM_TAGGED_STATIC
+    /vlans-ports/1-1/2         1 1/2     POM_UNTAGGED
+    /vlans-ports/23-1/3       23 1/3     POM_UNTAGGED
+...
+
+#Each cmdlet can use -connection parameter
+
+```
+
 # List of available command
 ```powershell
 Add-ArubaSWLACP
+Add-ArubaSWTrunk
 Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
 Disconnect-ArubaSW
+Get-ArubaSWCli
+Get-ArubaSWCliBatchStatus
 Get-ArubaSWDns
+Get-ArubaSWIpAddress
 Get-ArubaSWLACP
 Get-ArubaSWLed
 Get-ArubaSWLLDPGlobalStatus
 Get-ArubaSWLLDPNeighborStats
 Get-ArubaSWLLDPPortStats
 Get-ArubaSWLLDPRemote
+Get-ArubaSWPoE
+Get-ArubaSWPoEStats
 Get-ArubaSWPort
 Get-ArubaSWPortStatistics
 Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
+Get-ArubaSWSTP
+Get-ArubaSWSTPPort
 Get-ArubaSWSystem
 Get-ArubaSWSystemStatus
 Get-ArubaSWSystemStatusGlobal
 Get-ArubaSWSystemStatusSwitch
+Get-ArubaSWTrunk
 Get-ArubaSWVlans
 Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
 Remove-ArubaSWDns
 Remove-ArubaSWLACP
+Remove-ArubaSWTrunk
 Remove-ArubaSWVlans
 Remove-ArubaSWVlansPorts
+Send-ArubaSWCliBatch
 Set-ArubaSWCipherSSL
 Set-ArubaSWDns
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
+Set-ArubaSWPoE
 Set-ArubaSWPort
 Set-ArubaSWRestSessionTimeout
+Set-ArubaSWSTP
+Set-ArubaSWSTPPort
 Set-ArubaSWSystem
 Set-ArubaSWuntrustedSSL
 Set-ArubaSWVlans
