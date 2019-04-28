@@ -46,6 +46,17 @@ function Connect-ArubaSW {
       Connect-ArubaSW -Server 192.0.2.1 -Username manager -Password $mysecpassword
 
       Connect to an ArubaOS Switch with IP 192.0.2.1 using Username and Password
+
+      .EXAMPLE
+      $sw1 = Connect-ArubaSW -Server 192.0.2.1
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $sw1 variable
+
+      .EXAMPLE
+      $sw2 = Connect-ArubaSW -Server 192.0.2.1 -DefaultConnection:$false
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $sw2 variable
+      and don't store connection on global ($DefaultArubaSWConnection) variable
   #>
 
     Param(
