@@ -46,6 +46,17 @@ function Connect-ArubaSW {
       Connect-ArubaSW -Server 192.0.2.1 -Username manager -Password $mysecpassword
 
       Connect to an ArubaOS Switch with IP 192.0.2.1 using Username and Password
+
+      .EXAMPLE
+      $sw1 = Connect-ArubaSW -Server 192.0.2.1
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $sw1 variable
+
+      .EXAMPLE
+      $sw2 = Connect-ArubaSW -Server 192.0.2.1 -DefaultConnection:$false
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $sw2 variable
+      and don't store connection on global ($DefaultArubaSWConnection) variable
   #>
 
     Param(
@@ -65,7 +76,9 @@ function Connect-ArubaSW {
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
-        [int]$port
+        [int]$port,
+        [Parameter(Mandatory = $false)]
+        [boolean]$DefaultConnection=$true
     )
 
     Begin {
@@ -138,13 +151,15 @@ function Connect-ArubaSW {
         $connection.port = $port
         $connection.invokeParams = $invokeParams
 
-        Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
+        if ( $DefaultConnection ) {
+            Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
+        }
 
-        $switchstatus = Get-ArubaSWSystemStatusSwitch
+        $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
 
         if (-not $noverbose) {
-            $switchsystem = Get-ArubaSWSystem
+            $switchsystem = Get-ArubaSWSystem -connection $connection
 
 
             if ($switchstatus.switch_type -eq "ST_STACKED") {
@@ -164,6 +179,9 @@ function Connect-ArubaSW {
             Write-Host "Welcome on"$switchsystem.name"-"$product_name
 
         }
+
+        #Return connection info
+        $connection
     }
 
     End {
@@ -193,7 +211,10 @@ function Disconnect-ArubaSW {
 
     Param(
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -215,7 +236,7 @@ function Disconnect-ArubaSW {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Aruba SW connection"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Aruba SW connection" -completed
             if (Get-Variable -Name DefaultArubaSWConnection -scope global ) {
                 Remove-Variable -name DefaultArubaSWConnection -scope global

@@ -20,6 +20,11 @@ function Get-ArubaSWTrunk {
         Get the list of ports in a trunk configuration with the link aggregation interface and the name of ports in this interface.
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
     Begin {
     }
 
@@ -27,7 +32,7 @@ function Get-ArubaSWTrunk {
 
         $uri = "rest/v4/trunk/port"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).trunk_element
 
@@ -69,8 +74,10 @@ function Add-ArubaSWTrunk {
         [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
         [Parameter (Mandatory = $true, Position = 2)]
-        [string]$port
-
+        [string]$port,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -86,7 +93,7 @@ function Add-ArubaSWTrunk {
 
         $trunk | Add-Member -name "trunk_group" -membertype NoteProperty -Value $trunk_group
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $trunk -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $trunk -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -124,7 +131,10 @@ function Remove-ArubaSWTrunk {
         [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -154,7 +164,7 @@ function Remove-ArubaSWTrunk {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove trunk group"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -uri $uri -connection $connection
             Write-Progress -activity "Remove trunk group" -completed
         }
     }

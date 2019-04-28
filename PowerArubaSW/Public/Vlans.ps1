@@ -30,7 +30,10 @@ function Add-ArubaSWVlans {
         [Parameter (Mandatory = $false)]
         [switch]$is_jumbo_enabled,
         [Parameter (Mandatory = $false)]
-        [switch]$is_dsnoop_enabled
+        [switch]$is_dsnoop_enabled,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -79,7 +82,7 @@ function Add-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "POST" -body $vlan -uri $uri -connection $connection
         $vlans = ($response.Content | ConvertFrom-Json)
 
         $vlans
@@ -120,7 +123,10 @@ function Get-ArubaSWVlans {
         [Parameter (Mandatory = $false, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $false, ParameterSetName = "name", Position = 1)]
-        [string]$Name
+        [string]$Name,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -130,7 +136,7 @@ function Get-ArubaSWVlans {
 
         $uri = "rest/v4/vlans"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $vlans = ($response.Content | ConvertFrom-Json).vlan_element
 
@@ -178,7 +184,10 @@ function Set-ArubaSWVlans {
         [Parameter (Mandatory = $false)]
         [switch]$is_jumbo_enabled,
         [Parameter (Mandatory = $false)]
-        [switch]$is_dsnoop_enabled
+        [switch]$is_dsnoop_enabled,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -239,7 +248,7 @@ function Set-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri -connection $connection
         $rep_vlan = ($response.Content | ConvertFrom-Json)
 
         $rep_vlan
@@ -277,7 +286,10 @@ function Remove-ArubaSWVlans {
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -304,7 +316,7 @@ function Remove-ArubaSWVlans {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Vlan"
-            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri
+            $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Vlan" -completed
         }
     }

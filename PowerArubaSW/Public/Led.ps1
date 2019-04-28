@@ -27,7 +27,10 @@ function Get-ArubaSWLed {
 
     Param(
         [Parameter (Mandatory = $false)]
-        [int]$member_id
+        [int]$member_id,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -37,7 +40,7 @@ function Get-ArubaSWLed {
 
         $uri = "rest/v4/led_locator_info"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).locator_led_info
 
@@ -89,7 +92,10 @@ function Set-ArubaSWLed {
         [String]$when,
         [Parameter (Mandatory = $false)]
         [ValidateRange(1, 4)]
-        [int]$member_id
+        [int]$member_id,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -140,10 +146,10 @@ function Set-ArubaSWLed {
             $led | Add-Member -name "member_id" -membertype NoteProperty -Value $member_id
         }
 
-        Invoke-ArubaSWWebRequest -method "POST" -body $led -uri $uri | Out-Null
+        Invoke-ArubaSWWebRequest -method "POST" -body $led -uri $uri -connection $connection | Out-Null
 
         #Display the led info...
-        Get-ArubaSWLed
+        Get-ArubaSWLed -connection $connection
 
     }
 

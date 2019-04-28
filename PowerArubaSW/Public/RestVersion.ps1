@@ -21,6 +21,11 @@ function Get-ArubaSWRestVersion {
 
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
     Begin {
     }
 
@@ -28,7 +33,7 @@ function Get-ArubaSWRestVersion {
 
         $uri = "rest/version"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         ($response.content | ConvertFrom-Json).version_element
     }

@@ -19,6 +19,11 @@ function Get-ArubaSWRestSessionTimeout {
         This function give you idle time (in seconds) before being disconnected
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
     Begin {
     }
 
@@ -26,7 +31,7 @@ function Get-ArubaSWRestSessionTimeout {
 
         $uri = "rest/v4/session-idle-timeout"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).timeout
 
@@ -61,7 +66,10 @@ function Set-ArubaSWRestSessionTimeout {
     Param(
         [Parameter (Mandatory = $true, Position = 1)]
         [ValidateRange(120, 7200)]
-        [int]$timeout
+        [int]$timeout,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -77,7 +85,7 @@ function Set-ArubaSWRestSessionTimeout {
             $time | Add-Member -name "timeout" -membertype NoteProperty -Value $timeout
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $time -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $time -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).timeout
 

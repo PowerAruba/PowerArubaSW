@@ -21,6 +21,12 @@ function Get-ArubaSWSystem {
 
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -28,7 +34,7 @@ function Get-ArubaSWSystem {
 
         $uri = "rest/v4/system"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $response.content | ConvertFrom-Json
     }
@@ -59,7 +65,10 @@ function Set-ArubaSWSystem {
         [Parameter(Mandatory = $false)]
         [String]$location,
         [Parameter(Mandatory = $false)]
-        [String]$contact
+        [String]$contact,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -83,7 +92,7 @@ function Set-ArubaSWSystem {
             $system | Add-Member -name "contact" -membertype NoteProperty -Value $contact
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -uri $uri -Body $system
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -uri $uri -Body $system -connection $connection
 
         $response.content | ConvertFrom-Json
     }
@@ -108,18 +117,24 @@ function Get-ArubaSWSystemStatus {
 
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
     Process {
 
-        if ('ST_STACKED' -eq $DefaultArubaSWConnection.switch_type) {
+        if ('ST_STACKED' -eq $connection.switch_type) {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatusGlobal"
         }
 
         $uri = "rest/v4/system/status"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $response.content | ConvertFrom-Json
     }
@@ -140,6 +155,12 @@ function Get-ArubaSWSystemStatusSwitch {
         Get System Status Switch Product (Name / Number) and Hardware (FAN / ports) info
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -147,7 +168,7 @@ function Get-ArubaSWSystemStatusSwitch {
 
         $uri = "rest/v4/system/status/switch"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $response.content | ConvertFrom-Json
     }
@@ -172,17 +193,23 @@ function Get-ArubaSWSystemStatusGlobal {
 
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
     Process {
 
-        if ('ST_STANDALONE' -eq $DefaultArubaSWConnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWConnection.switch_type) {
+        if ('ST_STANDALONE' -eq $connection.switch_type -or 'ST_CHASSIS' -eq $connection.switch_type) {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatus"
         }
         $uri = "rest/v4/system/status/global_info"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $response.content | ConvertFrom-Json
     }
