@@ -47,3 +47,40 @@ Describe  "Connect to a switch (using HTTPS)" {
         { Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -noverbose } | Should throw "Unable to connect (certificate)"
     }
 }
+
+Describe  "Connect to a switch (using multi connection)" {
+    It "Connect to a switch (using HTTP and store on sw variable)" {
+        $script:sw = Connect-ArubaSW $ipaddress -Username $login -password $mysecpassword -httpOnly -noverbose -DefaultConnection:$false
+        $DefaultArubaSWConnection | Should -BeNullOrEmpty
+        $sw.server | Should -Be $ipaddress
+        $sw.cookie | Should -Not -BeNullOrEmpty
+        $sw.port | Should -Be "80"
+        $sw.httpOnly | Should -Be $true
+        $sw.session | Should -Not -BeNullOrEmpty
+    }
+
+    It "Throw when try to use Invoke-ArubaSWWebRequest and not connected" {
+        { Invoke-ArubaSWWebRequest -uri "rest/v4/vlans" } | Should throw "Not Connected. Connect to the Switch with Connect-ArubaSW"
+    }
+
+    Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
+        It "Use Multi connection for call Get vlans" {
+            { Get-ArubaSWVlans -connection $sw } | Should Not throw
+        }
+        It "Use Multi connection for call Get Vlans Ports" {
+            { Get-ArubaSWVlansPorts -connection $sw } | Should Not throw
+        }
+        It "Use Multi connection for call Get DNS" {
+            { Get-ArubaSWDNS -connection $sw } | Should Not throw
+        }
+        It "Use Multi connection for call Get Port" {
+            { Get-ArubaSWPort -connection $sw } | Should Not throw
+        }
+    }
+
+    It "Disconnect to a switch (Multi connection)" {
+        Disconnect-ArubaSW -connection $sw -noconfirm
+        $DefaultArubaSWConnection | Should be $null
+    }
+
+}
