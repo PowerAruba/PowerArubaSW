@@ -78,4 +78,9 @@ Describe  "Connect to a switch (using multi connection)" {
         }
     }
 
+    It "Disconnect to a switch (Multi connection)" {
+        Disconnect-ArubaSW -connection $sw -noconfirm
+        $DefaultArubaSWConnection | Should be $null
+    }
+
 }

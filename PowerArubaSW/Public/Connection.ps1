@@ -238,7 +238,7 @@ function Disconnect-ArubaSW {
             Write-Progress -activity "Remove Aruba SW connection"
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Aruba SW connection" -completed
-            if (Get-Variable -Name DefaultArubaSWConnection -scope global ) {
+            if (Test-Path variable:global:DefaultArubaSWConnection) {
                 Remove-Variable -name DefaultArubaSWConnection -scope global
             }
         }
