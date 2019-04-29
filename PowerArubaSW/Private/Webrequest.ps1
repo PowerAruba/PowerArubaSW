@@ -52,6 +52,9 @@ function Invoke-ArubaSWWebRequest() {
     Process {
 
         if ($null -eq $connection ) {
+            if ($null -eq $DefaultArubaSWConnection){
+                Throw "Not Connected. Connect to the Switch with Connect-ArubaSW"
+            }
             $connection = $DefaultArubaSWConnection
         }
 

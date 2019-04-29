@@ -59,6 +59,10 @@ Describe  "Connect to a switch (using multi connection)" {
         $sw.session | Should -Not -BeNullOrEmpty
     }
 
+    It "Throw when try to use Invoke-ArubaSWWebRequest and not connected" {
+        { Invoke-ArubaSWWebRequest -uri "rest/v4/vlans" } | Should throw "Not Connected. Connect to the Switch with Connect-ArubaSW"
+    }
+
     Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
         It "Use Multi connection for call Get vlans" {
             { Get-ArubaSWVlans -connection $sw } | Should Not throw
