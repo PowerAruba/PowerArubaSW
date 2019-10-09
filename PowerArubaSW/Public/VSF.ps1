@@ -19,14 +19,20 @@ function Set-ArubaSWVsfDisable {
         Set the vsf disable on the switch.
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/disable"
+        $uri = "rest/v4/stacking/vsf/disable"
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -url $url -body " "
+        $response = invoke-ArubaSWWebRequest -method "POST" -uri $uri -body " " -connection $connection
 
         $run = $response | convertfrom-json
 
@@ -54,7 +60,10 @@ function Set-ArubaSWVsfEnable {
     Param(
         [Parameter (Mandatory=$true)]
         [ValidateRange (1,4294967295)]
-        [int]$domain_id
+        [int]$domain_id,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -62,13 +71,13 @@ function Set-ArubaSWVsfEnable {
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/enable"
+        $uri = "rest/v4/stacking/vsf/enable"
 
         $vsf = new-Object -TypeName PSObject
 
         $vsf | add-member -name "domain_id" -membertype NoteProperty -Value $domain_id
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -url $url
+        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 
@@ -100,7 +109,10 @@ function Remove-ArubaSWVsfMember {
         [int]$member,
         [Parameter (Mandatory=$true)]
         [ValidateSet ("reboot", "shutdown")]
-        [string]$action
+        [string]$action,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -108,7 +120,7 @@ function Remove-ArubaSWVsfMember {
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/member/remove"
+        $uri = "rest/v4/stacking/vsf/member/remove"
 
         $vsf = new-Object -TypeName PSObject
 
@@ -128,7 +140,7 @@ function Remove-ArubaSWVsfMember {
 
         $vsf | add-member -name "member_id" -membertype NoteProperty -Value $member
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -url $url
+        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 
@@ -156,7 +168,10 @@ function Send-ArubaSWVsfShutdown {
     Param(
         [Parameter (Mandatory=$true)]
         [ValidateRange (1,4)]
-        [int]$member
+        [int]$member,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -164,13 +179,13 @@ function Send-ArubaSWVsfShutdown {
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/member/shutdown"
+        $uri = "rest/v4/stacking/vsf/member/shutdown"
 
         $vsf = new-Object -TypeName PSObject
 
         $vsf | add-member -name "member_id" -membertype NoteProperty -Value $member
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -url $url
+        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 
