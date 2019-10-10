@@ -15,80 +15,66 @@ Describe  "Get-ArubaSWRadius" {
 
 Describe  "Add-ArubaSWRadius" {
 
-    It "Add-ArubaSWRadius mandatory parameters" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+    BeforeEach {
+        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801 -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_dyn_authorization_enabled
         $radius = Get-ArubaSWRadius -address 192.0.2.1
+    }
+
+    It "Check Ip and Shared Secret" {
         $radius.address.version | Should be "IAV_IP_V4"
         $radius.address.octets | Should be "192.0.2.1"
         $radius.shared_secret | Should be "powerarubasw"
     }
 
-    It "Add-ArubaSWRadius ports" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801
-        $radius = Get-ArubaSWRadius -address 192.0.2.1
+    It "Check authentication port and accounting port" {
         $radius.authentication_port | Should be "1800"
-        $radius.accounting_port  | Should be "1801"
+        $radius.accounting_port | Should be "1801"
     }
 
-    It "Add-ArubaSWRadius time window settings" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0
-        $radius = Get-ArubaSWRadius -address 192.0.2.1
+    It "Check time window settings" {
         $radius.time_window_type | Should be "TW_PLUS_OR_MINUS_TIME_WINDOW"
         $radius.time_window | Should be "0"
     }
 
-    It "Add-ArubaSWRadius dynamic authorization" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -is_dyn_authorization_enabled
-        $radius = Get-ArubaSWRadius -address 192.0.2.1
+    It "Check dynamic authorization" {
         $radius.is_dyn_authorization_enabled | Should be "True"
     }
 
     AfterEach {
-        Remove-ArubaSWRadius -id $radius.radius_server_id
+        Remove-ArubaSWRadius -id $radius.radius_server_id -noconfirm
     }
 }
 
 Describe  "Set-ArubaSWRadius" {
 
-    BeforeEach {
-        Add-ArubaSWRadius -address 192.0.2.2 -shared_secret powerarubasw -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -authentication_port 1800 -accounting_port 1801
+    BeforeAll {
+        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801 -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_dyn_authorization_enabled
+        Set-ArubaSWRadius -id $radius.radius_server_id -address $radius.address.octets -shared_secret radius_test -authentication_port 1700 -accounting_port 1701 -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15 -is_dyn_authorization_enabled:$false
+        $radius = Get-ArubaSWRadius -address 192.0.2.1
     }
 
-    It "Set-ArubaSWRadius" {
-        $id_server = Get-ArubaSWRadius -address 192.0.2.2
-        Set-ArubaSWRadius -id $id_server.radius_server_id -address 192.0.2.2 -shared_secret radius_test
-        $radius = Get-ArubaSWRadius -address 192.0.2.2
-        $radius.address.octets | Should be "192.0.2.2"
+    It "Check change on shared secret" {
         $radius.shared_secret | Should be "radius_test"
     }
 
-    It "Set-ArubaSWRadius ports" {
-        $id_server = Get-ArubaSWRadius -address 192.0.2.2
-        Set-ArubaSWRadius -id $id_server.radius_server_id -address 192.0.2.2 -authentication_port 1700 -accounting_port 1701
-        $radius = Get-ArubaSWRadius -address 192.0.2.2
+    It "Check changes on authentication and accounting ports" {
         $radius.authentication_port | Should be "1700"
-        $radius.accounting_port  | Should be "1701"
+        $radius.accounting_port | Should be "1701"
     }
 
-    It "Set-ArubaSWRadius time window settings" {
-        $id_server = Get-ArubaSWRadius -address 192.0.2.2
-        Set-ArubaSWRadius -id $id_server.radius_server_id -address 192.0.2.2 -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15
-        $radius = Get-ArubaSWRadius -address 192.0.2.2
+    It "Check changes on time window type " {
         $radius.time_window_type | Should be "TW_POSITIVE_TIME_WINDOW"
         $radius.time_window | Should be "15"
     }
 
-    It "Set-ArubaSWRadius dynamic autorization" {
-        $id_server = Get-ArubaSWRadius -address 192.0.2.2
-        Set-ArubaSWRadius -id $id_server.radius_server_id -address 192.0.2.2 -is_dyn_authorization_enabled:$false
-        $radius = Get-ArubaSWRadius -address 192.0.2.2
+    It "Check change dynamic autorization" {
         $radius.is_dyn_authorization_enabled | Should be "False"
     }
 
-    AfterEach {
-        Remove-ArubaSWRadius -id $id_server.radius_server_id
+    AfterAll {
+        Remove-ArubaSWRadius -id $radius.radius_server_id -noconfirm
     }
-
+    
 }
 
 Describe  "Remove-ArubaSWRadius" {

@@ -16,19 +16,23 @@ function Get-ArubaSWRadius {
 
         .EXAMPLE
         Get-ArubaSWRadius
+
         This function give you all the informations about the radius servers parameters configured on the switch.
 
         .EXAMPLE
-        Get-ArubaSWRadius -id 2
-        This function give you all the informations about the radius server with ID 2 configured on the switch.
+        Get-ArubaSWRadius -address 192.0.2.1
+
+        This function give you all the informations about the radius server with address 192.0.2.1 configured on the switch.
     #>
 
     Param(
         [Parameter (Mandatory = $false)]
         [string]$address,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $false)]
+        [string]$id,
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -42,11 +46,20 @@ function Get-ArubaSWRadius {
 
         $run = ($response | ConvertFrom-Json).radius_server_element
 
-        if ( $address ) {
+        if ( $address -And !$id ) {
             $run | Where-Object { $_.address.octets -eq $address }
         }
-        else {
-            $run
+
+        if ( $id -And !$address ) {
+            $run | Where-Object { $_.radius_server_id -eq $id }
+        }
+
+        if ( $id -And $address ) {
+            $run | Where-Object { $_.radius_server_id -eq $id -And $_.address.octets -eq $address }  
+        }
+
+        if ( !$id -And !$address ) {
+            $run   
         }
     }
 
@@ -65,10 +78,12 @@ function Add-ArubaSWRadius {
 
         .EXAMPLE
         Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+
         Add this server with the mandatory parameters for a radius server.
 
         .EXAMPLE
         Add-ArubaSWRadius -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_autorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+
         Add all the parameters for a radius server, with dynamic autorization and oobm enable.
     #>
 
@@ -91,9 +106,9 @@ function Add-ArubaSWRadius {
         [int]$time_window,
         [Parameter (Mandatory = $false)]
         [switch]$is_oobm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -171,15 +186,17 @@ function Set-ArubaSWRadius {
 
         .EXAMPLE
         Set-ArubaSWRadius -id 1 -address 192.0.2.1 -shared_secret powerarubasw
+
         Change parameters for a radius server.
 
         .EXAMPLE
         Set-ArubaSWRadius -id 2 -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_autorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
-        CHange all the parameters for a radius server, with dynamic autorization and oobm enable.
+
+        Change all the parameters for a radius server, with dynamic autorization and oobm enable.
     #>
 
     Param(
-        [Parameter (Mandatory = $true)]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateRange (1, 15)]
         [int]$id,
         [Parameter (Mandatory = $true)]
@@ -200,9 +217,9 @@ function Set-ArubaSWRadius {
         [int]$time_window,
         [Parameter (Mandatory = $false)]
         [switch]$is_oobm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -217,6 +234,8 @@ function Set-ArubaSWRadius {
         $ip = New-Object -TypeName PSObject
 
         if ($PsBoundParameters.ContainsKey('address')) {
+            $ip = New-Object -TypeName PSObject
+
             $ip | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
             $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $address
@@ -272,7 +291,7 @@ function Set-ArubaSWRadius {
     End {
     }
 }
-
+    
 
 function Remove-ArubaSWRadius {
 
@@ -284,7 +303,8 @@ function Remove-ArubaSWRadius {
         Remove a RADIUS server parameters.
 
         .EXAMPLE
-        Remove-ArubaSWRadius -id 1 
+        Remove-ArubaSWRadius -id 1 -noconfirm
+
         Remove the radius server with ID 1.
     #>
 
@@ -295,7 +315,7 @@ function Remove-ArubaSWRadius {
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
