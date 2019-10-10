@@ -19,14 +19,20 @@ function Get-ArubaSWVsfGlobalConfig {
         Get the vsf global configuration on the switch.
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/global_config"
+        $uri = "rest/v4/stacking/vsf/global_config"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 
@@ -70,7 +76,10 @@ function Set-ArubaSWVsfGlobalConfig {
         [Parameter (Mandatory=$false)]
         [object]$lldp_mad,
         [Parameter (Mandatory=$false)]
-        [switch]$lldp_mad_enable
+        [switch]$lldp_mad_enable,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -78,7 +87,7 @@ function Set-ArubaSWVsfGlobalConfig {
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/global_config"
+        $uri = "rest/v4/stacking/vsf/global_config"
 
         $vsf = new-Object -TypeName PSObject
 
@@ -146,7 +155,7 @@ function Set-ArubaSWVsfGlobalConfig {
             $vsf | add-member -name "mad_vlan" -membertype NoteProperty -Value $mad_vlan
         }
 
-        $response = invoke-ArubaSWWebRequest -method "PUT" -url $url -body $vsf
+        $response = invoke-ArubaSWWebRequest -method "PUT" -uri $uri -body $vsf -connection $connection
 
         $run = $response | convertfrom-json
 
@@ -171,14 +180,20 @@ function Get-ArubaSWVsfMembers {
         Get the vsf members on the switch.
     #>
 
+    Param(
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/members"
+        $uri = "rest/v4/stacking/vsf/members"
 
-        $response = invoke-ArubaSWWebRequest -method "GET" -url $url
+        $response = invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 
@@ -209,7 +224,10 @@ function Set-ArubaSWVsfMember {
         [int]$member_id,
         [Parameter (Mandatory=$true)]
         [ValidateRange (1,255)]
-        [string]$priority
+        [string]$priority,
+        [Parameter (Mandatory=$False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection=$DefaultArubaSWConnection
     )
 
     Begin {
@@ -217,7 +235,7 @@ function Set-ArubaSWVsfMember {
 
     Process {
 
-        $url = "rest/v4/stacking/vsf/members"
+        $uri = "rest/v4/stacking/vsf/members"
 
         $vsf = new-Object -TypeName PSObject
 
@@ -225,7 +243,7 @@ function Set-ArubaSWVsfMember {
 
         $vsf | add-member -name "priority" -membertype NoteProperty -Value $priority
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -url $url
+        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 
