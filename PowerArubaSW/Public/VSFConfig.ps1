@@ -131,7 +131,7 @@ function Set-ArubaSWVsfGlobalConfig {
 
         if ( $PsBoundParameters.ContainsKey('lldp_mad_enable') ) {
             if ( $lldp_mad_enable ) {
-                $vsf | add-member -name "is_lldp_mad_enabled" -membertype NoteProperty -Value $True
+                $vsf | add-member -name "is_lldp_mad_enabled" -membertype NoteProperty -Value $true
             } else {
                 $vsf | add-member -name "is_lldp_mad_enabled" -membertype NoteProperty -Value $false
             }
@@ -147,7 +147,7 @@ function Set-ArubaSWVsfGlobalConfig {
 
             $mad | add-member -name "community_name" -MemberType NoteProperty -Value $mad_community
 
-            $vsf | add-member -name "lldp_vlan" -membertype NoteProperty -Value $mad
+            $vsf | add-member -name "lldp_mad" -membertype NoteProperty -Value $mad
         }
 
         if ( $PsBoundParameters.ContainsKey('mad_vlan') )
@@ -214,8 +214,8 @@ function Set-ArubaSWVsfMember {
         Set the vsf member on ArubaOS Switch.
 
         .EXAMPLE
-        Set-ArubaSWVsfMember -priority -member_id
-        Set the vsf member on the switch.
+        Set-ArubaSWVsfMember -priority 255 -member_id 2
+        Set the vsf member 2 with priority 255 on the switch.
     #>
 
     Param(
@@ -224,7 +224,7 @@ function Set-ArubaSWVsfMember {
         [int]$member_id,
         [Parameter (Mandatory=$true)]
         [ValidateRange (1,255)]
-        [string]$priority,
+        [int]$priority,
         [Parameter (Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection=$DefaultArubaSWConnection
@@ -235,7 +235,7 @@ function Set-ArubaSWVsfMember {
 
     Process {
 
-        $uri = "rest/v4/stacking/vsf/members"
+        $uri = "rest/v4/stacking/vsf/members/${member_id}"
 
         $vsf = new-Object -TypeName PSObject
 
@@ -243,7 +243,7 @@ function Set-ArubaSWVsfMember {
 
         $vsf | add-member -name "priority" -membertype NoteProperty -Value $priority
 
-        $response = invoke-ArubaSWWebRequest -method "POST" -body $vsf -uri $uri -connection $connection
+        $response = invoke-ArubaSWWebRequest -method "PUT" -body $vsf -uri $uri -connection $connection
 
         $run = $response | convertfrom-json
 

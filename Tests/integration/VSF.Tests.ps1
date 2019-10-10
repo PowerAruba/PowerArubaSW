@@ -22,10 +22,10 @@ Describe  "Get VSF global config" {
 Describe  "Set-ArubaSWVsfGlobalConfig" {
     It "Change VSF global config value" {
         $default = Get-ArubaSWVsfGlobalConfig
-        Set-ArubaSWVsfGlobalConfig -domain_id 2 -lldp_mad_enable True 
+        Set-ArubaSWVsfGlobalConfig -domain_id 2 -lldp_mad_enable:$false
         $vsf = Get-ArubaSWVsfGlobalConfig
         $vsf.domain_id | Should be "2"
-        $vsf.is_lldp_mad_enabled | Should be "True"
+        $vsf.is_lldp_mad_enabled | Should be "False"
         Set-ArubaSWVsfGlobalConfig -domain_id $default.domain_id -lldp_mad_enable $default.is_lldp_mad_enabled
     }
 }
@@ -47,10 +47,11 @@ Describe  "Set-ArubaSWVsfMember" {
     It "Change VSF member value" {
         $default = Get-ArubaSWVsfMembers
         Set-ArubaSWVsfMember -member_id 1 -priority 255 
-        $vsfme = Get-ArubaSWVsfMembers | Where-Object member_id -eq 1
-        $vsfme.member_id | Should be "1"
-        $vsfme.priority | Should be "255"
-        Set-ArubaSWVsfMember -domain_id $default.domain_id -lldp_mad_enable $default.is_lldp_mad_enabled
+        $vsf = Get-ArubaSWVsfMembers
+        $vsfmember = $vsf.vsf_member_element | Where-Object member_id -eq 1
+        $vsfmember.member_id | Should be "1"
+        $vsfmember.priority | Should be "255"
+        Set-ArubaSWVsfMember -member_id $default.vsf_member_element.member_id -priority $default.vsf_member_element.priority
     }
 }
 
