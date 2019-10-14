@@ -309,9 +309,11 @@ function Remove-ArubaSWRadius {
     #>
 
     Param(
-        [Parameter (Mandatory = $true)]
+        [Parameter (Mandatory = $false)]
         [ValidateRange (1, 15)]
         [int]$id,
+        [Parameter (Mandatory = $false)]
+        [string]$address,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
         [ValidateNotNullOrEmpty()]
@@ -322,6 +324,11 @@ function Remove-ArubaSWRadius {
     }
 
     Process {
+
+        if ($PsBoundParameters.ContainsKey('address')) {
+            $radius = Get-ArubaSWRadius -address $address
+            $id = $radius.radius_server_id
+        }
 
         $uri = "rest/v4/radius_servers/${id}"
 
