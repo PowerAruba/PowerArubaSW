@@ -20,6 +20,8 @@ function Get-ArubaSWMacTable {
     #>
 
     Param(
+        [Parameter (Mandatory = $false)]
+        [string]$port_id,
         [Parameter (Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection=$DefaultArubaSWConnection
@@ -30,7 +32,11 @@ function Get-ArubaSWMacTable {
 
     Process {
 
-        $uri = "rest/v4/mac-table"
+        if ($PsBoundParameters.ContainsKey('port_id')) {
+            $uri = "rest/v4/ports/${port_id}/mac-table"
+        } else {
+            $uri = "rest/v4/mac-table"
+        }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
