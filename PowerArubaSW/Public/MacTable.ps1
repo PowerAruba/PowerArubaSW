@@ -39,6 +39,8 @@ function Get-ArubaSWMacTable {
         Get Mac Table (Mac Address, Vlan, Port) from vlan 9
     #>
 
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
+
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "mac_address")]
         [string]$mac_address,
