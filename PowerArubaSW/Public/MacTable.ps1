@@ -40,11 +40,11 @@ function Get-ArubaSWMacTable {
     #>
 
     Param(
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $false, ParameterSetName="mac_address")]
         [string]$mac_address,
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $false, ParameterSetName="port_id")]
         [string]$port_id,
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $false, ParameterSetName="vlan_id")]
         [int]$vlan_id,
         [Parameter (Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
