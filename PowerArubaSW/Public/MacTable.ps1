@@ -17,6 +17,16 @@ function Get-ArubaSWMacTable {
         Get-ArubaSWMacTable
 
         Get Mac Table (ARP) with mac_address, port_id and vlan_id
+
+        .EXAMPLE
+        Get-ArubaSWMacTable -port_id 9
+
+        Get Mac Table (ARP) from port 9
+
+        .EXAMPLE
+        Get-ArubaSWMacTable -vlan_id 9
+
+        Get Mac Table (ARP) from vlan  9
     #>
 
     Param(
