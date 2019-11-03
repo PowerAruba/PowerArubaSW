@@ -18,11 +18,18 @@ function Test-ArubaSWPing {
         Test-ArubaSWPing -ipv4_address 192.2.0.1
 
         Send a PING to IPv4 address 192.2.0.1
+
+        .EXAMPLE
+        Test-ArubaSWPing -hostname www.arubanetworks.com
+
+        Send a PING to hostname www.arubanetworks.com
     #>
 
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "ipv4_address")]
         [ipaddress]$ipv4_address,
+        [Parameter (Mandatory = $false, ParameterSetName = "hostname")]
+        [string]$hostname,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -33,10 +40,10 @@ function Test-ArubaSWPing {
 
     Process {
 
+        $uri = "rest/v4/ping"
         $dest = New-Object -TypeName PSObject
 
         if ($PsBoundParameters.ContainsKey('ipv4_address')) {
-            $uri = "rest/v4/ping"
 
             $ipv4 = New-Object -TypeName PSObject
             $ipv4 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
@@ -44,8 +51,11 @@ function Test-ArubaSWPing {
             $ipv4 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipv4_address
 
             $dest | Add-Member -name "ip_address" -membertype NoteProperty -Value $ipv4
-        } else {
-            throw "You need to use a parameter (-ipv4_address)"
+        } elseif ($PsBoundParameters.ContainsKey('hostname')) {
+            $dest | Add-Member -name "hostname" -membertype NoteProperty -Value $hostname
+        }
+        else {
+            throw "You need to use a parameter (-ipv4_address, -hostname)"
         }
 
         $ping = New-Object -TypeName PSObject
