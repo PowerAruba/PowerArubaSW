@@ -36,19 +36,19 @@ function Get-ArubaSWMacTable {
         .EXAMPLE
         Get-ArubaSWMacTable -vlan_id 9
 
-        Get Mac Table (ARP) from vlan  9
+        Get Mac Table (ARP) from vlan 9
     #>
 
     Param(
-        [Parameter (Mandatory = $false, ParameterSetName="mac_address")]
+        [Parameter (Mandatory = $false, ParameterSetName = "mac_address")]
         [string]$mac_address,
-        [Parameter (Mandatory = $false, ParameterSetName="port_id")]
+        [Parameter (Mandatory = $false, ParameterSetName = "port_id")]
         [string]$port_id,
-        [Parameter (Mandatory = $false, ParameterSetName="vlan_id")]
+        [Parameter (Mandatory = $false, ParameterSetName = "vlan_id")]
         [int]$vlan_id,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -58,20 +58,24 @@ function Get-ArubaSWMacTable {
 
         if ($PsBoundParameters.ContainsKey('port_id')) {
             $uri = "rest/v4/ports/${port_id}/mac-table"
-        } elseif ($PsBoundParameters.ContainsKey('vlan_id')) {
+        }
+        elseif ($PsBoundParameters.ContainsKey('vlan_id')) {
             $uri = "rest/v4/vlans/${vlan_id}/mac-table"
-        } elseif ($PsBoundParameters.ContainsKey('mac_address')) {
+        }
+        elseif ($PsBoundParameters.ContainsKey('mac_address')) {
             $uri = "rest/v4/mac-table/${mac_address}"
-        } else {
+        }
+        else {
             $uri = "rest/v4/mac-table"
         }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json)
-        if($PsBoundParameters.ContainsKey('mac_address')) {
+        if ($PsBoundParameters.ContainsKey('mac_address')) {
             $run
-        } else {
+        }
+        else {
             $run.mac_table_entry_element
         }
     }
