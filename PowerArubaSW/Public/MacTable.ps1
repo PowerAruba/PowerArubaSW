@@ -19,6 +19,16 @@ function Get-ArubaSWMacTable {
         Get Mac Table (ARP) with mac_address, port_id and vlan_id
 
         .EXAMPLE
+        Get-ArubaSWMacTable -mac_address 12:34:56:78:90:AB
+
+        Get Mac Table (Vlan and Port) from Mac Address
+
+        .EXAMPLE
+        Get-ArubaSWMacTable -mac_address 12-34-56-78-90-AB
+
+        Get Mac Table (Vlan and Port) from Mac Address
+
+        .EXAMPLE
         Get-ArubaSWMacTable -port_id 9
 
         Get Mac Table (ARP) from port 9
@@ -30,6 +40,8 @@ function Get-ArubaSWMacTable {
     #>
 
     Param(
+        [Parameter (Mandatory = $false)]
+        [string]$mac_address,
         [Parameter (Mandatory = $false)]
         [string]$port_id,
         [Parameter (Mandatory = $false)]
@@ -48,6 +60,8 @@ function Get-ArubaSWMacTable {
             $uri = "rest/v4/ports/${port_id}/mac-table"
         } elseif ($PsBoundParameters.ContainsKey('vlan_id')) {
             $uri = "rest/v4/vlans/${vlan_id}/mac-table"
+        } elseif ($PsBoundParameters.ContainsKey('mac_address')) {
+            $uri = "rest/v4/mac-table/${mac_address}"
         } else {
             $uri = "rest/v4/mac-table"
         }
@@ -55,8 +69,11 @@ function Get-ArubaSWMacTable {
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json)
-
-        $run.mac_table_entry_element
+        if($PsBoundParameters.ContainsKey('mac_address')) {
+            $run
+        } else {
+            $run.mac_table_entry_element
+        }
     }
 
     End {
