@@ -22,6 +22,8 @@ function Get-ArubaSWMacTable {
     Param(
         [Parameter (Mandatory = $false)]
         [string]$port_id,
+        [Parameter (Mandatory = $false)]
+        [int]$vlan_id,
         [Parameter (Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection=$DefaultArubaSWConnection
@@ -34,6 +36,8 @@ function Get-ArubaSWMacTable {
 
         if ($PsBoundParameters.ContainsKey('port_id')) {
             $uri = "rest/v4/ports/${port_id}/mac-table"
+        } elseif ($PsBoundParameters.ContainsKey('vlan_id')) {
+            $uri = "rest/v4/vlans/${vlan_id}/mac-table"
         } else {
             $uri = "rest/v4/mac-table"
         }
