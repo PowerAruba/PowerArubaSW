@@ -94,7 +94,7 @@ function Add-ArubaSWRadiusGroup {
 
         $servers += $serverip1
 
-        if ($PsBoundParameters.ContainsKey('server2')) {
+        if ($PsBoundParameters.ContainsKey('ipaddress2')) {
             $serverip2 = New-Object -TypeName PSObject
 
             $serverip2 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
@@ -104,7 +104,7 @@ function Add-ArubaSWRadiusGroup {
             $servers += $serverip2
         }
 
-        if ($PsBoundParameters.ContainsKey('server3')) {
+        if ($PsBoundParameters.ContainsKey('ipaddress3')) {
             $serverip3 = New-Object -TypeName PSObject
 
             $serverip3 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
