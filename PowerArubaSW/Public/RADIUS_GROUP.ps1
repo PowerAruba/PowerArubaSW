@@ -16,6 +16,7 @@ function Get-ArubaSWRadiusGroup {
 
         .EXAMPLE
         Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW
+
         This function give you all the informations about the radius servers in the group PowerArubaSW configured on the switch.
     #>
 
@@ -56,6 +57,7 @@ function Add-ArubaSWRadiusGroup {
 
         .EXAMPLE
         Add-ArubaSWRadiusGroup -server_group_name PowerArubaSWGroup -server1 192.0.2.1 -server2 192.0.2.2 -server3 192.0.2.3
+
         Add the group PowerArubaSWGroup with servers.
     #>
 
@@ -63,11 +65,11 @@ function Add-ArubaSWRadiusGroup {
         [Parameter (Mandatory = $true)]
         [string]$server_group_name,
         [Parameter (Mandatory = $true)]
-        [string]$server1,
+        [string]$ipaddress1,
         [Parameter (Mandatory = $false)]
-        [string]$server2,
+        [string]$ipaddress2,
         [Parameter (Mandatory = $false)]
-        [string]$server3,
+        [string]$ipaddress3,
         [Parameter (Mandatory=$False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection=$DefaultArubaSWConnection
@@ -88,7 +90,7 @@ function Add-ArubaSWRadiusGroup {
 
         $serverip1 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-        $serverip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $server1
+        $serverip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress1
 
         $servers += $serverip1
 
@@ -97,7 +99,7 @@ function Add-ArubaSWRadiusGroup {
 
             $serverip2 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $serverip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $server2
+            $serverip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress2
 
             $servers += $serverip2
         }
@@ -107,7 +109,7 @@ function Add-ArubaSWRadiusGroup {
 
             $serverip3 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $serverip3 | Add-Member -name "octets" -MemberType NoteProperty -Value $server3
+            $serverip3 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress3
 
             $servers += $serverip3
         }
@@ -138,6 +140,7 @@ function Remove-ArubaSWRadiusGroup {
 
         .EXAMPLE
         Remove-ArubaSWRadius -server_group_name PowerArubaSW
+
         Remove the radius server group with name PowerArubaSW.
     #>
 
