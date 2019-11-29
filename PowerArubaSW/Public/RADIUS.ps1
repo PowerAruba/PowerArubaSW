@@ -20,14 +20,14 @@ function Get-ArubaSWRadius {
         This function give you all the informations about the radius servers parameters configured on the switch.
 
         .EXAMPLE
-        Get-ArubaSWRadius -address 192.0.2.1
+        Get-ArubaSWRadius -ipaddress 192.0.2.1
 
         This function give you all the informations about the radius server with address 192.0.2.1 configured on the switch.
     #>
 
     Param(
         [Parameter (Mandatory = $false)]
-        [string]$address,
+        [string]$ipaddress,
         [Parameter (Mandatory = $false)]
         [string]$id,
         [Parameter (Mandatory = $False)]
@@ -47,18 +47,18 @@ function Get-ArubaSWRadius {
         $run = ($response | ConvertFrom-Json).radius_server_element
 
         if ( $address -And !$id ) {
-            $run | Where-Object { $_.address.octets -eq $address }
+            $run | Where-Object { $_.address.octets -eq $ipaddress }
         }
 
-        if ( $id -And !$address ) {
+        if ( $id -And !$ipaddress ) {
             $run | Where-Object { $_.radius_server_id -eq $id }
         }
 
-        if ( $id -And $address ) {
-            $run | Where-Object { $_.radius_server_id -eq $id -And $_.address.octets -eq $address }  
+        if ( $id -And $ipaddress ) {
+            $run | Where-Object { $_.radius_server_id -eq $id -And $_.address.octets -eq $ipaddress }  
         }
 
-        if ( !$id -And !$address ) {
+        if ( !$id -And !$ipaddress ) {
             $run   
         }
     }
@@ -89,7 +89,7 @@ function Add-ArubaSWRadius {
 
     Param(
         [Parameter (Mandatory = $true)]
-        [string]$address,
+        [string]$ipaddress,
         [Parameter (Mandatory = $true)]
         [string]$shared_secret,
         [Parameter (Mandatory = $false)]
@@ -124,7 +124,7 @@ function Add-ArubaSWRadius {
 
         $ip | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-        $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $address
+        $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress
 
         $conf | Add-Member -name "address" -membertype NoteProperty -Value $ip
 
@@ -196,11 +196,11 @@ function Set-ArubaSWRadius {
     #>
 
     Param(
-        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName="id")]
         [ValidateRange (1, 15)]
         [int]$id,
-        [Parameter (Mandatory = $true)]
-        [string]$address,
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, ParameterSetName="id_server")]
+        [psobject]$id_server,
         [Parameter (Mandatory = $false)]
         [string]$shared_secret,
         [Parameter (Mandatory = $false)]
@@ -226,21 +226,20 @@ function Set-ArubaSWRadius {
     }
 
     Process {
+        if($id_server) {
+            $id = $id_server.radius_server_id
+        }
 
         $uri = "rest/v4/radius_servers/${id}"
 
         $conf = New-Object -TypeName PSObject
 
-        $ip = New-Object -TypeName PSObject
-
-        if ($PsBoundParameters.ContainsKey('address')) {
-            $ip = New-Object -TypeName PSObject
-
-            $ip | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
-
-            $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $address
-
-            $conf | Add-Member -name "address" -membertype NoteProperty -Value $ip
+        if ($PsBoundParameters.ContainsKey('id')) {
+            $address = Get-ArubaSWRadius -id $id
+            $conf | Add-Member -name "address" -MemberType NoteProperty -Value $address.address
+        }
+        else {
+            $conf | Add-Member -name "address" -MemberType NoteProperty -Value $id_server.address
         }
 
         if ($PsBoundParameters.ContainsKey('shared_secret')) {
@@ -281,6 +280,8 @@ function Set-ArubaSWRadius {
             }
         }
 
+        $conf | Convertto-Json
+
         $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
@@ -309,11 +310,11 @@ function Remove-ArubaSWRadius {
     #>
 
     Param(
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName="id")]
         [ValidateRange (1, 15)]
         [int]$id,
-        [Parameter (Mandatory = $false)]
-        [string]$address,
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, ParameterSetName="id_server")]
+        [psobject]$id_server,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
         [ValidateNotNullOrEmpty()]
@@ -325,9 +326,8 @@ function Remove-ArubaSWRadius {
 
     Process {
 
-        if ($PsBoundParameters.ContainsKey('address')) {
-            $radius = Get-ArubaSWRadius -address $address
-            $id = $radius.radius_server_id
+        if($id_server) {
+            $id = $id_server.radius_server_id
         }
 
         $uri = "rest/v4/radius_servers/${id}"
