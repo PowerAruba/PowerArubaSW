@@ -4,8 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Get-ArubaSWBanner
-{
+function Get-ArubaSWBanner {
 
     <#
         .SYNOPSIS
@@ -21,7 +20,6 @@ function Get-ArubaSWBanner
         Get Banner (motd, exec and last login)
         the cmdlet decode base64 for easy use
 
-        .EXAMPLE
     #>
 
     Param(
@@ -29,12 +27,10 @@ function Get-ArubaSWBanner
         [PSObject]$connection = $DefaultArubaSWConnection
     )
 
-    Begin
-    {
+    Begin {
     }
 
-    Process
-    {
+    Process {
 
         $uri = "rest/v4/banner"
 
@@ -63,13 +59,11 @@ function Get-ArubaSWBanner
         $banner
     }
 
-    End
-    {
+    End {
     }
 }
 
-function Set-ArubaSWBanner
-{
+function Set-ArubaSWBanner {
 
     <#
         .SYNOPSIS
@@ -106,18 +100,15 @@ function Set-ArubaSWBanner
         [PSObject]$connection = $DefaultArubaSWConnection
     )
 
-    Begin
-    {
+    Begin {
     }
 
-    Process
-    {
+    Process {
         $uri = "rest/v4/banner"
 
         $banner = New-Object -TypeName PSObject
 
-        if ($PsBoundParameters.ContainsKey('motd'))
-        {
+        if ($PsBoundParameters.ContainsKey('motd')) {
             $encode = [System.Text.Encoding]::UTF8.GetBytes($motd)
 
             $EncodedText = [Convert]::ToBase64String($encode)
@@ -126,8 +117,7 @@ function Set-ArubaSWBanner
 
         }
 
-        if ($PsBoundParameters.ContainsKey('exec'))
-        {
+        if ($PsBoundParameters.ContainsKey('exec')) {
             $encode = [System.Text.Encoding]::UTF8.GetBytes($exec)
 
             $EncodedText = [Convert]::ToBase64String($encode)
@@ -136,14 +126,11 @@ function Set-ArubaSWBanner
 
         }
 
-        if ( $PsBoundParameters.ContainsKey('is_last_login_enabled') )
-        {
-            if ( $is_last_login_enabled )
-            {
+        if ( $PsBoundParameters.ContainsKey('is_last_login_enabled') ) {
+            if ( $is_last_login_enabled ) {
                 $banner | Add-Member -name "is_last_login_enabled" -membertype NoteProperty -Value $true
             }
-            else
-            {
+            else {
                 $banner | Add-Member -name "is_last_login_enabled" -membertype NoteProperty -Value $false
             }
         }
@@ -155,7 +142,6 @@ function Set-ArubaSWBanner
         $run
     }
 
-    End
-    {
+    End {
     }
 }
