@@ -46,7 +46,7 @@ function Get-ArubaSWRadius {
 
         $run = ($response | ConvertFrom-Json).radius_server_element
 
-        if ( $address -And !$id ) {
+        if ( $ipaddress -And !$id ) {
             $run | Where-Object { $_.address.octets -eq $ipaddress }
         }
 
