@@ -57,14 +57,14 @@ Describe  "Set-ArubaSWRadius" {
 
     It "Check change on shared secret" {
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
-        Set-ArubaSWRadius -id $radius.radius_server_id -ipaddress $radius.address.octets -shared_secret radius_test
+        Set-ArubaSWRadius -id $radius.radius_server_id -shared_secret radius_test
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
         $radius.shared_secret | Should be "radius_test"
     }
 
     It "Check changes on authentication and accounting ports" {
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
-        Set-ArubaSWRadius -id $radius.radius_server_id -ipaddress $radius.address.octets -shared_secret radius_test -authentication_port 1700 -accounting_port 1701
+        Set-ArubaSWRadius -id $radius.radius_server_id -shared_secret radius_test -authentication_port 1700 -accounting_port 1701
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
         $radius.authentication_port | Should be "1700"
         $radius.accounting_port | Should be "1701"
@@ -72,7 +72,7 @@ Describe  "Set-ArubaSWRadius" {
 
     It "Check changes on time window type " {
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
-        Set-ArubaSWRadius -id $radius.radius_server_id -ipaddress $radius.address.octets -shared_secret radius_test -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15
+        Set-ArubaSWRadius -id $radius.radius_server_id -shared_secret radius_test -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
         $radius.time_window_type | Should be "TW_POSITIVE_TIME_WINDOW"
         $radius.time_window | Should be "15"
@@ -80,7 +80,7 @@ Describe  "Set-ArubaSWRadius" {
 
     It "Check change dynamic autorization" {
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
-        Set-ArubaSWRadius -id $radius.radius_server_id -ipaddress $radius.address.octets -shared_secret radius_test -is_dyn_authorization_enabled:$false
+        Set-ArubaSWRadius -id $radius.radius_server_id -shared_secret radius_test -is_dyn_authorization_enabled:$false
         $radius = Get-ArubaSWRadius -ipaddress 192.0.2.1
         $radius.is_dyn_authorization_enabled | Should be "False"
     }
