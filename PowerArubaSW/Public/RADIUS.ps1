@@ -55,11 +55,11 @@ function Get-ArubaSWRadius {
         }
 
         if ( $id -And $ipaddress ) {
-            $run | Where-Object { $_.radius_server_id -eq $id -And $_.address.octets -eq $ipaddress }  
+            $run | Where-Object { $_.radius_server_id -eq $id -And $_.address.octets -eq $ipaddress }
         }
 
         if ( !$id -And !$ipaddress ) {
-            $run   
+            $run
         }
     }
 
@@ -196,10 +196,10 @@ function Set-ArubaSWRadius {
     #>
 
     Param(
-        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id")]
         [ValidateRange (1, 15)]
         [int]$id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, ParameterSetName="id_server")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id_server")]
         [psobject]$id_server,
         [Parameter (Mandatory = $false)]
         [string]$shared_secret,
@@ -226,7 +226,7 @@ function Set-ArubaSWRadius {
     }
 
     Process {
-        if($id_server) {
+        if ($id_server) {
             $id = $id_server.radius_server_id
         }
 
@@ -292,7 +292,7 @@ function Set-ArubaSWRadius {
     End {
     }
 }
-    
+
 
 function Remove-ArubaSWRadius {
 
@@ -310,10 +310,10 @@ function Remove-ArubaSWRadius {
     #>
 
     Param(
-        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id")]
         [ValidateRange (1, 15)]
         [int]$id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, ParameterSetName="id_server")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id_server")]
         [psobject]$id_server,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
@@ -326,7 +326,7 @@ function Remove-ArubaSWRadius {
 
     Process {
 
-        if($id_server) {
+        if ($id_server) {
             $id = $id_server.radius_server_id
         }
 
@@ -348,7 +348,7 @@ function Remove-ArubaSWRadius {
             Write-Progress -activity "Remove RADIUS Server" -completed
         }
     }
-    
+
 
     End {
     }
