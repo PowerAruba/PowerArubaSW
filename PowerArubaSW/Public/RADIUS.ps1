@@ -189,14 +189,19 @@ function Set-ArubaSWRadius {
         Set a RADIUS server parameters.
 
         .EXAMPLE
-        Set-ArubaSWRadius -id 1 -address 192.0.2.1 -shared_secret powerarubasw
+        Get-ArubaSWRadius -id 1 | Set-ArubaSWRadius -shared_secret powerarubasw
 
-        Change parameters for a radius server.
+        Change shared secret of RADIUS Server id 1
 
         .EXAMPLE
-        Set-ArubaSWRadius -id 2 -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_autorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+        Get-ArubaSWRadius -ipaddress 192.2.0.2 | Set-ArubaSWRadius -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
 
-        Change all the parameters for a radius server, with dynamic autorization and oobm enable.
+        Change all the parameters for a radius server with ip address 192.2.0.2, with dynamic autorization and oobm enable.
+
+        .EXAMPLE
+        Set-ArubaSWRadius -id 3 -is_oobm
+
+        Enable OOBM on RADIUS Server id 3
     #>
 
     Param(
