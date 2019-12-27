@@ -23,12 +23,20 @@ function Get-ArubaSWRadius {
         Get-ArubaSWRadius -ipaddress 192.0.2.1
 
         This function give you all the informations about the radius server with address 192.0.2.1 configured on the switch.
+
+        .EXAMPLE
+        Get-ArubaSWRadius -id 1
+
+        Get Radius servers parameters where the id equal 1
     #>
 
+    [CmdletBinding(DefaultParameterSetName = "default")]
     Param(
         [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "ipaddress")]
         [string]$ipaddress,
         [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "id")]
         [string]$id,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
@@ -46,20 +54,16 @@ function Get-ArubaSWRadius {
 
         $run = ($response | ConvertFrom-Json).radius_server_element
 
-        if ( $ipaddress -And !$id ) {
-            $run | Where-Object { $_.address.octets -eq $ipaddress }
-        }
-
-        if ( $id -And !$ipaddress ) {
-            $run | Where-Object { $_.radius_server_id -eq $id }
-        }
-
-        if ( $id -And $ipaddress ) {
-            $run | Where-Object { $_.radius_server_id -eq $id -And $_.address.octets -eq $ipaddress }
-        }
-
-        if ( !$id -And !$ipaddress ) {
-            $run
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "id" {
+                $run | Where-Object { $_.radius_server_id -eq $id }
+            }
+            "ipaddress" {
+                $run | Where-Object { $_.address.octets -eq $ipaddress }
+            }
+            default {
+                $run
+            }
         }
     }
 
