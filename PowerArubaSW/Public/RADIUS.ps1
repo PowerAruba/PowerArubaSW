@@ -311,9 +311,14 @@ function Remove-ArubaSWRadius {
         Remove a RADIUS server parameters.
 
         .EXAMPLE
+        Get-ArubaSWRadius -ipaddress 192.0.2.2 | Remove-ArubaSWRadius
+
+        Remove the RADIUS server with IP Address 192.0.2.2
+
+        .EXAMPLE
         Remove-ArubaSWRadius -id 1 -noconfirm
 
-        Remove the radius server with ID 1.
+        Remove the RADIUS server with id 1 without confirmation
     #>
 
     Param(
