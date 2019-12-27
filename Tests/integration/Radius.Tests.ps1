@@ -16,7 +16,7 @@ Describe  "Get-ArubaSWRadius" {
 Describe  "Add-ArubaSWRadius" {
 
     It "Check Ip and Shared Secret" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw 
+        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
         $radius = Get-ArubaSWRadius -address 192.0.2.1
         $radius.address.version | Should be "IAV_IP_V4"
         $radius.address.octets | Should be "192.0.2.1"
@@ -24,7 +24,7 @@ Describe  "Add-ArubaSWRadius" {
     }
 
     It "Check authentication port and accounting port" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801 
+        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801
         $radius = Get-ArubaSWRadius -address 192.0.2.1
         $radius.authentication_port | Should be "1800"
         $radius.accounting_port | Should be "1801"
