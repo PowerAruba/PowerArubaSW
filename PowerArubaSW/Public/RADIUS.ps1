@@ -77,12 +77,12 @@ function Add-ArubaSWRadius {
         Add a RADIUS server parameters
 
         .EXAMPLE
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadius -ipaddress 192.0.2.1 -shared_secret powerarubasw
 
         Add this server with the mandatory parameters for a radius server.
 
         .EXAMPLE
-        Add-ArubaSWRadius -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_autorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+        Add-ArubaSWRadius -ipaddress 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
 
         Add all the parameters for a radius server, with dynamic autorization and oobm enable.
     #>
