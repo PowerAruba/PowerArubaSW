@@ -284,8 +284,6 @@ function Set-ArubaSWRadius {
             }
         }
 
-        $conf | Convertto-Json
-
         $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
