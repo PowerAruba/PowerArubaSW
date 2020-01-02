@@ -144,7 +144,7 @@ function Remove-ArubaSWRadiusServerGroup {
         Remove a RADIUS Server Group.
 
         .EXAMPLE
-        Remove-ArubaSWRadius -server_group_name PowerArubaSW
+        Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadius
 
         Remove the radius server group with name PowerArubaSW.
 
@@ -155,8 +155,10 @@ function Remove-ArubaSWRadiusServerGroup {
     #>
 
     Param(
-        [Parameter (Mandatory = $true)]
+        [Parameter (Mandatory = $true, ParameterSetName = "server_group_name")]
         [string]$server_group_name,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "server_group")]
+        [psobject]$server_group,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
@@ -168,6 +170,10 @@ function Remove-ArubaSWRadiusServerGroup {
     }
 
     Process {
+
+        if ($server_group) {
+            $server_group_name = $server_group.server_group_name
+        }
 
         $uri = "rest/v4/radius/server_group/${server_group_name}"
 
