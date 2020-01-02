@@ -9,18 +9,18 @@
 
 Describe  "Get-ArubaSWRadiusGroup" {
     It "Get-ArubaSWRadiusGroup Does not throw an error" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
         Add-ArubaSWRadiusGroup -server_group_name PowerArubaSW -server1 192.0.2.1
         { Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW } | Should Not Throw
         Remove-ArubaSWRadiusGroup -server_group_name PowerArubaSW -noconfirm
-        Remove-ArubaSWRadius -address 192.0.2.1 -noconfirm
+        Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
     }
 }
 
 Describe  "Add-ArubaSWRadiusGroup" {
 
     BeforeEach {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
     }
 
     It "Check name of group and IP" {
@@ -31,7 +31,7 @@ Describe  "Add-ArubaSWRadiusGroup" {
     }
 
     It "Check IP of multiple RADIUS server" {
-        Add-ArubaSWRadius -address 192.0.2.2 -shared_secret powerarubasw
+        Add-ArubaSWRadiusServer -address 192.0.2.2 -shared_secret powerarubasw
         Add-ArubaSWRadiusGroup -server_group_name PowerArubaSW -server1 192.0.2.1 -server2 192.0.2.2
         $radius_group = Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW
         $radius_group.server_ip.octets[0] | Should be "192.0.2.1"
@@ -40,19 +40,19 @@ Describe  "Add-ArubaSWRadiusGroup" {
 
     AfterEach {
         Remove-ArubaSWRadiusGroup -server_group_name PowerArubaSW -noconfirm
-        Remove-ArubaSWRadius -address 192.0.2.1 -noconfirm
-        Remove-ArubaSWRadius -address 192.0.2.2 -noconfirm
+        Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
+        Remove-ArubaSWRadiusServer -address 192.0.2.2 -noconfirm
     }
 }
 
 Describe  "Remove-ArubaSWRadiusGroup" {
     It "Remove RADIUS group server" {
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
         Add-ArubaSWRadiusGroup -server_group_name PowerArubaSW -server1 192.0.2.1
         $radius_group = Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW
         Remove-ArubaSWRadiusGroup -server_group_name $radius_group.server_group_name -noconfirm
         { Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW } | Should Throw
-        Remove-ArubaSWRadius -address 192.0.2.1 -noconfirm
+        Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
     }
 }
 
