@@ -23,9 +23,9 @@ function Get-ArubaSWRadiusGroup {
     Param(
         [Parameter (Mandatory = $true)]
         [string]$server_group_name,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -70,9 +70,9 @@ function Add-ArubaSWRadiusGroup {
         [string]$ipaddress2,
         [Parameter (Mandatory = $false)]
         [string]$ipaddress3,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -149,9 +149,9 @@ function Remove-ArubaSWRadiusGroup {
         [string]$server_group_name,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -177,7 +177,7 @@ function Remove-ArubaSWRadiusGroup {
             Write-Progress -activity "Remove RADIUS Server Group" -completed
         }
     }
-    
+
 
     End {
     }
