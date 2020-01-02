@@ -5,27 +5,27 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Get-ArubaSWRadius {
+function Get-ArubaSWRadiusServer {
 
     <#
         .SYNOPSIS
-        Get RADIUS information.
+        Get RADIUS Server information.
 
         .DESCRIPTION
-        Get RADIUS information configured on the device.
+        Get RADIUS Server information configured on the device.
 
         .EXAMPLE
-        Get-ArubaSWRadius
+        Get-ArubaSWRadiusServer
 
         This function give you all the informations about the radius servers parameters configured on the switch.
 
         .EXAMPLE
-        Get-ArubaSWRadius -address 192.0.2.1
+        Get-ArubaSWRadiusServer -address 192.0.2.1
 
         This function give you all the informations about the radius server with address 192.0.2.1 configured on the switch.
 
         .EXAMPLE
-        Get-ArubaSWRadius -id 1
+        Get-ArubaSWRadiusServer -id 1
 
         Get Radius servers parameters where the id equal 1
     #>
@@ -70,7 +70,7 @@ function Get-ArubaSWRadius {
     }
 }
 
-function Add-ArubaSWRadius {
+function Add-ArubaSWRadiusServer {
 
     <#
         .SYNOPSIS
@@ -80,12 +80,12 @@ function Add-ArubaSWRadius {
         Add a RADIUS server parameters
 
         .EXAMPLE
-        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
 
         Add this server with the mandatory parameters for a radius server.
 
         .EXAMPLE
-        Add-ArubaSWRadius -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+        Add-ArubaSWRadiusServer -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
 
         Add all the parameters for a radius server, with dynamic autorization and oobm enable.
     #>
@@ -178,7 +178,7 @@ function Add-ArubaSWRadius {
     }
 }
 
-function Set-ArubaSWRadius {
+function Set-ArubaSWRadiusServer {
 
     <#
         .SYNOPSIS
@@ -188,17 +188,17 @@ function Set-ArubaSWRadius {
         Set a RADIUS server parameters.
 
         .EXAMPLE
-        Get-ArubaSWRadius -id 1 | Set-ArubaSWRadius -shared_secret powerarubasw
+        Get-ArubaSWRadiusServer -id 1 | Set-ArubaSWRadiusServer -shared_secret powerarubasw
 
         Change shared secret of RADIUS Server id 1
 
         .EXAMPLE
-        Get-ArubaSWRadius -address 192.2.0.2 | Set-ArubaSWRadius -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+        Get-ArubaSWRadiusServer -address 192.2.0.2 | Set-ArubaSWRadiusServer -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
 
         Change all the parameters for a radius server with ip address 192.2.0.2, with dynamic autorization and oobm enable.
 
         .EXAMPLE
-        Set-ArubaSWRadius -id 3 -is_oobm
+        Set-ArubaSWRadiusServer -id 3 -is_oobm
 
         Enable OOBM on RADIUS Server id 3
     #>
@@ -243,7 +243,7 @@ function Set-ArubaSWRadius {
         $conf = New-Object -TypeName PSObject
 
         if ($PsBoundParameters.ContainsKey('id')) {
-            $address = Get-ArubaSWRadius -id $id
+            $address = Get-ArubaSWRadiusServer -id $id
             $conf | Add-Member -name "address" -MemberType NoteProperty -Value $address.address
         }
         else {
@@ -300,7 +300,7 @@ function Set-ArubaSWRadius {
 }
 
 
-function Remove-ArubaSWRadius {
+function Remove-ArubaSWRadiusServer {
 
     <#
         .SYNOPSIS
@@ -310,12 +310,12 @@ function Remove-ArubaSWRadius {
         Remove a RADIUS server parameters.
 
         .EXAMPLE
-        Get-ArubaSWRadius -address 192.0.2.2 | Remove-ArubaSWRadius
+        Get-ArubaSWRadiusServer -address 192.0.2.2 | Remove-ArubaSWRadiusServer
 
         Remove the RADIUS server with IP Address 192.0.2.2
 
         .EXAMPLE
-        Remove-ArubaSWRadius -id 1 -noconfirm
+        Remove-ArubaSWRadiusServer -id 1 -noconfirm
 
         Remove the RADIUS server with id 1 without confirmation
     #>
