@@ -20,7 +20,7 @@ function Get-ArubaSWRadius {
         This function give you all the informations about the radius servers parameters configured on the switch.
 
         .EXAMPLE
-        Get-ArubaSWRadius -ipaddress 192.0.2.1
+        Get-ArubaSWRadius -address 192.0.2.1
 
         This function give you all the informations about the radius server with address 192.0.2.1 configured on the switch.
 
@@ -33,8 +33,8 @@ function Get-ArubaSWRadius {
     [CmdletBinding(DefaultParameterSetName = "default")]
     Param(
         [Parameter (Mandatory = $false)]
-        [Parameter (ParameterSetName = "ipaddress")]
-        [ipaddress]$ipaddress,
+        [Parameter (ParameterSetName = "address")]
+        [ipaddress]$address,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
         [string]$id,
@@ -47,7 +47,6 @@ function Get-ArubaSWRadius {
     }
 
     Process {
-
         $uri = "rest/v4/radius_servers"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
@@ -58,8 +57,8 @@ function Get-ArubaSWRadius {
             "id" {
                 $run | Where-Object { $_.radius_server_id -eq $id }
             }
-            "ipaddress" {
-                $run | Where-Object { $_.address.octets -eq $ipaddress.ToString() }
+            "address" {
+                $run | Where-Object { $_.address.octets -eq $address.ToString() }
             }
             default {
                 $run
@@ -81,19 +80,19 @@ function Add-ArubaSWRadius {
         Add a RADIUS server parameters
 
         .EXAMPLE
-        Add-ArubaSWRadius -ipaddress 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadius -address 192.0.2.1 -shared_secret powerarubasw
 
         Add this server with the mandatory parameters for a radius server.
 
         .EXAMPLE
-        Add-ArubaSWRadius -ipaddress 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+        Add-ArubaSWRadius -address 192.0.2.2 -shared_secret powerarubasw -authentication_port 1645 -accounting_port 1646 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
 
         Add all the parameters for a radius server, with dynamic autorization and oobm enable.
     #>
 
     Param(
         [Parameter (Mandatory = $true)]
-        [ipaddress]$ipaddress,
+        [ipaddress]$address,
         [Parameter (Mandatory = $true)]
         [string]$shared_secret,
         [Parameter (Mandatory = $false)]
@@ -128,7 +127,7 @@ function Add-ArubaSWRadius {
 
         $ip | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-        $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress.ToString()
+        $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $address.ToString()
 
         $conf | Add-Member -name "address" -membertype NoteProperty -Value $ip
 
@@ -194,7 +193,7 @@ function Set-ArubaSWRadius {
         Change shared secret of RADIUS Server id 1
 
         .EXAMPLE
-        Get-ArubaSWRadius -ipaddress 192.2.0.2 | Set-ArubaSWRadius -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
+        Get-ArubaSWRadius -address 192.2.0.2 | Set-ArubaSWRadius -shared_secret powerarubasw -authentication_port 1812 -accounting_port 1813 -is_dyn_authorization_enabled -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_oobm
 
         Change all the parameters for a radius server with ip address 192.2.0.2, with dynamic autorization and oobm enable.
 
@@ -311,7 +310,7 @@ function Remove-ArubaSWRadius {
         Remove a RADIUS server parameters.
 
         .EXAMPLE
-        Get-ArubaSWRadius -ipaddress 192.0.2.2 | Remove-ArubaSWRadius
+        Get-ArubaSWRadius -address 192.0.2.2 | Remove-ArubaSWRadius
 
         Remove the RADIUS server with IP Address 192.0.2.2
 
