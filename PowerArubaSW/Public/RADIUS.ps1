@@ -34,7 +34,7 @@ function Get-ArubaSWRadius {
     Param(
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "ipaddress")]
-        [string]$ipaddress,
+        [ipaddress]$ipaddress,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
         [string]$id,
@@ -59,7 +59,7 @@ function Get-ArubaSWRadius {
                 $run | Where-Object { $_.radius_server_id -eq $id }
             }
             "ipaddress" {
-                $run | Where-Object { $_.address.octets -eq $ipaddress }
+                $run | Where-Object { $_.address.octets -eq $ipaddress.ToString() }
             }
             default {
                 $run
@@ -93,7 +93,7 @@ function Add-ArubaSWRadius {
 
     Param(
         [Parameter (Mandatory = $true)]
-        [string]$ipaddress,
+        [ipaddress]$ipaddress,
         [Parameter (Mandatory = $true)]
         [string]$shared_secret,
         [Parameter (Mandatory = $false)]
@@ -128,7 +128,7 @@ function Add-ArubaSWRadius {
 
         $ip | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-        $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress
+        $ip | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress.ToString()
 
         $conf | Add-Member -name "address" -membertype NoteProperty -Value $ip
 
