@@ -9,10 +9,10 @@ function Get-ArubaSWRadiusServerGroup {
 
     <#
         .SYNOPSIS
-        Get RADIUS group informations.
+        Get RADIUS Server group informations.
 
         .DESCRIPTION
-        Get RADIUS group informations configured on the device.
+        Get RADIUS Server Group informations configured on the device.
 
         .EXAMPLE
         Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
@@ -50,10 +50,10 @@ function Add-ArubaSWRadiusServerGroup {
 
     <#
         .SYNOPSIS
-        Add a RADIUS server group.
+        Add a RADIUS Server Group.
 
         .DESCRIPTION
-        Add a RADIUS server group with radius servers.
+        Add a RADIUS Server Group with radius servers.
 
         .EXAMPLE
         Add-ArubaSWRadiusServerGroup -server_group_name PowerArubaSWGroup -server1 192.0.2.1 -server2 192.0.2.2 -server3 192.0.2.3
@@ -133,10 +133,10 @@ function Remove-ArubaSWRadiusServerGroup {
 
     <#
         .SYNOPSIS
-        Remove a RADIUS GROUP server.
+        Remove a RADIUS Server Group.
 
         .DESCRIPTION
-        Remove a RADIUS GROUP server.
+        Remove a RADIUS Server Group.
 
         .EXAMPLE
         Remove-ArubaSWRadius -server_group_name PowerArubaSW
