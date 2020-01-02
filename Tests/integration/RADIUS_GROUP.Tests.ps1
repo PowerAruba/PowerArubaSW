@@ -8,13 +8,21 @@
 . ../common.ps1
 
 Describe  "Get-ArubaSWRadiusGroup" {
-    It "Get-ArubaSWRadiusGroup Does not throw an error" {
+
+    BeforeAll {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
         Add-ArubaSWRadiusGroup -server_group_name PowerArubaSW -server1 192.0.2.1
+    }
+
+    It "Get-ArubaSWRadiusGroup Does not throw an error" {
         { Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW } | Should Not Throw
+    }
+
+    AfterAll {
         Remove-ArubaSWRadiusGroup -server_group_name PowerArubaSW -noconfirm
         Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
     }
+
 }
 
 Describe  "Add-ArubaSWRadiusGroup" {
