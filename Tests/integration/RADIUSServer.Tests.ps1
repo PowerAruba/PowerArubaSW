@@ -55,34 +55,68 @@ Describe  "Configure RADIUS Server" {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801 -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_dyn_authorization_enabled
     }
 
-    It "Check change on shared secret" {
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        $radius.shared_secret | Should be "radius_test"
+    Context "Configure RADIUS server via id" {
+
+        It "Check change on shared secret" {
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.shared_secret | Should be "radius_test"
+        }
+
+        It "Check changes on authentication and accounting ports" {
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test -authentication_port 1700 -accounting_port 1701
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.authentication_port | Should be "1700"
+            $radius.accounting_port | Should be "1701"
+        }
+
+        It "Check changes on time window type " {
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.time_window_type | Should be "TW_POSITIVE_TIME_WINDOW"
+            $radius.time_window | Should be "15"
+        }
+
+        It "Check change dynamic autorization" {
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test -is_dyn_authorization_enabled:$false
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.is_dyn_authorization_enabled | Should be "False"
+        }
+
     }
 
-    It "Check changes on authentication and accounting ports" {
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test -authentication_port 1700 -accounting_port 1701
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        $radius.authentication_port | Should be "1700"
-        $radius.accounting_port | Should be "1701"
-    }
+    Context "Configure RADIUS server via pipeline" {
 
-    It "Check changes on time window type " {
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        $radius.time_window_type | Should be "TW_POSITIVE_TIME_WINDOW"
-        $radius.time_window | Should be "15"
-    }
+        It "Check change on shared secret" {
+            Get-ArubaSWRadiusServer -address 192.0.2.1 | Set-ArubaSWRadiusServer -shared_secret radius_test
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.shared_secret | Should be "radius_test"
+        }
 
-    It "Check change dynamic autorization" {
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Set-ArubaSWRadiusServer -id $radius.radius_server_id -shared_secret radius_test -is_dyn_authorization_enabled:$false
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        $radius.is_dyn_authorization_enabled | Should be "False"
+        It "Check changes on authentication and accounting ports" {
+            Get-ArubaSWRadiusServer -address 192.0.2.1 | Set-ArubaSWRadiusServer -shared_secret radius_test -authentication_port 1700 -accounting_port 1701
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.authentication_port | Should be "1700"
+            $radius.accounting_port | Should be "1701"
+        }
+
+        It "Check changes on time window type " {
+            Get-ArubaSWRadiusServer -address 192.0.2.1 | Set-ArubaSWRadiusServer -shared_secret radius_test -time_window_type TW_POSITIVE_TIME_WINDOW -time_window 15
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.time_window_type | Should be "TW_POSITIVE_TIME_WINDOW"
+            $radius.time_window | Should be "15"
+        }
+
+        It "Check change dynamic autorization" {
+            Get-ArubaSWRadiusServer -address 192.0.2.1 | Set-ArubaSWRadiusServer -shared_secret radius_test -is_dyn_authorization_enabled:$false
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius.is_dyn_authorization_enabled | Should be "False"
+        }
+
     }
 
     AfterAll {
@@ -92,12 +126,23 @@ Describe  "Configure RADIUS Server" {
 }
 
 Describe  "Remove RADIUS Server" {
-    It "Remove ArubaSWRadiusServer server" {
-        Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
-        $id_server = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Remove-ArubaSWRadiusServer -id $id_server.radius_server_id -noconfirm
-        $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        $radius | Should -BeNullOrEmpty
+    Context "Remove RADIUS server by id" {
+        It "Remove ArubaSWRadiusServer server" {
+            Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
+            $id_server = Get-ArubaSWRadiusServer -address 192.0.2.1
+            Remove-ArubaSWRadiusServer -id $id_server.radius_server_id -noconfirm
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius | Should -BeNullOrEmpty
+        }
+    }
+
+    Context "Remove RADIUS server by pipeline" {
+        It "Remove ArubaSWRadiusServer server" {
+            Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
+            Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
+            $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
+            $radius | Should -BeNullOrEmpty
+        }
     }
 }
 
