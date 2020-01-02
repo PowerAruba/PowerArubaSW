@@ -7,13 +7,13 @@
 
 . ../common.ps1
 
-Describe  "Get-ArubaSWRadiusServer" {
+Describe  "Get RADIUS Server" {
     It "Get-ArubaSWRadiusServer Does not throw an error" {
         { Get-ArubaSWRadiusServer } | Should Not Throw
     }
 }
 
-Describe  "Add-ArubaSWRadiusServer" {
+Describe  "Add RADIUS Server" {
 
     It "Check Ip and Shared Secret" {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
@@ -49,7 +49,7 @@ Describe  "Add-ArubaSWRadiusServer" {
     }
 }
 
-Describe  "Set-ArubaSWRadiusServer" {
+Describe  "Configure RADIUS Server" {
 
     BeforeAll {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw -authentication_port 1800 -accounting_port 1801 -time_window_type TW_PLUS_OR_MINUS_TIME_WINDOW -time_window 0 -is_dyn_authorization_enabled
@@ -91,7 +91,7 @@ Describe  "Set-ArubaSWRadiusServer" {
     }
 }
 
-Describe  "Remove-ArubaSWRadiusServer" {
+Describe  "Remove RADIUS Server" {
     It "Remove ArubaSWRadiusServer server" {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
         $id_server = Get-ArubaSWRadiusServer -address 192.0.2.1
