@@ -65,11 +65,11 @@ function Add-ArubaSWRadiusGroup {
         [Parameter (Mandatory = $true)]
         [string]$server_group_name,
         [Parameter (Mandatory = $true)]
-        [string]$ipaddress1,
+        [string]$server1,
         [Parameter (Mandatory = $false)]
-        [string]$ipaddress2,
+        [string]$server2,
         [Parameter (Mandatory = $false)]
-        [string]$ipaddress3,
+        [string]$server3,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -90,26 +90,26 @@ function Add-ArubaSWRadiusGroup {
 
         $serverip1 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-        $serverip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress1
+        $serverip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $server1
 
         $servers += $serverip1
 
-        if ($PsBoundParameters.ContainsKey('ipaddress2')) {
+        if ($PsBoundParameters.ContainsKey('server2')) {
             $serverip2 = New-Object -TypeName PSObject
 
             $serverip2 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $serverip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress2
+            $serverip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $server2
 
             $servers += $serverip2
         }
 
-        if ($PsBoundParameters.ContainsKey('ipaddress3')) {
+        if ($PsBoundParameters.ContainsKey('server3')) {
             $serverip3 = New-Object -TypeName PSObject
 
             $serverip3 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $serverip3 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipaddress3
+            $serverip3 | Add-Member -name "octets" -MemberType NoteProperty -Value $server3
 
             $servers += $serverip3
         }
