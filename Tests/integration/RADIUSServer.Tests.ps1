@@ -126,9 +126,14 @@ Describe  "Configure RADIUS Server" {
 }
 
 Describe  "Remove RADIUS Server" {
+
+    BeforeAll {
+        Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret .\PowerArubaSW
+    }
+
     Context "Remove RADIUS server by id" {
         It "Remove ArubaSWRadiusServer server" {
-            Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
+
             $id_server = Get-ArubaSWRadiusServer -address 192.0.2.1
             Remove-ArubaSWRadiusServer -id $id_server.radius_server_id -noconfirm
             $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
@@ -138,7 +143,6 @@ Describe  "Remove RADIUS Server" {
 
     Context "Remove RADIUS server by pipeline" {
         It "Remove ArubaSWRadiusServer server" {
-            Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
             Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
             $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
             $radius | Should -BeNullOrEmpty
