@@ -65,13 +65,11 @@ Describe  "Remove-ArubaSWRadiusServerGroup" {
         $radius_group = Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
         Remove-ArubaSWRadiusServerGroup -server_group_name $radius_group.server_group_name -noconfirm
         { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should Throw
-        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
     }
 
     It "Remove RADIUS group server" {
         Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup -noconfirm
         { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should Throw
-        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
     }
 
     AfterEach {
