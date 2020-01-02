@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Get-ArubaSWRadiusGroup {
+function Get-ArubaSWRadiusServerGroup {
 
     <#
         .SYNOPSIS
@@ -15,7 +15,7 @@ function Get-ArubaSWRadiusGroup {
         Get RADIUS group informations configured on the device.
 
         .EXAMPLE
-        Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW
+        Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
 
         This function give you all the informations about the radius servers in the group PowerArubaSW configured on the switch.
     #>
@@ -46,7 +46,7 @@ function Get-ArubaSWRadiusGroup {
     }
 }
 
-function Add-ArubaSWRadiusGroup {
+function Add-ArubaSWRadiusServerGroup {
 
     <#
         .SYNOPSIS
@@ -56,7 +56,7 @@ function Add-ArubaSWRadiusGroup {
         Add a RADIUS server group with radius servers.
 
         .EXAMPLE
-        Add-ArubaSWRadiusGroup -server_group_name PowerArubaSWGroup -server1 192.0.2.1 -server2 192.0.2.2 -server3 192.0.2.3
+        Add-ArubaSWRadiusServerGroup -server_group_name PowerArubaSWGroup -server1 192.0.2.1 -server2 192.0.2.2 -server3 192.0.2.3
 
         Add the group PowerArubaSWGroup with servers.
     #>
@@ -129,7 +129,7 @@ function Add-ArubaSWRadiusGroup {
     }
 }
 
-function Remove-ArubaSWRadiusGroup {
+function Remove-ArubaSWRadiusServerGroup {
 
     <#
         .SYNOPSIS
