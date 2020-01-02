@@ -7,7 +7,7 @@
 
 . ../common.ps1
 
-Describe  "Get-ArubaSWRadiusServerGroup" {
+Describe  "Get RADIUS Server Group" {
 
     BeforeAll {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
@@ -25,7 +25,7 @@ Describe  "Get-ArubaSWRadiusServerGroup" {
 
 }
 
-Describe  "Add-ArubaSWRadiusServerGroup" {
+Describe  "Add RADIUS Server Group" {
 
     BeforeEach {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
@@ -53,23 +53,31 @@ Describe  "Add-ArubaSWRadiusServerGroup" {
     }
 }
 
-Describe  "Remove-ArubaSWRadiusServerGroup" {
+Describe  "Remove RADIUS Server Group" {
 
     BeforeEach {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
         Add-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -server1 192.0.2.1
     }
 
-    It "Remove RADIUS group server" {
+    Context "Remove RADIUS Server Group via id" {
 
-        $radius_group = Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
-        Remove-ArubaSWRadiusServerGroup -server_group_name $radius_group.server_group_name -noconfirm
-        { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should Throw
+        It "Remove RADIUS Server Group" {
+
+            $radius_group = Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
+            Remove-ArubaSWRadiusServerGroup -server_group_name $radius_group.server_group_name -noconfirm
+            { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should Throw
+        }
+
     }
 
-    It "Remove RADIUS group server" {
-        Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup -noconfirm
-        { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should Throw
+    Context "Remove RADIUS Server Group via pipeline" {
+
+        It "Remove RADIUS Server Group" {
+            Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup -noconfirm
+            { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should Throw
+        }
+
     }
 
     AfterEach {
