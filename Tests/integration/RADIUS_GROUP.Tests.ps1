@@ -20,7 +20,7 @@ Describe  "Get-ArubaSWRadiusGroup" {
 
     AfterAll {
         Remove-ArubaSWRadiusGroup -server_group_name PowerArubaSW -noconfirm
-        Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
     }
 
 }
@@ -48,8 +48,8 @@ Describe  "Add-ArubaSWRadiusGroup" {
 
     AfterEach {
         Remove-ArubaSWRadiusGroup -server_group_name PowerArubaSW -noconfirm
-        Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
-        Remove-ArubaSWRadiusServer -address 192.0.2.2 -noconfirm
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
+        Get-ArubaSWRadiusServer -address 192.0.2.2 | Remove-ArubaSWRadiusServer -noconfirm
     }
 }
 
@@ -60,7 +60,7 @@ Describe  "Remove-ArubaSWRadiusGroup" {
         $radius_group = Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW
         Remove-ArubaSWRadiusGroup -server_group_name $radius_group.server_group_name -noconfirm
         { Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW } | Should Throw
-        Remove-ArubaSWRadiusServer -address 192.0.2.1 -noconfirm
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
     }
 }
 
