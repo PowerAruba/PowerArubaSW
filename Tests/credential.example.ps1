@@ -28,3 +28,5 @@ $script:httpOnly = $false
 #$script:pester_stp_port = 3
 #$script:pester_cli_port = 3
 #$script:pester_poe_port = 4
+#$script:pester_dns1 = "1.1.1.1"
+#$script:pester_dns2 = "8.8.8.8"
