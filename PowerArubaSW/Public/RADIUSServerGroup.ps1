@@ -56,9 +56,14 @@ function Add-ArubaSWRadiusServerGroup {
         Add a RADIUS Server Group with radius servers.
 
         .EXAMPLE
+        Add-ArubaSWRadiusServerGroup -server_group_name PowerArubaSWGroup -server1 192.0.2.1
+
+        Add the group PowerArubaSWGroup with 1 server.
+
+        .EXAMPLE
         Add-ArubaSWRadiusServerGroup -server_group_name PowerArubaSWGroup -server1 192.0.2.1 -server2 192.0.2.2 -server3 192.0.2.3
 
-        Add the group PowerArubaSWGroup with servers.
+        Add the group PowerArubaSWGroup with 3 servers.
     #>
 
     Param(
@@ -142,6 +147,11 @@ function Remove-ArubaSWRadiusServerGroup {
         Remove-ArubaSWRadius -server_group_name PowerArubaSW
 
         Remove the radius server group with name PowerArubaSW.
+
+        .EXAMPLE
+        Remove-ArubaSWRadius -server_group_name PowerArubaSW -noconfirm
+
+        Remove the radius server group with name PowerArubaSW without confirmation.
     #>
 
     Param(
