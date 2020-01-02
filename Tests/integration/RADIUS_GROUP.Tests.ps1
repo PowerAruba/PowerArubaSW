@@ -54,12 +54,21 @@ Describe  "Add-ArubaSWRadiusGroup" {
 }
 
 Describe  "Remove-ArubaSWRadiusGroup" {
-    It "Remove RADIUS group server" {
+
+    BeforeAll {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
         Add-ArubaSWRadiusGroup -server_group_name PowerArubaSW -server1 192.0.2.1
+    }
+
+    It "Remove RADIUS group server" {
+
         $radius_group = Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW
         Remove-ArubaSWRadiusGroup -server_group_name $radius_group.server_group_name -noconfirm
         { Get-ArubaSWRadiusGroup -server_group_name PowerArubaSW } | Should Throw
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
+    }
+
+    AfterAll {
         Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
     }
 }
