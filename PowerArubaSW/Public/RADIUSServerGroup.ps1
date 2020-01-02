@@ -144,12 +144,12 @@ function Remove-ArubaSWRadiusServerGroup {
         Remove a RADIUS Server Group.
 
         .EXAMPLE
-        Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadius
+        Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup
 
         Remove the radius server group with name PowerArubaSW.
 
         .EXAMPLE
-        Remove-ArubaSWRadius -server_group_name PowerArubaSW -noconfirm
+        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -noconfirm
 
         Remove the radius server group with name PowerArubaSW without confirmation.
     #>
