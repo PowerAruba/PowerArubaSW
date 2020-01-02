@@ -65,11 +65,11 @@ function Add-ArubaSWRadiusGroup {
         [Parameter (Mandatory = $true)]
         [string]$server_group_name,
         [Parameter (Mandatory = $true)]
-        [string]$server1,
+        [ipaddress]$server1,
         [Parameter (Mandatory = $false)]
-        [string]$server2,
+        [ipaddress]$server2,
         [Parameter (Mandatory = $false)]
-        [string]$server3,
+        [ipaddress]$server3,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -90,7 +90,7 @@ function Add-ArubaSWRadiusGroup {
 
         $serverip1 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-        $serverip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $server1
+        $serverip1 | Add-Member -name "octets" -MemberType NoteProperty -Value $server1.ToString()
 
         $servers += $serverip1
 
@@ -99,7 +99,7 @@ function Add-ArubaSWRadiusGroup {
 
             $serverip2 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $serverip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $server2
+            $serverip2 | Add-Member -name "octets" -MemberType NoteProperty -Value $server2.ToString()
 
             $servers += $serverip2
         }
@@ -109,7 +109,7 @@ function Add-ArubaSWRadiusGroup {
 
             $serverip3 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $serverip3 | Add-Member -name "octets" -MemberType NoteProperty -Value $server3
+            $serverip3 | Add-Member -name "octets" -MemberType NoteProperty -Value $server3.ToString()
 
             $servers += $serverip3
         }
