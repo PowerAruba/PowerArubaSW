@@ -27,7 +27,10 @@ function Get-ArubaSWLLDPRemote {
 
     Param(
         [Parameter (Mandatory = $false, Position = 1)]
-        [string]$port_id
+        [string]$port_id,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
     Begin {
     }
@@ -40,7 +43,7 @@ function Get-ArubaSWLLDPRemote {
             $uri += "/$port_id"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response.content | ConvertFrom-Json)
 
@@ -70,6 +73,12 @@ function Get-ArubaSWLLDPGlobalStatus {
         Get all the informations about the global status of LLDP.
     #>
 
+    Param(
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -77,7 +86,7 @@ function Get-ArubaSWLLDPGlobalStatus {
 
         $uri = "rest/v4/lldp"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -117,7 +126,10 @@ function Set-ArubaSWLLDPGlobalStatus {
         [int]$holdtime,
         [Parameter (Mandatory = $false)]
         [ValidateRange (1, 10)]
-        [int]$faststart
+        [int]$faststart,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -152,7 +164,7 @@ function Set-ArubaSWLLDPGlobalStatus {
             $conf | Add-Member -name "fast_start_count" -membertype NoteProperty -Value $faststart
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -178,6 +190,12 @@ function Get-ArubaSWLLDPNeighborStats {
         Get all the informations about the neighbor stats
     #>
 
+    Param(
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
+    )
+
     Begin {
     }
 
@@ -185,7 +203,7 @@ function Get-ArubaSWLLDPNeighborStats {
 
         $uri = "rest/v4/lldp/stats/device"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = $response | ConvertFrom-Json
 
@@ -216,7 +234,10 @@ function Get-ArubaSWLLDPPortStats {
 
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "port")]
-        [string]$port
+        [string]$port,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -226,7 +247,7 @@ function Get-ArubaSWLLDPPortStats {
 
         $uri = "rest/v4/lldp/stats/ports"
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $run = ($response | ConvertFrom-Json).lldp_port_stats_element
 
