@@ -10,7 +10,7 @@
 
 Describe  "Get Aruba LACP" {
     It "Get ArubaSWLACP Does not throw an error" {
-        { Get-ArubaSWLACP } | Should Not Throw 
+        { Get-ArubaSWLACP } | Should Not Throw
     }
 }
 

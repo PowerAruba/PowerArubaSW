@@ -31,9 +31,9 @@ function Add-ArubaSWVlans {
         [switch]$is_jumbo_enabled,
         [Parameter (Mandatory = $false)]
         [switch]$is_dsnoop_enabled,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -124,9 +124,9 @@ function Get-ArubaSWVlans {
         [int]$id,
         [Parameter (Mandatory = $false, ParameterSetName = "name", Position = 1)]
         [string]$Name,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -185,9 +185,9 @@ function Set-ArubaSWVlans {
         [switch]$is_jumbo_enabled,
         [Parameter (Mandatory = $false)]
         [switch]$is_dsnoop_enabled,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -287,9 +287,9 @@ function Remove-ArubaSWVlans {
         [psobject]$vlan,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

@@ -21,9 +21,9 @@ function Get-ArubaSWTrunk {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
     Begin {
     }
@@ -75,9 +75,9 @@ function Add-ArubaSWTrunk {
         [string]$trunk_group,
         [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -132,9 +132,9 @@ function Remove-ArubaSWTrunk {
         [string]$port,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

@@ -78,7 +78,7 @@ function Connect-ArubaSW {
         [ValidateRange(1, 65535)]
         [int]$port,
         [Parameter(Mandatory = $false)]
-        [boolean]$DefaultConnection=$true
+        [boolean]$DefaultConnection = $true
     )
 
     Begin {
@@ -212,9 +212,9 @@ function Disconnect-ArubaSW {
     Param(
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

@@ -28,9 +28,9 @@ function Get-ArubaSWLed {
     Param(
         [Parameter (Mandatory = $false)]
         [int]$member_id,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -93,9 +93,9 @@ function Set-ArubaSWLed {
         [Parameter (Mandatory = $false)]
         [ValidateRange(1, 4)]
         [int]$member_id,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

@@ -21,9 +21,9 @@ function Get-ArubaSWSTP {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
     Begin {
     }
@@ -72,9 +72,9 @@ function Set-ArubaSWSTP {
         [Parameter (Mandatory = $false, Position = 3)]
         [ValidateSet ("MSTP", "RPVST")]
         [string]$mode,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -148,9 +148,9 @@ function Get-ArubaSWSTPPort {
     Param(
         [Parameter (Mandatory = $false)]
         [string]$port,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -218,9 +218,9 @@ function Set-ArubaSWSTPPort {
         [switch]$bpdu_filter,
         [Parameter (Mandatory = $false)]
         [switch]$root_guard,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
