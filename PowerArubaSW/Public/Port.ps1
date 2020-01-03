@@ -27,9 +27,9 @@ function Get-ArubaSWPort {
     Param(
         [Parameter (Mandatory = $false)]
         [string]$port_id,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -79,9 +79,9 @@ function Get-ArubaSWPortStatistics {
     Param(
         [Parameter (Mandatory = $false)]
         [string]$port_id,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -155,9 +155,9 @@ function Set-ArubaSWPort {
         [switch]$is_flow_control_enabled,
         [Parameter (Mandatory = $false)]
         [switch]$is_dsnoop_port_trusted,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

@@ -33,9 +33,9 @@ function Add-ArubaSWVlansPorts {
         [Parameter (Mandatory = $true, Position = 3)]
         [ValidateSet("Untagged", "tagged", "Forbidden")]
         [string]$port_mode,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -99,9 +99,9 @@ function Get-ArubaSWVlansPorts {
         [int]$vlan_id,
         [Parameter (Mandatory = $false)]
         [string]$port_id,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -158,9 +158,9 @@ function Set-ArubaSWVlansPorts {
         [Parameter (Mandatory = $true, Position = 3)]
         [ValidateSet("Untagged", "Tagged", "Forbidden")]
         [string]$port_mode,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -227,9 +227,9 @@ function Remove-ArubaSWVlansPorts {
         [psobject]$vlanport,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

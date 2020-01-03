@@ -22,9 +22,9 @@ function Get-ArubaSWSystem {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -66,9 +66,9 @@ function Set-ArubaSWSystem {
         [String]$location,
         [Parameter(Mandatory = $false)]
         [String]$contact,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -118,9 +118,9 @@ function Get-ArubaSWSystemStatus {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -156,9 +156,9 @@ function Get-ArubaSWSystemStatusSwitch {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -194,9 +194,9 @@ function Get-ArubaSWSystemStatusGlobal {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

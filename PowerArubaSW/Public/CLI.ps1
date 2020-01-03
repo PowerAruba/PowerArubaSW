@@ -37,9 +37,9 @@ function Get-ArubaSWCli {
         [string]$cmd,
         [Parameter (Mandatory = $false)]
         [switch]$display_result,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -103,9 +103,9 @@ function Send-ArubaSWCliBatch {
     Param(
         [Parameter (Mandatory = $true)]
         [string[]]$command,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -157,9 +157,9 @@ function Get-ArubaSWCliBatchStatus {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

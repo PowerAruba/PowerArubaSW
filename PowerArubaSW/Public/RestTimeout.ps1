@@ -20,9 +20,9 @@ function Get-ArubaSWRestSessionTimeout {
     #>
 
     Param(
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
     Begin {
     }
@@ -67,9 +67,9 @@ function Set-ArubaSWRestSessionTimeout {
         [Parameter (Mandatory = $true, Position = 1)]
         [ValidateRange(120, 7200)]
         [int]$timeout,
-        [Parameter (Mandatory=$False)]
+        [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
-        [PSObject]$connection=$DefaultArubaSWConnection
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {

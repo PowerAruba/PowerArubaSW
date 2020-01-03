@@ -14,7 +14,7 @@ Describe  "Get Led Locator" {
     It "Get LedLocator Does not throw an error" {
         {
             Get-ArubaSWLed
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get LedLocator info (first unit)" {
