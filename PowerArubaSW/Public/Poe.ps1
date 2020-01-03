@@ -26,7 +26,10 @@ function Get-ArubaSWPoE {
     #>
     Param(
         [Parameter (Mandatory = $false, position = 1)]
-        [string]$port_id
+        [string]$port_id,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -40,7 +43,7 @@ function Get-ArubaSWPoE {
             $uri = "rest/v4/ports/$port_id/poe"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $poe = ($response.Content | ConvertFrom-Json)
 
@@ -97,7 +100,10 @@ function Set-ArubaSWPoE {
         [Parameter (Mandatory = $false)]
         [string]$port_configured_type,
         [Parameter (Mandatory = $false)]
-        [switch]$pre_standard_detect_enabled
+        [switch]$pre_standard_detect_enabled,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -170,7 +176,7 @@ function Set-ArubaSWPoE {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_poe -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_poe -uri $uri -connection $connection
         $rep_poe = ($response.Content | ConvertFrom-Json)
 
         $rep_poe
@@ -201,7 +207,10 @@ function Get-ArubaSWPoEStats {
     #>
     Param(
         [Parameter (Mandatory = $false, position = 1)]
-        [string]$port_id
+        [string]$port_id,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaSWConnection
     )
 
     Begin {
@@ -215,7 +224,7 @@ function Get-ArubaSWPoEStats {
             $uri = "rest/v4/ports/$port_id/poe/stats"
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri
+        $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
         $poe = ($response.Content | ConvertFrom-Json)
 
