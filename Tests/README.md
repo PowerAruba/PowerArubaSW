@@ -48,8 +48,3 @@ Invoke-Pester Vlan.Tests.ps1 -g 'Add Vlans'
 ```
 
 The first time tests are executed, default connection details are prompted for and optionally saved to disk. These can be overridden by deleting the Test.cxn file in the tests directory if it becomes necessary to reconfigure them. Currently these credentials are stored in CLEAR TEXT. See Known Issues for details.
-
-## Known Issues
-
-There is actually some issue when launch test on Aruba VSF switch (about port number...)
-It will be fixed on future release
