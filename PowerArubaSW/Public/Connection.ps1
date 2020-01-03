@@ -87,7 +87,7 @@ function Connect-ArubaSW {
     Process {
 
         $version = @{min = ""; cur = ""; max = "" }
-        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; version = $version }
+        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; version = $version ; product_number = "" }
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -158,6 +158,20 @@ function Connect-ArubaSW {
 
         $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
+
+        if ('ST_STACKED' -eq $switchstatus.switch_type) {
+            if ( $switchstatus.blades.count -eq "1") {
+                $connection.product_number = $switchstatus.blades.product_number
+            }
+            else {
+                $connection.product_number = $switchstatus.blades.product_number[0]
+            }
+
+        }
+        else {
+            $connection.product_number = $switchstatus.product_number
+        }
+
         $restversion = Get-ArubaSWRestversion
         #Remove v and .x (.0, 1)
         $vers = $restversion.version -replace "v" -replace ".0" -replace ".1"
