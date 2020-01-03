@@ -76,6 +76,12 @@ Describe  "Connect to a switch (using multi connection)" {
         It "Use Multi connection for call Get Port" {
             { Get-ArubaSWPort -connection $sw } | Should Not throw
         }
+        It "Use Multi connection for call Get PoE" {
+            { Get-ArubaSWPoE -connection $sw } | Should Not throw
+        }
+        It "Use Multi connection for call Get LLDP Remote" {
+            { Get-ArubaSWLLDPRemote -connection $sw } | Should Not throw
+        }
     }
 
     It "Disconnect to a switch (Multi connection)" {
