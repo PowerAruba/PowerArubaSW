@@ -50,16 +50,17 @@ function Test-ArubaSWPing {
 
             $ipv4 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipv4_address
 
-            $dest | Add-Member -name "ip_address" -membertype NoteProperty -Value $ipv4
-        } elseif ($PsBoundParameters.ContainsKey('hostname')) {
-            $dest | Add-Member -name "hostname" -membertype NoteProperty -Value $hostname
+            $dest | Add-Member -name "ip_address" -Membertype NoteProperty -Value $ipv4
+        }
+        elseif ($PsBoundParameters.ContainsKey('hostname')) {
+            $dest | Add-Member -name "hostname" -Membertype NoteProperty -Value $hostname
         }
         else {
             throw "You need to use a parameter (-ipv4_address, -hostname)"
         }
 
         $ping = New-Object -TypeName PSObject
-        $ping | Add-Member -name "destination" -membertype NoteProperty -Value $dest
+        $ping | Add-Member -name "destination" -Membertype NoteProperty -Value $dest
 
         $response = Invoke-ArubaSWWebRequest -method "POST" -body $ping -uri $uri -connection $connection
 
