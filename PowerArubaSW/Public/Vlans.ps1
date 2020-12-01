@@ -260,7 +260,7 @@ function Set-ArubaSWVlans {
 }
 
 function Remove-ArubaSWVlans {
-
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     <#
         .SYNOPSIS
         Remove a Vlan on ArubaOS Switch (Provision)
@@ -286,13 +286,10 @@ function Remove-ArubaSWVlans {
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
     )
-
     Begin {
     }
 
@@ -305,17 +302,8 @@ function Remove-ArubaSWVlans {
 
         $uri = "rest/v4/vlans/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Vlan on switch"
-            $question = "Proceed with removal of vlan ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
+        $target = "Vlan ID {0}" -f $id
+        if ($PSCmdlet.ShouldProcess($target, "Remove VLAN")) {
             Write-Progress -activity "Remove Vlan"
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Vlan" -completed
