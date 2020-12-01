@@ -275,7 +275,7 @@ function Remove-ArubaSWVlans {
         Remove vlan id 85
 
         .EXAMPLE
-        Remove-ArubaSWVlans -id 85 -noconfirm
+        Remove-ArubaSWVlans -id 85 -confirm:$false
 
         Remove vlan id 85 with no confirmation
     #>
