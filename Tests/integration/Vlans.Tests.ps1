@@ -52,7 +52,7 @@ Describe  "Add VLAN" {
                 #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
                 Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
             }
-            Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+            Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
         }
     }
 
@@ -103,7 +103,7 @@ Describe  "Add VLAN" {
                 #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
                 Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
             }
-            Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+            Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
         }
     }
 }
@@ -151,7 +151,7 @@ Describe  "Configure VLAN" {
                     #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
                     Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
                 }
-                Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+                Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
             }
         }
     }
@@ -199,7 +199,7 @@ Describe  "Configure VLAN" {
                     #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
                     Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
                 }
-                Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+                Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
             }
         }
 
@@ -214,14 +214,14 @@ Describe  "Remove VLAN" {
     }
 
     It "Remove VLAN $pester_vlan by id" {
-        Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+        Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
         $VLAN = Get-ArubaSWVlans -id $pester_vlan
         $VLAN | Should be $NULL
     }
 
     It "Remove VLAN $pester_vlan by pipeline" {
         $VLAN = Get-ArubaSWVlans -id $pester_vlan
-        $VLAN | Remove-ArubaSWVlans -noconfirm
+        $VLAN | Remove-ArubaSWVlans -confirm:$false
         $VLAN = Get-ArubaSWVlans -id $pester_vlan
         $VLAN | Should be $NULL
     }
@@ -234,7 +234,7 @@ Describe  "Remove VLAN" {
                 #fix stupid issue... when there is already dhcp snoop enable on a vlan, it is not remove (when remove the vlan)...
                 Set-ArubaSWVlans -id $pester_vlan -name PowerArubaSW -is_dsnoop_enabled:$false
             }
-            Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+            Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
         }
     }
 }

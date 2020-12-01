@@ -6,6 +6,7 @@
 #
 
 function Connect-ArubaSW {
+    [CmdletBinding()]
 
     <#
       .SYNOPSIS
@@ -68,8 +69,6 @@ function Connect-ArubaSW {
         [SecureString]$Password,
         [Parameter(Mandatory = $false)]
         [PSCredential]$Credentials,
-        [Parameter(Mandatory = $false)]
-        [switch]$noverbose = $false,
         [Parameter(Mandatory = $false)]
         [switch]$httpOnly = $false,
         [Parameter(Mandatory = $false)]
@@ -158,28 +157,26 @@ function Connect-ArubaSW {
         $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
 
-        if (-not $noverbose) {
-            $switchsystem = Get-ArubaSWSystem -connection $connection
+        $switchsystem = Get-ArubaSWSystem -connection $connection
 
 
-            if ($switchstatus.switch_type -eq "ST_STACKED") {
-                $product_name = $NULL;
-                foreach ($blades in $switchstatus.blades) {
-                    if ($blades.product_name) {
-                        if ($product_name) {
-                            $product_name += ", "
-                        }
-                        $product_name += $blades.product_name
+        if ($switchstatus.switch_type -eq "ST_STACKED") {
+            $product_name = $NULL;
+            foreach ($blades in $switchstatus.blades) {
+                if ($blades.product_name) {
+                    if ($product_name) {
+                        $product_name += ", "
                     }
+                    $product_name += $blades.product_name
                 }
             }
-            else {
-                $product_name = $switchstatus.product_name
-            }
-            Write-Host "Welcome on"$switchsystem.name"-"$product_name
-
         }
-
+        else {
+            $product_name = $switchstatus.product_name
+        }
+        Write-Verbose "Welcome on"$switchsystem.name"-"$product_name
+        
+        $connection.name = $switchsystem.name
         #Return connection info
         $connection
     }
