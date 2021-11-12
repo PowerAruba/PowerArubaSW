@@ -51,6 +51,8 @@ Extract-Port-ArubaSW.ps1
   #>
 
 # Parameters :
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
 Param(
   [string]$CompanyName,
   [string]$IPSwitch,
