@@ -176,7 +176,7 @@ function Connect-ArubaSW {
             else {
                 $product_name = $switchstatus.product_name
             }
-            Write-Host "Welcome on"$switchsystem.name"-"$product_name
+            Write-Output "Welcome on $($switchsystem.name) -$product_name"
 
         }
 
