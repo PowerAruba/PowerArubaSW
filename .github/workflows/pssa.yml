@@ -7,6 +7,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: lint
-      uses: devblackops/github-action-psscriptanalyzer@master
+      uses: docker://devblackops/github-action-psscriptanalyzer:2.4.0
       with:
         settingsPath: .vscode/PSScriptAnalyzerSettings.psd1
+        sendComment: false
+        failOnInfos: true
+        failOnErrors: true
+        failOnWarnings: true

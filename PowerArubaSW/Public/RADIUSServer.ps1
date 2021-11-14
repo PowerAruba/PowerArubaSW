@@ -31,6 +31,8 @@ function Get-ArubaSWRadiusServer {
     #>
 
     [CmdletBinding(DefaultParameterSetName = "default")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'address', Justification = 'False positive see PSSA #1472')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'id', Justification = 'False positive see PSSA #1472')]
     Param(
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "address")]

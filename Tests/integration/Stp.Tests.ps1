@@ -25,7 +25,7 @@ Describe  "Get Spanning Tree" {
 
 Describe  "Configure STP (Global)" {
     BeforeAll {
-        $stp_default = Get-ArubaSWSTP
+        $script:stp_default = Get-ArubaSWSTP
         #force disable STP with mode RSTP and Priority 2
         Set-ArubaSWSTP -enable:$false -priority 10 -mode MSTP
     }

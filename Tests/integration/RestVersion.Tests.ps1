@@ -11,7 +11,7 @@ Describe  "Get-ArubaSWRestVersion" {
     It "Get-ArubaSWRestVersion Does not throw an error" {
         {
             Get-ArubaSWRestVersion
-        } | Should Not Throw 
+        } | Should Not Throw
     }
 
     It "Get-ArubaSWRestVersion should not be null" {
