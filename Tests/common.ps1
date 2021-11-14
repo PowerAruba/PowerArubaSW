@@ -4,6 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
+Param()
+
 # default settings for test...
 $pester_vlan = 85 #vlan id for Vlan test (and Port Test)
 $pester_vlanport = 8 #Port number of Vlan Port Test
