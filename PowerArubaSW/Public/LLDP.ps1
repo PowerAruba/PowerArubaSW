@@ -25,7 +25,6 @@ function Get-ArubaSWLLDPRemote {
         Get LLDP neighbor informations on port 5
     #>
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'port_id', Justification = 'False positive see PSSA #1472')]
     Param(
         [Parameter (Mandatory = $false, Position = 1)]
         [string]$port_id,
@@ -233,6 +232,7 @@ function Get-ArubaSWLLDPPortStats {
         Get all the LLDP stats informations about the port 5
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'port', Justification = 'False positive see PSSA #1472')]
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "port")]
         [string]$port,
