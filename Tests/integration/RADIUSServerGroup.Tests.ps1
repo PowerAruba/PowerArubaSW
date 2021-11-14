@@ -27,8 +27,9 @@ Describe  "Get RADIUS Server Group" {
 
 Describe  "Add RADIUS Server Group" {
 
-    BeforeEach {
+    BeforeAll {
         Add-ArubaSWRadiusServer -address 192.0.2.1 -shared_secret powerarubasw
+        Add-ArubaSWRadiusServer -address 192.0.2.2 -shared_secret powerarubasw#
     }
 
     It "Check name of group and IP" {
@@ -39,7 +40,6 @@ Describe  "Add RADIUS Server Group" {
     }
 
     It "Check IP of multiple RADIUS server" {
-        Add-ArubaSWRadiusServer -address 192.0.2.2 -shared_secret powerarubasw
         Add-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -server1 192.0.2.1 -server2 192.0.2.2
         $radius_group = Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
         $radius_group.server_ip.octets[0] | Should be "192.0.2.1"
@@ -48,6 +48,9 @@ Describe  "Add RADIUS Server Group" {
 
     AfterEach {
         Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -noconfirm
+    }
+
+    AfterAll {
         Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
         Get-ArubaSWRadiusServer -address 192.0.2.2 | Remove-ArubaSWRadiusServer -noconfirm
     }
