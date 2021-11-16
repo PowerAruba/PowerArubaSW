@@ -26,6 +26,7 @@ With this module (version 0.8.0) you can manage:
 - RADIUS Server (Add/Get/Set/Remove)
 - RADIUS Group (Add/Get/Remove)
 - MAC Table (Get)
+- Banner (Get/set)
 - [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
