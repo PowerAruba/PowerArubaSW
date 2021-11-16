@@ -25,6 +25,7 @@ With this module (version 0.8.0) you can manage:
 - PoE (Get/Configure PoE Settings and Get Poe Stats)
 - RADIUS Server (Add/Get/Set/Remove)
 - RADIUS Group (Add/Get/Remove)
+- MAC Table (Get)
 - [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
