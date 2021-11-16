@@ -9,7 +9,7 @@
 Describe  "Get-ArubaSWModules" {
     It "Get-ArubaSWModules Does not throw an error" {
         {
-            Get-ArubaSWRestVersion
+            Get-ArubaSWModules
         } | Should Not Throw
     }
 
