@@ -3,6 +3,10 @@
 
 This is a Powershell module for configure a ArubaOS Switch.
 
+<p align="center">
+<img src="https://raw.githubusercontent.com/PowerAruba/PowerArubaSW/master/Medias/PowerArubaSW.png" width="250" height="250" />
+</p>
+
 With this module (version 0.8.0) you can manage:
 
 - System (Name, Location, Contact) & Switch Status (Product and Hardware info)
