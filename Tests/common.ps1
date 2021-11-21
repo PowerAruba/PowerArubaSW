@@ -23,9 +23,11 @@ $pester_trunk_trk2 = "trk7" #Port trunk 2 name of Trunk test
 $pester_stp_port = 3 #Port Number of STP test
 $pester_cli_port = 3 #Port Number of CLI test
 $pester_poe_port = 4 #Port Number of PoE test
+$pester_dns1 = "1.1.1.1" #DNS server 1
+$pester_dns2 = "8.8.8.8" #DNS server 2
 
-
-if ("Desktop" -eq $PSVersionTable.PsEdition) { # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
+if ("Desktop" -eq $PSVersionTable.PsEdition) {
+    # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
     $script:pester_longint = "int"
 }
 else {
