@@ -48,7 +48,7 @@ function Test-ArubaSWPing {
             $ipv4 = New-Object -TypeName PSObject
             $ipv4 | Add-Member -name "version" -MemberType NoteProperty -Value "IAV_IP_V4"
 
-            $ipv4 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipv4_address
+            $ipv4 | Add-Member -name "octets" -MemberType NoteProperty -Value $ipv4_address.ToString()
 
             $dest | Add-Member -name "ip_address" -Membertype NoteProperty -Value $ipv4
         }
