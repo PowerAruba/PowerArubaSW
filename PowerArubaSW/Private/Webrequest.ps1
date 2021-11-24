@@ -27,11 +27,6 @@ function Invoke-ArubaSWWebRequest() {
 
       Invoke-WebRequest with ArubaSW connection for post rest/v1/system uri with $body payload
 
-      .EXAMPLE
-      Invoke-ArubaSWWebRequest -method "get" -uri "rest/v1/system" -depth 1 -selector configuration
-
-      Invoke-WebRequest with ArubaSW connection for get rest/v1/system with depth 1 and select only configuration
-
     #>
 
 
