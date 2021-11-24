@@ -73,6 +73,8 @@ function Invoke-ArubaSWWebRequest() {
 
         try {
             if ($body) {
+
+                Write-Verbose ($body | ConvertTo-Json)
                 $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Websession $sessionvariable @invokeParams
             }
             else {
