@@ -18,14 +18,14 @@ function Invoke-ArubaSWWebRequest() {
       Invoke-WebRequest with ArubaSW connection for get rest/v4/vlan
 
       .EXAMPLE
-      Invoke-ArubaSWWebRequest "rest/v1/system"
+      Invoke-ArubaSWWebRequest "rest/v4/system"
 
-      Invoke-WebRequest with ArubaSW connection for get rest/v1/system uri with default GET method parameter
+      Invoke-WebRequest with ArubaSW connection for get rest/v4/system uri with default GET method parameter
 
       .EXAMPLE
-      Invoke-ArubaSWWebRequest -method "post" -uri "rest/v1/system" -body $body
+      Invoke-ArubaSWWebRequest -method "post" -uri "rest/v4/system" -body $body
 
-      Invoke-WebRequest with ArubaSW connection for post rest/v1/system uri with $body payload
+      Invoke-WebRequest with ArubaSW connection for post rest/v4/system uri with $body payload
 
     #>
 
