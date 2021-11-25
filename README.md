@@ -278,4 +278,4 @@ Test-ArubaSWPing
 
 # License
 
-Copyright 2018 Alexis La Goutte and the community.
+Copyright 2018-2021 Alexis La Goutte and the community.
