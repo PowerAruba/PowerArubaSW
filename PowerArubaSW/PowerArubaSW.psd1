@@ -12,7 +12,7 @@
     RootModule        = 'PowerArubaSW.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.8.0'
+    ModuleVersion     = '0.9.0'
 
     # Supported PSEditions
     #CompatiblePSEditions = @('Desktop', 'Core')
@@ -104,7 +104,7 @@
             ProjectUri = 'https://github.com/PowerAruba/PowerArubaSW'
 
             # A URL to an icon representing this module.
-            IconUri = 'https://raw.githubusercontent.com/PowerAruba/PowerArubaSW/master/Medias/PowerArubaSW.png'
+            IconUri    = 'https://raw.githubusercontent.com/PowerAruba/PowerArubaSW/master/Medias/PowerArubaSW.png'
 
             # ReleaseNotes of this module
             # ReleaseNotes = ''
