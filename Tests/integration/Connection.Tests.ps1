@@ -88,6 +88,9 @@ Describe  "Connect to a switch (using multi connection)" {
         It "Use Multi connection for call Get RADIUS Profile" {
             { Get-ArubaSWRadiusProfile -connection $sw } | Should Not throw
         }
+        It "Use Multi connection for call Get RADIUS Server" {
+            { Get-ArubaSWRadiusServer -connection $sw } | Should Not throw
+        }
     }
 
     It "Disconnect to a switch (Multi connection)" {
