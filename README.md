@@ -196,11 +196,14 @@ For example to get Vlan Ports of 2 switchs
 # List of available command
 ```powershell
 Add-ArubaSWLACP
+Add-ArubaSWRadiusServer
+Add-ArubaSWRadiusServerGroup
 Add-ArubaSWTrunk
 Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
 Disconnect-ArubaSW
+Get-ArubaSWBanner
 Get-ArubaSWCli
 Get-ArubaSWCliBatchStatus
 Get-ArubaSWDns
@@ -211,10 +214,15 @@ Get-ArubaSWLLDPGlobalStatus
 Get-ArubaSWLLDPNeighborStats
 Get-ArubaSWLLDPPortStats
 Get-ArubaSWLLDPRemote
+Get-ArubaSWMacTable
+Get-ArubaSWModules
 Get-ArubaSWPoE
 Get-ArubaSWPoEStats
 Get-ArubaSWPort
 Get-ArubaSWPortStatistics
+Get-ArubaSWRadiusProfile
+Get-ArubaSWRadiusServer
+Get-ArubaSWRadiusServerGroup
 Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSTP
@@ -229,16 +237,21 @@ Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
 Remove-ArubaSWDns
 Remove-ArubaSWLACP
+Remove-ArubaSWRadiusServer
+Remove-ArubaSWRadiusServerGroup
 Remove-ArubaSWTrunk
 Remove-ArubaSWVlans
 Remove-ArubaSWVlansPorts
 Send-ArubaSWCliBatch
+Set-ArubaSWBanner
 Set-ArubaSWCipherSSL
 Set-ArubaSWDns
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
 Set-ArubaSWPoE
 Set-ArubaSWPort
+Set-ArubaSWRadiusProfile
+Set-ArubaSWRadiusServer
 Set-ArubaSWRestSessionTimeout
 Set-ArubaSWSTP
 Set-ArubaSWSTPPort
@@ -248,6 +261,7 @@ Set-ArubaSWVlans
 Set-ArubaSWVlansPorts
 Set-Cookie
 Show-ArubaSWException
+Test-ArubaSWPing
 ```
 
 # Author
