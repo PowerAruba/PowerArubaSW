@@ -28,6 +28,7 @@ With this module (version 0.8.0) you can manage:
 - RADIUS Profile (Get/Set)
 - MAC Table (Get)
 - Banner (Get/set)
+- Ping (Test)
 - [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
