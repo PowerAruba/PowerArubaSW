@@ -27,7 +27,7 @@
     #CompanyName = 'Unknown'
 
     # Copyright statement for this module
-    Copyright         = '(c) 2018 Alexis La Goutte All rights reserved.'
+    Copyright         = '(c) 2018-2021 Alexis La Goutte All rights reserved.'
 
     # Description of the functionality provided by this module
     Description       = 'PowerShell module to query the ArubaOS Switch API'
