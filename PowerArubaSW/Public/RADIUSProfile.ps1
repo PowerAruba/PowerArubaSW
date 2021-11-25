@@ -14,7 +14,7 @@ function Get-ArubaSWRadiusProfile {
         Get RADIUS Profile information (retry, retransmit, dead time...) configured on the device.
 
         .EXAMPLE
-        Get-ArubaSWRadiusServer
+        Get-ArubaSWRadiusProfile
 
         This function give you all the informations about the radius profile parameters configured on the switch.
 
