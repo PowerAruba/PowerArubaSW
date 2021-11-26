@@ -14,7 +14,7 @@ Describe  "Get VLAN" {
 
     It "Get ALL vlan" {
         $VLANS = Get-ArubaSWVlans
-        $VLANS.count | Should not be $NULL
+        @($VLANS).count | Should not be $NULL
     }
 
     It "Get the Vlan ID (1)" {
