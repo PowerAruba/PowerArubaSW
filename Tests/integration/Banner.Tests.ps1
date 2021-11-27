@@ -6,6 +6,10 @@
 
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaSW @invokeParams
+}
+
 Describe  "Get Banner" {
     BeforeAll {
         $banner = Get-ArubaSWBanner
@@ -68,4 +72,6 @@ Describe  "Configure Banner" {
     }
 }
 
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}
