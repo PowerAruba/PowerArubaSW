@@ -7,7 +7,7 @@ This is a Powershell module for configure a ArubaOS Switch.
 <img src="https://raw.githubusercontent.com/PowerAruba/PowerArubaSW/master/Medias/PowerArubaSW.png" width="250" height="250" />
 </p>
 
-With this module (version 0.8.0) you can manage:
+With this module (version 0.9.0) you can manage:
 
 - System (Name, Location, Contact) & Switch Status (Product and Hardware info)
 - Vlans (Add/Configure/Remove)
@@ -23,6 +23,12 @@ With this module (version 0.8.0) you can manage:
 - IP Address (Get)
 - Cli (AnyCli and CliBatch for send CLI function)
 - PoE (Get/Configure PoE Settings and Get Poe Stats)
+- RADIUS Server (Add/Get/Set/Remove)
+- RADIUS Group (Add/Get/Remove)
+- RADIUS Profile (Get/Set)
+- MAC Table (Get)
+- Banner (Get/set)
+- Ping (Test)
 - [Multi Connection](#MultiConnection)
 
 More functionality will be added later.
@@ -191,11 +197,14 @@ For example to get Vlan Ports of 2 switchs
 # List of available command
 ```powershell
 Add-ArubaSWLACP
+Add-ArubaSWRadiusServer
+Add-ArubaSWRadiusServerGroup
 Add-ArubaSWTrunk
 Add-ArubaSWVlans
 Add-ArubaSWVlansPorts
 Connect-ArubaSW
 Disconnect-ArubaSW
+Get-ArubaSWBanner
 Get-ArubaSWCli
 Get-ArubaSWCliBatchStatus
 Get-ArubaSWDns
@@ -206,10 +215,15 @@ Get-ArubaSWLLDPGlobalStatus
 Get-ArubaSWLLDPNeighborStats
 Get-ArubaSWLLDPPortStats
 Get-ArubaSWLLDPRemote
+Get-ArubaSWMacTable
+Get-ArubaSWModules
 Get-ArubaSWPoE
 Get-ArubaSWPoEStats
 Get-ArubaSWPort
 Get-ArubaSWPortStatistics
+Get-ArubaSWRadiusProfile
+Get-ArubaSWRadiusServer
+Get-ArubaSWRadiusServerGroup
 Get-ArubaSWRestSessionTimeout
 Get-ArubaSWRestVersion
 Get-ArubaSWSTP
@@ -224,16 +238,21 @@ Get-ArubaSWVlansPorts
 Invoke-ArubaSWWebRequest
 Remove-ArubaSWDns
 Remove-ArubaSWLACP
+Remove-ArubaSWRadiusServer
+Remove-ArubaSWRadiusServerGroup
 Remove-ArubaSWTrunk
 Remove-ArubaSWVlans
 Remove-ArubaSWVlansPorts
 Send-ArubaSWCliBatch
+Set-ArubaSWBanner
 Set-ArubaSWCipherSSL
 Set-ArubaSWDns
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
 Set-ArubaSWPoE
 Set-ArubaSWPort
+Set-ArubaSWRadiusProfile
+Set-ArubaSWRadiusServer
 Set-ArubaSWRestSessionTimeout
 Set-ArubaSWSTP
 Set-ArubaSWSTPPort
@@ -243,6 +262,7 @@ Set-ArubaSWVlans
 Set-ArubaSWVlansPorts
 Set-Cookie
 Show-ArubaSWException
+Test-ArubaSWPing
 ```
 
 # Author
@@ -258,4 +278,4 @@ Show-ArubaSWException
 
 # License
 
-Copyright 2018 Alexis La Goutte and the community.
+Copyright 2018-2021 Alexis La Goutte and the community.
