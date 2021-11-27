@@ -58,13 +58,19 @@ else {
 }
 
 $mysecpassword = ConvertTo-SecureString $password -AsPlainText -Force
+$script:invokeParams = @{
+    Server   = $ipaddress;
+    Username = $login;
+    password = $mysecpassword;
+}
 if ($httpOnly) {
-    Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -httpOnly
+    $invokeParams.add('httpOnly', $true)
 }
 else {
-    Connect-ArubaSW -Server $ipaddress -Username $login -password $mysecpassword -SkipCertificateCheck
+    $invokeParams.add('SkipCertificateCheck', $true)
 }
 
+Connect-ArubaSW @invokeParams
 $status = Get-ArubaSWSystemStatusSwitch
 
 if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type) {
