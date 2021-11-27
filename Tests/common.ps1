@@ -100,3 +100,5 @@ if ('ST_STACKED' -eq $defaultArubaSWConnection.switch_type) {
     $pester_cli_port = "$pester_stack_module/$pester_cli_port"
     $pester_poe_port = "$pester_stack_module/$pester_poe_port"
 }
+
+Disconnect-ArubaSW -noconfirm
