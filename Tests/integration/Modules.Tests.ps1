@@ -6,18 +6,24 @@
 
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaSW @invokeParams
+}
+
 Describe  "Get-ArubaSWModules" {
     It "Get-ArubaSWModules Does not throw an error" {
         {
             Get-ArubaSWModules
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get-ArubaSWModules should not be null" {
         $modules = Get-ArubaSWModules
-        $modules.interop_mode | Should not be $null
-        $modules.module_info | Should not be $null
+        $modules.interop_mode | Should -Not -Be $null
+        $modules.module_info | Should -Not -Be $null
     }
 }
 
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}
