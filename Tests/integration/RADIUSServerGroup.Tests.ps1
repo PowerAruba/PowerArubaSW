@@ -73,7 +73,7 @@ Describe  "Remove RADIUS Server Group" {
 
             $radius_group = Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
             Remove-ArubaSWRadiusServerGroup -server_group_name $radius_group.server_group_name -noconfirm
-            { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should -Throw
+            { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW 3> $null } | Should -Throw
         }
 
     }
@@ -82,7 +82,7 @@ Describe  "Remove RADIUS Server Group" {
 
         It "Remove RADIUS Server Group" {
             Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup -noconfirm
-            { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW } | Should -Throw
+            { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW 3> $null } | Should -Throw
         }
 
     }
