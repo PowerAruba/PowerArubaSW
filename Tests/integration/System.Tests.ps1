@@ -65,19 +65,19 @@ Describe  "Configure System" {
 }
 
 Describe  "Get System Status Global (Stacked)" {
-    It "Get System Status Global (Stacked) Does not throw an error" -Skip:(-Not ('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status Global (Stacked) Does not throw an error" -Skip:(-Not ('ST_STACKED' -eq $script:switch_type)) {
         {
             Get-ArubaSWSystemStatusGlobal
         } | Should -Not -Throw
     }
 
-    It "Get System Status Global (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status Global (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $script:switch_type)) {
         $SYSTEM_STATUS = Get-ArubaSWSystemStatusGlobal
         $SYSTEM_STATUS.name | Should -Not -Be $NULL
         $SYSTEM_STATUS.firmware_version | Should -Not -Be $NULL
         $SYSTEM_STATUS.base_ethernet_address | Should -Not -Be $NULL
     }
-    It "Get System Status (Stacked) Does THROW an error" -Skip:('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type) {
+    It "Get System Status (Stacked) Does THROW an error" -Skip:('ST_STACKED' -eq $script:switch_type) {
         {
             Get-ArubaSWSystemStatusGlobal
         } | Should -Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatus"
@@ -85,13 +85,13 @@ Describe  "Get System Status Global (Stacked)" {
 }
 
 Describe  "Get System Status (Standalone/Chassis)" {
-    It "Get System Status (Standalone/Chassis) Does not throw an error" -Skip:(-not ('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type) -or ('ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status (Standalone/Chassis) Does not throw an error" -Skip:(-not ('ST_STANDALONE' -eq $script:switch_type) -or ('ST_CHASSIS' -eq $script:switch_type)) {
         {
             Get-ArubaSWSystemStatus
         } | Should -Not -Throw
     }
 
-    It "Get System Status (Standalone)" -Skip:(-not ('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status (Standalone)" -Skip:(-not ('ST_STANDALONE' -eq $script:switch_type -or 'ST_CHASSIS' -eq $script:switch_type)) {
         $SYSTEM_STATUS = Get-ArubaSWSystemStatus
         $SYSTEM_STATUS.name | Should -Not -Be $NULL
         $SYSTEM_STATUS.serial_number | Should -Not -Be $NULL
@@ -102,7 +102,7 @@ Describe  "Get System Status (Standalone/Chassis)" {
         $SYSTEM_STATUS.total_memory_in_bytes | Should -Not -Be $NULL
         $SYSTEM_STATUS.total_poe_consumption | Should -Not -Be $NULL
     }
-    It "Get System Status (Stacked) Does THROW an error" -Skip:(('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type -or 'ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status (Stacked) Does THROW an error" -Skip:(('ST_STANDALONE' -eq $script:switch_type -or 'ST_CHASSIS' -eq $script:switch_type)) {
         {
             Get-ArubaSWSystemStatus
         } | Should -Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatusGlobal"
@@ -117,7 +117,7 @@ Describe  "Get System Status Switch" {
         } | Should -Not -Throw
     }
 
-    It "Get System Status Switch (Standalone)" -Skip:(-Not ('ST_STANDALONE' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status Switch (Standalone)" -Skip:(-Not ('ST_STANDALONE' -eq $script:switch_type)) {
         $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
         $SYSTEM_STATUS_SWITCH.switch_type | Should -Be 'ST_STANDALONE'
         $SYSTEM_STATUS_SWITCH.product_name | Should -Not -Be $NULL
@@ -126,7 +126,7 @@ Describe  "Get System Status Switch" {
         $SYSTEM_STATUS_SWITCH.blades | Should -Not -Be $NULL
     }
 
-    It "Get System Status Switch (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status Switch (Stacked)" -Skip:(-Not ('ST_STACKED' -eq $script:switch_type)) {
         $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
         $SYSTEM_STATUS_SWITCH.switch_type | Should -Be 'ST_STACKED'
         $SYSTEM_STATUS_SWITCH.blades | Should -Not -Be $NULL
@@ -136,7 +136,7 @@ Describe  "Get System Status Switch" {
         $SYSTEM_STATUS_SWITCH.blades.data_ports | Should -Not -Be $NULL
     }
 
-    It "Get System Status Switch (Chassis)" -Skip:(-Not ('ST_CHASSIS' -eq $DefaultArubaSWCOnnection.switch_type)) {
+    It "Get System Status Switch (Chassis)" -Skip:(-Not ('ST_CHASSIS' -eq $script:switch_type)) {
         $SYSTEM_STATUS_SWITCH = Get-ArubaSWSystemStatusSwitch
         $SYSTEM_STATUS_SWITCH.switch_type | Should -Be 'ST_CHASSIS'
         $SYSTEM_STATUS_SWITCH.blades | Should -Not -Be $NULL
