@@ -34,7 +34,7 @@ function Invoke-ArubaSWWebRequest() {
         [Parameter(Mandatory = $true, position = 1)]
         [String]$uri,
         [ValidateSet("GET", "POST", "DELETE", "PUT")]
-        [String]$method="get",
+        [String]$method = "get",
         [Parameter(Mandatory = $false)]
         [psobject]$body,
         [Parameter(Mandatory = $false)]
@@ -47,7 +47,7 @@ function Invoke-ArubaSWWebRequest() {
     Process {
 
         if ($null -eq $connection ) {
-            if ($null -eq $DefaultArubaSWConnection){
+            if ($null -eq $DefaultArubaSWConnection) {
                 Throw "Not Connected. Connect to the Switch with Connect-ArubaSW"
             }
             $connection = $DefaultArubaSWConnection
