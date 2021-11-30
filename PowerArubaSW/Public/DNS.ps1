@@ -69,6 +69,7 @@ function Set-ArubaSWDns {
         This set DNS mode to manual with domain name to example.org and example.net
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true)]
         [ValidateSet ("DHCP", "Manual")]
@@ -136,11 +137,13 @@ function Set-ArubaSWDns {
             $conf | Add-Member -name "dns_domain_names" -membertype NoteProperty -Value $domain
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure DNS')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+            $run = $response | ConvertFrom-Json
 
-        $run
+            $run
+        }
     }
 
     End {
@@ -158,12 +161,17 @@ function Remove-ArubaSWDns {
 
         .EXAMPLE
         Remove-ArubaSWDns
+
         Remove the ip of server 1 and server 2, and all the domain names
+
+        .EXAMPLE
+        Remove-ArubaSWDns -confirm:$false
+
+        Remove the ip of server 1 and server 2, and all the domain names without confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -180,20 +188,8 @@ function Remove-ArubaSWDns {
 
         $uri = "rest/v4/dns"
 
-        if ( -not ( $noconfirm )) {
-            $message = "Remove DNS on the switch"
-            $question = "Proceed with removal of DNS config ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove DNS"
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Remove DNS')) {
             $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -uri $uri -connection $connection
-            Write-Progress -activity "Remove DNS" -completed
         }
     }
 
