@@ -88,6 +88,7 @@ function Set-ArubaSWBanner {
         Disable is_last_login message
         #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $false)]
         [string]$motd,
@@ -135,11 +136,13 @@ function Set-ArubaSWBanner {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $banner -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess("", 'Configure Banner')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $banner -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+            $run = $response | ConvertFrom-Json
 
-        $run
+            $run
+        }
     }
 
     End {
