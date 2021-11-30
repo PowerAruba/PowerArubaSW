@@ -80,6 +80,7 @@ function Set-ArubaSWLed {
         Enable Led Locator on member stack 2 (for stack unit)
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true)]
         [ValidateSet("On", "Off", "Blink")]
@@ -146,11 +147,12 @@ function Set-ArubaSWLed {
             $led | Add-Member -name "member_id" -membertype NoteProperty -Value $member_id
         }
 
-        Invoke-ArubaSWWebRequest -method "POST" -body $led -uri $uri -connection $connection | Out-Null
+        if (($PSCmdlet.ShouldProcess($connection.server), 'Configure Led')) {
+            Invoke-ArubaSWWebRequest -method "POST" -body $led -uri $uri -connection $connection | Out-Null
 
-        #Display the led info...
-        Get-ArubaSWLed -connection $connection
-
+            #Display the led info...
+            Get-ArubaSWLed -connection $connection
+        }
     }
 
     End {
