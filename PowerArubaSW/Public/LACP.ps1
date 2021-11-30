@@ -119,19 +119,18 @@ function Remove-ArubaSWLACP {
         Remove port 3 of the lacp trunk group trk6.
 
         .EXAMPLE
-        Remove-ArubaSWLACP -trunk_group trk6 -port 3 -noconfirm
-        PS C:\>Remove-ArubaSWLACP -trunk_group trk6 -port 5 -noconfirm
+        Remove-ArubaSWLACP -trunk_group trk6 -port 3 -confirm:$false
+        PS C:\>Remove-ArubaSWLACP -trunk_group trk6 -port 5 -confirm:$false
 
         Remove ports 3 and 5 in trunk group 6 without confirmation.
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
         [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -152,20 +151,8 @@ function Remove-ArubaSWLACP {
 
         $uri = "rest/v4/lacp/port/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove LACP on switch"
-            $question = "Proceed with removal of LACP ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove LACP"
+        if ($PSCmdlet.ShouldProcess($id, 'Remove LACP')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -uri $uri -connection $connection
-            Write-Progress -activity "Remove LACP" -completed
         }
     }
 
