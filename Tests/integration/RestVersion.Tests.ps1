@@ -7,17 +7,23 @@
 
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaSW @invokeParams
+}
+
 Describe  "Get-ArubaSWRestVersion" {
     It "Get-ArubaSWRestVersion Does not throw an error" {
         {
             Get-ArubaSWRestVersion
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get-ArubaSWRestVersion should not be null" {
         $version = Get-ArubaSWRestVersion
-        $version.version | Should not be $NULL
+        $version.version | Should -Not -Be $NULL
     }
 }
 
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}

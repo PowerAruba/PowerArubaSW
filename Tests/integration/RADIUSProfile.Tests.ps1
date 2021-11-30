@@ -7,12 +7,15 @@
 
 . ../common.ps1
 
-Describe  "Get RADIUS Profile" {
-    It "Get-ArubaSWRadiusProfile Does not throw an error" {
-        { Get-ArubaSWRadiusProfile } | Should Not Throw
-    }
+BeforeAll {
+    Connect-ArubaSW @invokeParams
 }
 
+Describe  "Get RADIUS Profile" {
+    It "Get-ArubaSWRadiusProfile Does not throw an error" {
+        { Get-ArubaSWRadiusProfile } | Should -Not -Throw
+    }
+}
 
 Describe  "Configure RADIUS Profile" {
 
@@ -74,5 +77,6 @@ Describe  "Configure RADIUS Profile" {
     }
 }
 
-
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}

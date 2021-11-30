@@ -6,6 +6,10 @@
 
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaSW @invokeParams
+}
+
 Describe  "Ping (ipv4_address)" {
     beforeAll {
         $script:ipv4_gateway = (Get-ArubaSWSystem).default_gateway.octets
@@ -51,4 +55,6 @@ Describe  "Ping (-hostname)" {
 
 }
 
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}

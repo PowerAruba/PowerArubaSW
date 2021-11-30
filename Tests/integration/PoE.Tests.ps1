@@ -5,16 +5,20 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaSW @invokeParams
+}
+
 Describe  "Get PoE" {
     It "Get PoE Does not throw an error" {
         {
             Get-ArubaSWPoE
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get ALL PoE (Port)" {
         $poe = Get-ArubaSWPoE
-        $poe | Should not be $NULL
+        $poe | Should -Not -Be $NULL
         $poe.port_id | Should -BeOfType string
         $poe.is_poe_enabled | Should -BeOfType boolean
         $poe.poe_priority | Should -BeOfType string
@@ -26,7 +30,7 @@ Describe  "Get PoE" {
 
     It "Get PoE Port $pester_poe_port" {
         $poe = Get-ArubaSWPoE -port $pester_poe_port
-        $poe | Should not be $NULL
+        $poe | Should -Not -Be $NULL
         $poe.port_id | Should -Be $pester_poe_port
         $poe.is_poe_enabled | Should -BeOfType boolean
         $poe.poe_priority | Should -BeOfType string
@@ -72,12 +76,12 @@ Describe  "Get PoE Stats" {
     It "Get PoE StatsDoes not throw an error" {
         {
             Get-ArubaSWPoEStats
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get ALL PoE Stats (Port)" {
         $poe = Get-ArubaSWPoEStats
-        $poe | Should not be $NULL
+        $poe | Should -Not -Be $NULL
         $poe.port_id | Should -BeOfType string
         $poe.port_voltage_in_volts | Should -BeOfType $pester_longint
         $poe.power_denied_count | Should -BeOfType $pester_longint
@@ -90,7 +94,7 @@ Describe  "Get PoE Stats" {
 
     It "Get PoE Port Stats $pester_poe_port" {
         $poe = Get-ArubaSWPoEStats -port $pester_poe_port
-        $poe | Should not be $NULL
+        $poe | Should -Not -Be $NULL
         $poe.port_id | Should -Be $pester_poe_port
         $poe.port_voltage_in_volts | Should -BeOfType $pester_longint
         $poe.power_denied_count | Should -BeOfType $pester_longint
@@ -101,5 +105,6 @@ Describe  "Get PoE Stats" {
         $poe.power_class | Should -BeOfType $pester_longint
     }
 }
-
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}

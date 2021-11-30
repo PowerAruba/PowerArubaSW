@@ -7,17 +7,23 @@
 
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaSW @invokeParams
+}
+
 Describe  "Get-ArubaSWIPAddress" {
     It "Get-ArubaSWIPAddress Does not throw an error" {
-        { Get-ArubaSWIPAddress } | Should Not Throw
+        { Get-ArubaSWIPAddress } | Should -Not -Throw
     }
 
     It "Get IP Address(es) of Switch" {
         $ipaddress = Get-ArubaSWIPAddress
-        $ipaddress | Should not be $NULL
+        $ipaddress | Should -Not -Be $NULL
         $ipaddress.ip_address_mode | Should -BeOfType string
         $ipaddress.vlan_id | Should -BeOfType $pester_longint
     }
 }
 
-Disconnect-ArubaSW -noconfirm
+AfterAll {
+    Disconnect-ArubaSW -noconfirm
+}
