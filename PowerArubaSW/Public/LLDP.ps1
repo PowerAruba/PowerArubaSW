@@ -115,6 +115,7 @@ function Set-ArubaSWLLDPGlobalStatus {
         Set LLDP disable and configure holdtime to 10 and faststart to 1
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $false)]
         [switch]$enable,
@@ -166,10 +167,11 @@ function Set-ArubaSWLLDPGlobalStatus {
 
         $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+        if ($PSCmdlet.ShouldProcess("", 'Configure LLDP Global Status')) {
+            $run = $response | ConvertFrom-Json
 
-        $run
-
+            $run
+        }
     }
 
     End {
