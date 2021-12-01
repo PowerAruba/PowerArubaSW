@@ -172,6 +172,7 @@ function Set-ArubaSWVlans {
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -220,7 +221,6 @@ function Set-ArubaSWVlans {
 
             $_vlan | Add-Member -name "name" -membertype NoteProperty -Value $oldname
         }
-        $name
 
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
@@ -249,10 +249,12 @@ function Set-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri -connection $connection
-        $rep_vlan = ($response.Content | ConvertFrom-Json)
+        if ($PSCmdlet.ShouldProcess($id, 'Configure Vlans')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri -connection $connection
+            $rep_vlan = ($response.Content | ConvertFrom-Json)
 
-        $rep_vlan
+            $rep_vlan
+        }
     }
 
     End {
