@@ -32,7 +32,7 @@ Describe  "Ping (-hostname)" {
 
     BeforeAll {
         #Always remove DNS Settings...
-        Remove-ArubaSWDns -noconfirm
+        Remove-ArubaSWDns -confirm:$false
     }
 
     It "Ping a hostname (without DNS config)" {
@@ -50,7 +50,7 @@ Describe  "Ping (-hostname)" {
 
     AfterAll {
         #Always remove DNS Settings...
-        Remove-ArubaSWDns -noconfirm
+        Remove-ArubaSWDns -confirm:$false
     }
 
 }
