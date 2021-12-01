@@ -68,6 +68,7 @@ function Set-ArubaSWRadiusProfile {
         Enable RADIUS Tracking
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $false)]
         [ValidateRange(1, 15)]
@@ -136,11 +137,13 @@ function Set-ArubaSWRadiusProfile {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess("", 'Configure RADIUS Profile')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+            $run = $response | ConvertFrom-Json
 
-        $run
+            $run
+        }
     }
 
     End {
