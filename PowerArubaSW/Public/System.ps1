@@ -59,6 +59,7 @@ function Set-ArubaSWSystem {
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter(Mandatory = $false)]
         [String]$name,
@@ -92,9 +93,11 @@ function Set-ArubaSWSystem {
             $system | Add-Member -name "contact" -membertype NoteProperty -Value $contact
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -uri $uri -Body $system -connection $connection
+        if ($PSCmdlet.ShouldProcess($port, 'Configure STP Port')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -uri $uri -Body $system -connection $connection
 
-        $response.content | ConvertFrom-Json
+            $response.content | ConvertFrom-Json
+        }
     }
 
     End {
