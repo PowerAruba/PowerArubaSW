@@ -93,5 +93,5 @@ Describe  "Remove RADIUS Server Group" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

@@ -244,5 +244,5 @@ Describe  "Remove VLAN" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

@@ -52,5 +52,5 @@ Describe  "Remove Aruba Trunk" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

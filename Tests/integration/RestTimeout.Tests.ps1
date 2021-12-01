@@ -54,5 +54,5 @@ Describe  "Set RestSessionTimeout" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

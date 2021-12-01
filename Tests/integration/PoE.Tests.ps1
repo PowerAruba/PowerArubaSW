@@ -106,5 +106,5 @@ Describe  "Get PoE Stats" {
     }
 }
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

@@ -25,5 +25,5 @@ Describe  "Get-ArubaSWIPAddress" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

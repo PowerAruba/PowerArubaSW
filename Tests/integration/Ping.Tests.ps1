@@ -56,5 +56,5 @@ Describe  "Ping (-hostname)" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

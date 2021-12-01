@@ -186,5 +186,5 @@ Describe  "Get Port Statistics" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

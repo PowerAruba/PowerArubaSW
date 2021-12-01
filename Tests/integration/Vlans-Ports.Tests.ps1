@@ -159,5 +159,5 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

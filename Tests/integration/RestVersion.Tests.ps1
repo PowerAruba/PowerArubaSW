@@ -25,5 +25,5 @@ Describe  "Get-ArubaSWRestVersion" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

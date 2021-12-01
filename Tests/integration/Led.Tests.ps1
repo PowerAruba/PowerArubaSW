@@ -107,5 +107,5 @@ Describe  "Configure Led Locator" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

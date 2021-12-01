@@ -53,5 +53,5 @@ Describe  "Remove Aruba LACP" {
 
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

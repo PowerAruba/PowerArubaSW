@@ -16,7 +16,7 @@ Describe  "Connect to a switch (using HTTP)" {
         $DefaultArubaSWConnection.session | Should -Not -BeNullOrEmpty
     }
     It "Disconnect to a switch (using HTTP) and check global variable" {
-        Disconnect-ArubaSW -noconfirm
+        Disconnect-ArubaSW -confirm:$false
         $DefaultArubaSWConnection | Should -Be $null
     }
     #TODO: Connect using wrong login/password
@@ -34,7 +34,7 @@ Describe  "Connect to a switch (using HTTPS)" {
         $DefaultArubaSWConnection.session | Should -Not -BeNullOrEmpty
     }
     It "Disconnect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
-        Disconnect-ArubaSW -noconfirm
+        Disconnect-ArubaSW -confirm:$false
         $DefaultArubaSWConnection | Should -Be $null
     }
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
@@ -90,7 +90,7 @@ Describe  "Connect to a switch (using multi connection)" {
     }
 
     It "Disconnect to a switch (Multi connection)" {
-        Disconnect-ArubaSW -connection $sw -noconfirm
+        Disconnect-ArubaSW -connection $sw -confirm:$false
         $DefaultArubaSWConnection | Should -Be $null
     }
 

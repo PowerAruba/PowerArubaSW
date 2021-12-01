@@ -203,15 +203,14 @@ function Disconnect-ArubaSW {
         Disconnect the connection
 
         .EXAMPLE
-        Disconnect-ArubaSW -noconfirm
+        Disconnect-ArubaSW -confirm:$false
 
         Disconnect the connection with no confirmation
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -224,20 +223,8 @@ function Disconnect-ArubaSW {
 
         $uri = "rest/v3/login-sessions"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Aruba Switch connection."
-            $question = "Proceed with removal of Aruba Switch connection ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Aruba SW connection"
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Remove Connection')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Aruba SW connection" -completed
             if (Test-Path variable:global:DefaultArubaSWConnection) {
                 Remove-Variable -name DefaultArubaSWConnection -scope global
             }
