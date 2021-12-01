@@ -135,6 +135,7 @@ function Set-ArubaSWPort {
         Configure port 3 to Mode 100 HDX
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
         [string]$port_id,
@@ -211,9 +212,11 @@ function Set-ArubaSWPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess("", 'Configure Port')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $uri -connection $connection
 
-        $response | ConvertFrom-Json
+            $response | ConvertFrom-Json
+        }
     }
 
     End {
