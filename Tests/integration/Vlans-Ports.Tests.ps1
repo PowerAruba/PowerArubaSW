@@ -40,7 +40,7 @@ Describe  "Get Vlans Ports" {
     }
 
     AfterAll {
-        Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+        Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
     }
 }
 
@@ -67,7 +67,7 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
         }
 
         It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
-            Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -noconfirm
+            Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -confirm:$false
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should -Be 1
             $VLANP.port_id | Should -Be $pester_vlanport
@@ -91,7 +91,7 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
         }
 
         It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
-            Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -noconfirm
+            Remove-ArubaSWVlansPorts -vlan_id $pester_vlan -port_id $pester_vlanport -confirm:$false
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should -Be 1
             $VLANP.port_id | Should -Be $pester_vlanport
@@ -119,7 +119,7 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
 
         It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
-            $VLANP | Remove-ArubaSWVlansPorts -noconfirm
+            $VLANP | Remove-ArubaSWVlansPorts -confirm:$false
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should -Be 1
             $VLANP.port_id | Should -Be $pester_vlanport
@@ -145,7 +145,7 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
 
         It "Remove vlan_id $pester_vlan on port_id $pester_vlanport" {
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport -vlan_id $pester_vlan
-            $VLANP | Remove-ArubaSWVlansPorts -noconfirm
+            $VLANP | Remove-ArubaSWVlansPorts -confirm:$false
             $VLANP = Get-ArubaSWVlansPorts -port_id $pester_vlanport
             $VLANP.vlan_id | Should -Be 1
             $VLANP.port_id | Should -Be $pester_vlanport
@@ -154,7 +154,7 @@ Describe  "Configure (Add/Set/Remove) Vlans Ports" {
     }
 
     AfterAll {
-        Remove-ArubaSWVlans -id $pester_vlan -noconfirm
+        Remove-ArubaSWVlans -id $pester_vlan -confirm:$false
     }
 }
 

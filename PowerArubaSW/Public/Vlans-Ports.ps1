@@ -147,6 +147,7 @@ function Set-ArubaSWVlansPorts {
         (Re)configure vlan id 23 on port id 8 with mode tagged
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$vlan_id,
@@ -186,10 +187,12 @@ function Set-ArubaSWVlansPorts {
             { $_ -eq "Forbidden" } { $_vlanport | Add-Member -name "port_mode" -membertype NoteProperty -Value "POM_FORBIDDEN" }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -uri $uri -connection $connection
-        $rep_vlanport = ($response.Content | ConvertFrom-Json)
+        if ($PSCmdlet.ShouldProcess("${vlan_id}-${port_id}", 'Configure Vlans Ports')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlanport -uri $uri -connection $connection
+            $rep_vlanport = ($response.Content | ConvertFrom-Json)
 
-        $rep_vlanport
+            $rep_vlanport
+        }
     }
 
     End {
@@ -212,11 +215,12 @@ function Remove-ArubaSWVlansPorts {
         Remove vlan 85 on port 8
 
         .EXAMPLE
-        Remove-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -noconfirm
+        Remove-ArubaSWVlansPorts -vlan_id 85 -port_id 8 -confirm:$false
 
         Remove vlan id 85 on port 8 with no confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$vlan_id,
@@ -225,8 +229,6 @@ function Remove-ArubaSWVlansPorts {
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlanport,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -245,20 +247,8 @@ function Remove-ArubaSWVlansPorts {
 
         $uri = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Vlan on switch"
-            $question = "Proceed with removal of vlan ${vlan_id} on port ${port_id}?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Vlan Port"
+        if ($PSCmdlet.ShouldProcess("${vlan_id}-${port_id}", 'Configure Vlans Ports')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Vlan Port" -completed
         }
     }
 
