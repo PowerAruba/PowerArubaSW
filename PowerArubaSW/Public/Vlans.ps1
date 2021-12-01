@@ -262,7 +262,7 @@ function Set-ArubaSWVlans {
 }
 
 function Remove-ArubaSWVlans {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+
     <#
         .SYNOPSIS
         Remove a Vlan on ArubaOS Switch (Provision)
@@ -282,6 +282,7 @@ function Remove-ArubaSWVlans {
         Remove vlan id 85 with no confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -306,9 +307,7 @@ function Remove-ArubaSWVlans {
 
         $target = "Vlan ID {0}" -f $id
         if ($PSCmdlet.ShouldProcess($target, "Remove VLAN")) {
-            Write-Progress -activity "Remove Vlan"
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Vlan" -completed
         }
     }
 
