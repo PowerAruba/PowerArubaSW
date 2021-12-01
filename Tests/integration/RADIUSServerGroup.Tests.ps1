@@ -23,8 +23,8 @@ Describe  "Get RADIUS Server Group" {
     }
 
     AfterAll {
-        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -noconfirm
-        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
+        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -confirm:$false
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -confirm:$false
     }
 
 }
@@ -51,12 +51,12 @@ Describe  "Add RADIUS Server Group" {
     }
 
     AfterEach {
-        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -noconfirm
+        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -confirm:$false
     }
 
     AfterAll {
-        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
-        Get-ArubaSWRadiusServer -address 192.0.2.2 | Remove-ArubaSWRadiusServer -noconfirm
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -confirm:$false
+        Get-ArubaSWRadiusServer -address 192.0.2.2 | Remove-ArubaSWRadiusServer -confirm:$false
     }
 }
 
@@ -72,7 +72,7 @@ Describe  "Remove RADIUS Server Group" {
         It "Remove RADIUS Server Group" {
 
             $radius_group = Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW
-            Remove-ArubaSWRadiusServerGroup -server_group_name $radius_group.server_group_name -noconfirm
+            Remove-ArubaSWRadiusServerGroup -server_group_name $radius_group.server_group_name -confirm:$false
             { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW 3> $null } | Should -Throw
         }
 
@@ -81,14 +81,14 @@ Describe  "Remove RADIUS Server Group" {
     Context "Remove RADIUS Server Group via pipeline" {
 
         It "Remove RADIUS Server Group" {
-            Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup -noconfirm
+            Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW | Remove-ArubaSWRadiusServerGroup -confirm:$false
             { Get-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW 3> $null } | Should -Throw
         }
 
     }
 
     AfterEach {
-        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
+        Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -confirm:$false
     }
 }
 
