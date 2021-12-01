@@ -5,6 +5,8 @@
 #
 Function Set-ArubaSWuntrustedSSL {
 
+  [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessforStateChangingFunctions", "")]
+  Param(  )
   # Hack for allowing untrusted SSL certs with https connections
   Add-Type -TypeDefinition @"
     using System.Net;
@@ -24,6 +26,8 @@ Function Set-ArubaSWuntrustedSSL {
 
 Function Set-ArubaSWCipherSSL {
 
+  [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessforStateChangingFunctions", "")]
+  Param(  )
   # Hack for allowing TLS 1.1 and TLS 1.2 (by default it is only SSL3 and TLS (1.0))
   $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
   [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
