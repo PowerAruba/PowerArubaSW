@@ -63,6 +63,7 @@ function Set-ArubaSWSTP {
         Set the spanning-tree protocol off, the priority to 4 and the mode to RPVST
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, Position = 1)]
         [switch]$enable,
@@ -112,12 +113,13 @@ function Set-ArubaSWSTP {
             $_stp | Add-Member -name "mode" -membertype NoteProperty -Value $_mode
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure STP')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+            $run = $response | ConvertFrom-Json
 
-        $run
-
+            $run
+        }
     }
 
     End {
@@ -201,6 +203,7 @@ function Set-ArubaSWSTPPort {
         Configure the port 4 and set the priority 6, enable admin edge, and disable bpdu protection, bpdu filter and root guard.
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
         [string]$port,
@@ -279,11 +282,13 @@ function Set-ArubaSWSTPPort {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess($port, 'Configure STP Port')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_stp -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+            $run = $response | ConvertFrom-Json
 
-        $run
+            $run
+        }
 
     }
 
