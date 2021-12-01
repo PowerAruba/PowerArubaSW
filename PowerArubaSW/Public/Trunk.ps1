@@ -125,13 +125,12 @@ function Remove-ArubaSWTrunk {
         Remove ports 3 and 5 in trunk group 6 without confirm
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, Position = 1)]
         [string]$trunk_group,
         [Parameter (Mandatory = $true, Position = 2)]
         [string]$port,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -152,20 +151,8 @@ function Remove-ArubaSWTrunk {
 
         $uri = "rest/v4/trunk/port/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove trunk group on switch"
-            $question = "Proceed with removal of trunk group $trunk_group on port $port ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove trunk group"
+        if ($PSCmdlet.ShouldProcess($id, 'Remove Trunk')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -uri $uri -connection $connection
-            Write-Progress -activity "Remove trunk group" -completed
         }
     }
 
