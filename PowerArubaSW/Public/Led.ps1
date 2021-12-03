@@ -147,7 +147,7 @@ function Set-ArubaSWLed {
             $led | Add-Member -name "member_id" -membertype NoteProperty -Value $member_id
         }
 
-        if (($PSCmdlet.ShouldProcess($connection.server), 'Configure Led')) {
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure Led')) {
             Invoke-ArubaSWWebRequest -method "POST" -body $led -uri $uri -connection $connection | Out-Null
 
             #Display the led info...
