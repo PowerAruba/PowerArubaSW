@@ -212,7 +212,7 @@ function Set-ArubaSWPort {
             }
         }
 
-        if ($PSCmdlet.ShouldProcess("", 'Configure Port')) {
+        if ($PSCmdlet.ShouldProcess($port_id, 'Configure Port')) {
             $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_port -uri $uri -connection $connection
 
             $response | ConvertFrom-Json
