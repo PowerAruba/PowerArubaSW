@@ -137,7 +137,7 @@ function Set-ArubaSWRadiusProfile {
             }
         }
 
-        if ($PSCmdlet.ShouldProcess("", 'Configure RADIUS Profile')) {
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure RADIUS Profile')) {
             $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
             $run = $response | ConvertFrom-Json
