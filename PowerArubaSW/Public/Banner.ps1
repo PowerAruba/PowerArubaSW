@@ -136,7 +136,7 @@ function Set-ArubaSWBanner {
             }
         }
 
-        if ($PSCmdlet.ShouldProcess("", 'Configure Banner')) {
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure Banner')) {
             $response = Invoke-ArubaSWWebRequest -method "PUT" -body $banner -uri $uri -connection $connection
 
             $run = $response | ConvertFrom-Json
