@@ -167,7 +167,7 @@ function Set-ArubaSWLLDPGlobalStatus {
 
         $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
-        if ($PSCmdlet.ShouldProcess("", 'Configure LLDP Global Status')) {
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure LLDP Global Status')) {
             $run = $response | ConvertFrom-Json
 
             $run
