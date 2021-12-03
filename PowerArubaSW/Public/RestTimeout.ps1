@@ -86,7 +86,7 @@ function Set-ArubaSWRestSessionTimeout {
             $time | Add-Member -name "timeout" -membertype NoteProperty -Value $timeout
         }
 
-        if ($PSCmdlet.ShouldProcess("", 'Configure REST Timeout')) {
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure REST Timeout')) {
             $response = Invoke-ArubaSWWebRequest -method "PUT" -body $time -uri $uri -connection $connection
 
             $run = ($response | ConvertFrom-Json).timeout
