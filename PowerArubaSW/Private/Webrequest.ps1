@@ -13,19 +13,29 @@ function Invoke-ArubaSWWebRequest() {
        Invoke WebRequest with ArubaSW connection variable (IP Address, cookie, port...)
 
       .EXAMPLE
-      Invoke-ArubaSWWebRequest -method "get" -uri "rest/v4/vlan"
+      Invoke-ArubaSWWebRequest -method "get" -uri "vlan"
 
-      Invoke-WebRequest with ArubaSW connection for get rest/v4/vlan
-
-      .EXAMPLE
-      Invoke-ArubaSWWebRequest "rest/v4/system"
-
-      Invoke-WebRequest with ArubaSW connection for get rest/v4/system uri with default GET method parameter
+      Invoke-WebRequest with ArubaSW connection for get rest/vX/vlan
 
       .EXAMPLE
-      Invoke-ArubaSWWebRequest -method "post" -uri "rest/v4/system" -body $body
+      Invoke-ArubaSWWebRequest "system"
 
-      Invoke-WebRequest with ArubaSW connection for post rest/v4/system uri with $body payload
+      Invoke-WebRequest with ArubaSW connection for get rest/vX/system uri with default GET method parameter
+
+      .EXAMPLE
+      Invoke-ArubaSWWebRequest -method "post" -uri "system" -body $body
+
+      Invoke-WebRequest with ArubaSW connection for post est/vX/ssystem uri with $body payload
+
+      .EXAMPLE
+      Invoke-ArubaSWWebRequest -method "get" -uri "system" -version 4
+
+      Invoke-WebRequest with ArubaSW connection for get rest/v4/ssystem uri
+
+            .EXAMPLE
+      Invoke-ArubaSWWebRequest -method "get" -uri "/rest/v8/system" -version 0
+
+      Invoke-WebRequest with ArubaSW connection for get /rest/v8/system uri
 
     #>
 
@@ -35,6 +45,8 @@ function Invoke-ArubaSWWebRequest() {
         [String]$uri,
         [ValidateSet("GET", "POST", "DELETE", "PUT")]
         [String]$method = "get",
+        [Parameter(Mandatory = $false)]
+        [int]$version,
         [Parameter(Mandatory = $false)]
         [psobject]$body,
         [Parameter(Mandatory = $false)]
@@ -60,11 +72,24 @@ function Invoke-ArubaSWWebRequest() {
         $sessionvariable = $connection.session
 
         if ($httpOnly) {
-            $fullurl = "http://${Server}:${port}/${uri}"
+            $fullurl = "http://${Server}:${port}/"
         }
         else {
-            $fullurl = "https://${Server}:${port}/${uri}"
+            $fullurl = "https://${Server}:${port}/"
         }
+
+        if ( $PsBoundParameters.ContainsKey('version') ) {
+            #Not Equal to 0, we add $version (if 0 we don't add rest info..)
+            if ($version -ne "0") {
+                $fullurl = "rest/v" + $version + "/"
+            }
+        }
+        else {
+            #Get info from connection
+            $fullurl = "rest/v" + $connection.version.cur + "/"
+        }
+
+        $fullurl += $uri
 
         try {
             if ($body) {
