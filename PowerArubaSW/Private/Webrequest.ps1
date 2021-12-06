@@ -81,12 +81,12 @@ function Invoke-ArubaSWWebRequest() {
         if ( $PsBoundParameters.ContainsKey('version') ) {
             #Not Equal to 0, we add $version (if 0 we don't add rest info..)
             if ($version -ne "0") {
-                $fullurl = "rest/v" + $version + "/"
+                $fullurl += "rest/v" + $version + "/"
             }
         }
         else {
             #Get info from connection
-            $fullurl = "rest/v" + $connection.version.cur + "/"
+            $fullurl += "rest/v" + $connection.version.cur + "/"
         }
 
         $fullurl += $uri
