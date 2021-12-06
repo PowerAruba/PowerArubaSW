@@ -80,6 +80,7 @@ function Set-ArubaSWPoE {
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "port_id")]
         [string]$port_id,
@@ -176,10 +177,12 @@ function Set-ArubaSWPoE {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_poe -uri $uri -connection $connection
-        $rep_poe = ($response.Content | ConvertFrom-Json)
+        if ($PSCmdlet.ShouldProcess("", 'Configure Banner')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_poe -uri $uri -connection $connection
+            $rep_poe = ($response.Content | ConvertFrom-Json)
 
-        $rep_poe
+            $rep_poe
+        }
     }
 
     End {

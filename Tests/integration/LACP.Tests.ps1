@@ -23,35 +23,35 @@ Describe  "Add ArubaSWLACP" {
         $lacp = Get-ArubaSWLACP | Where-Object port_id -eq $pester_lacp_port
         $lacp.port_id | Should -Be "$pester_lacp_port"
         $lacp.trunk_group | Should -Be "$pester_lacp_trk1"
-        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -noconfirm
+        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -confirm:$false
     }
 
     It "Change trunk group on a port without removing it before" {
         Add-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port
         { Add-ArubaSWLACP -trunk_group $pester_lacp_trk2 -port $pester_lacp_port 3> $null } | Should -Throw
-        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -noconfirm
+        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -confirm:$false
     }
 
     It "Change trunk group on a port after removing this port of the trunk group" {
         Add-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port
-        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -noconfirm
+        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -confirm:$false
         { Add-ArubaSWLACP -trunk_group $pester_lacp_trk2 -port $pester_lacp_port } | Should -Not -Throw
-        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk2 -port $pester_lacp_port -noconfirm
+        Remove-ArubaSWLACP -trunk_group $pester_lacp_trk2 -port $pester_lacp_port -confirm:$false
     }
 }
 
 Describe  "Remove Aruba LACP" {
     It "Remove ArubaSWLACP does throw an error if trunk group doesn't exist on a port" {
-        { Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -noconfirm 3> $null } | Should -Throw
+        { Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -confirm:$false 3> $null } | Should -Throw
     }
 
     It "Remove ArubaSWLACP does not throw an error if the trunk group exist on a port" {
         Add-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port
-        { Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -noconfirm } | Should -Not -Throw
+        { Remove-ArubaSWLACP -trunk_group $pester_lacp_trk1 -port $pester_lacp_port -confirm:$false } | Should -Not -Throw
     }
 }
 
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

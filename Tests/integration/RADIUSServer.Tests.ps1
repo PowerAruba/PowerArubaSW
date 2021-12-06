@@ -49,7 +49,7 @@ Describe  "Add RADIUS Server" {
 
     AfterEach {
         $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Remove-ArubaSWRadiusServer -id $radius.radius_server_id -noconfirm
+        Remove-ArubaSWRadiusServer -id $radius.radius_server_id -confirm:$false
     }
 }
 
@@ -125,7 +125,7 @@ Describe  "Configure RADIUS Server" {
 
     AfterAll {
         $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
-        Remove-ArubaSWRadiusServer -id $radius.radius_server_id -noconfirm
+        Remove-ArubaSWRadiusServer -id $radius.radius_server_id -confirm:$false
     }
 }
 
@@ -139,7 +139,7 @@ Describe  "Remove RADIUS Server" {
         It "Remove ArubaSWRadiusServer server" {
 
             $id_server = Get-ArubaSWRadiusServer -address 192.0.2.1
-            Remove-ArubaSWRadiusServer -id $id_server.radius_server_id -noconfirm
+            Remove-ArubaSWRadiusServer -id $id_server.radius_server_id -confirm:$false
             $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
             $radius | Should -BeNullOrEmpty
         }
@@ -147,7 +147,7 @@ Describe  "Remove RADIUS Server" {
 
     Context "Remove RADIUS server by pipeline" {
         It "Remove ArubaSWRadiusServer server" {
-            Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -noconfirm
+            Get-ArubaSWRadiusServer -address 192.0.2.1 | Remove-ArubaSWRadiusServer -confirm:$false
             $radius = Get-ArubaSWRadiusServer -address 192.0.2.1
             $radius | Should -BeNullOrEmpty
         }
@@ -155,5 +155,5 @@ Describe  "Remove RADIUS Server" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

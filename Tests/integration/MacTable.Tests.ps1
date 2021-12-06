@@ -78,5 +78,5 @@ Describe  "Get Mac Table" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

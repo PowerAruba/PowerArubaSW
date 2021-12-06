@@ -20,7 +20,7 @@ Describe  "Set-ArubaSWDns" {
 
     BeforeEach {
         #Always DNS Settings...
-        Remove-ArubaSWDns -noconfirm
+        Remove-ArubaSWDns -confirm:$false
     }
 
     It "Set ArubaSWDns ip server 1" {
@@ -64,7 +64,7 @@ Describe  "Set-ArubaSWDns" {
 
     AfterAll {
         #Always DNS Settings...
-        Remove-ArubaSWDns -noconfirm
+        Remove-ArubaSWDns -confirm:$false
     }
 
 }
@@ -72,7 +72,7 @@ Describe  "Set-ArubaSWDns" {
 Describe  "Remove-ArubaSWDns" {
     It "Remove ArubaSWDns" {
         Set-ArubaSWDns -mode Manual -server1 1.1.1.1 -server2 8.8.8.8 -domain example.org
-        Remove-ArubaSWDns -noconfirm
+        Remove-ArubaSWDns -confirm:$false
         $dns = Get-ArubaSWDns
         $dns.dns_config_mode | Should -Be "DCM_DISABLED"
         $dns.server_1 | Should -BeNullOrEmpty
@@ -82,5 +82,5 @@ Describe  "Remove-ArubaSWDns" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

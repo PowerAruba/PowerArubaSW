@@ -63,6 +63,7 @@ function Set-ArubaSWRestSessionTimeout {
         This function allow you to set idle time (in seconds) before being disconnected with the parameter timeout.
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, Position = 1)]
         [ValidateRange(120, 7200)]
@@ -85,12 +86,13 @@ function Set-ArubaSWRestSessionTimeout {
             $time | Add-Member -name "timeout" -membertype NoteProperty -Value $timeout
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $time -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Configure REST Timeout')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $time -uri $uri -connection $connection
 
-        $run = ($response | ConvertFrom-Json).timeout
+            $run = ($response | ConvertFrom-Json).timeout
 
-        $run
-
+            $run
+        }
     }
 
     End {

@@ -149,18 +149,17 @@ function Remove-ArubaSWRadiusServerGroup {
         Remove the radius server group with name PowerArubaSW.
 
         .EXAMPLE
-        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -noconfirm
+        Remove-ArubaSWRadiusServerGroup -server_group_name PowerArubaSW -confirm:$false
 
         Remove the radius server group with name PowerArubaSW without confirmation.
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "server_group_name")]
         [string]$server_group_name,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "server_group")]
         [psobject]$server_group,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
@@ -177,20 +176,8 @@ function Remove-ArubaSWRadiusServerGroup {
 
         $uri = "rest/v4/radius/server_group/${server_group_name}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove RADIUS Server Group on switch"
-            $question = "Proceed with removal of RADIUS server Group $server_group_name ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove RADIUS Server Group"
+        if ($PSCmdlet.ShouldProcess($server_group_name, 'Remove RADIUS Server Group')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove RADIUS Server Group" -completed
         }
     }
 

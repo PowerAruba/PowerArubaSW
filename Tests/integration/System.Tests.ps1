@@ -148,5 +148,5 @@ Describe  "Get System Status Switch" {
 }
 
 AfterAll {
-    Disconnect-ArubaSW -noconfirm
+    Disconnect-ArubaSW -confirm:$false
 }

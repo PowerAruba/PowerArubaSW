@@ -172,6 +172,7 @@ function Set-ArubaSWVlans {
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -220,7 +221,6 @@ function Set-ArubaSWVlans {
 
             $_vlan | Add-Member -name "name" -membertype NoteProperty -Value $oldname
         }
-        $name
 
         if ( $PsBoundParameters.ContainsKey('is_voice_enabled') ) {
             if ( $is_voice_enabled ) {
@@ -249,10 +249,12 @@ function Set-ArubaSWVlans {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri -connection $connection
-        $rep_vlan = ($response.Content | ConvertFrom-Json)
+        if ($PSCmdlet.ShouldProcess($id, 'Configure Vlans')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $_vlan -uri $uri -connection $connection
+            $rep_vlan = ($response.Content | ConvertFrom-Json)
 
-        $rep_vlan
+            $rep_vlan
+        }
     }
 
     End {
@@ -275,24 +277,22 @@ function Remove-ArubaSWVlans {
         Remove vlan id 85
 
         .EXAMPLE
-        Remove-ArubaSWVlans -id 85 -noconfirm
+        Remove-ArubaSWVlans -id 85 -confirm:$false
 
         Remove vlan id 85 with no confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "vlan")]
         #ValidateScript({ ValidateVlan $_ })]
         [psobject]$vlan,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
     )
-
     Begin {
     }
 
@@ -305,20 +305,9 @@ function Remove-ArubaSWVlans {
 
         $uri = "rest/v4/vlans/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Vlan on switch"
-            $question = "Proceed with removal of vlan ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Vlan"
+        $target = "Vlan ID {0}" -f $id
+        if ($PSCmdlet.ShouldProcess($target, "Remove VLAN")) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Vlan" -completed
         }
     }
 

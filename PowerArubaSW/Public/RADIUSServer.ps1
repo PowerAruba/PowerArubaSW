@@ -205,6 +205,7 @@ function Set-ArubaSWRadiusServer {
         Enable OOBM on RADIUS Server id 3
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id")]
         [ValidateRange (1, 15)]
@@ -290,11 +291,13 @@ function Set-ArubaSWRadiusServer {
             }
         }
 
-        $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
+        if ($PSCmdlet.ShouldProcess($id, 'Configure RADIUS Server')) {
+            $response = Invoke-ArubaSWWebRequest -method "PUT" -body $conf -uri $uri -connection $connection
 
-        $run = $response | ConvertFrom-Json
+            $run = $response | ConvertFrom-Json
 
-        $run
+            $run
+        }
     }
 
     End {
@@ -317,19 +320,18 @@ function Remove-ArubaSWRadiusServer {
         Remove the RADIUS server with IP Address 192.0.2.2
 
         .EXAMPLE
-        Remove-ArubaSWRadiusServer -id 1 -noconfirm
+        Remove-ArubaSWRadiusServer -id 1 -confirm:$false
 
         Remove the RADIUS server with id 1 without confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id")]
         [ValidateRange (1, 15)]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "id_server")]
         [psobject]$id_server,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaSWConnection
     )
@@ -345,20 +347,8 @@ function Remove-ArubaSWRadiusServer {
 
         $uri = "rest/v4/radius_servers/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove RADIUS Server on switch"
-            $question = "Proceed with removal of RADIUS server $id ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove RADIUS Server"
+        if ($PSCmdlet.ShouldProcess($id, 'Remove RADIUS Server')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove RADIUS Server" -completed
         }
     }
 
