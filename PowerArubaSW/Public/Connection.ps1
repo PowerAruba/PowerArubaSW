@@ -156,6 +156,14 @@ function Connect-ArubaSW {
             Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
         }
 
+        $restversion = Get-ArubaSWRestversion
+        #Remove v and .x (.0, 1)
+        $vers = $restversion.version -replace "v" -replace ".0" -replace ".1"
+
+        $connection.version.min = ($vers | Measure-Object -Minimum).Minimum
+        $connection.version.max = ($vers | Measure-Object -Maximum).Maximum
+        $connection.version.cur = "4"
+
         $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
 
@@ -171,14 +179,6 @@ function Connect-ArubaSW {
         else {
             $connection.product_number = $switchstatus.product_number
         }
-
-        $restversion = Get-ArubaSWRestversion
-        #Remove v and .x (.0, 1)
-        $vers = $restversion.version -replace "v" -replace ".0" -replace ".1"
-
-        $connection.version.min = ($vers | Measure-Object -Minimum).Minimum
-        $connection.version.max = ($vers | Measure-Object -Maximum).Maximum
-        $connection.version.cur = "4"
 
         if (-not $noverbose) {
             $switchsystem = Get-ArubaSWSystem -connection $connection
