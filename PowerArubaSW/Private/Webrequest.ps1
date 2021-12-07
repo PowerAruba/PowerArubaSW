@@ -46,6 +46,7 @@ function Invoke-ArubaSWWebRequest() {
         [ValidateSet("GET", "POST", "DELETE", "PUT")]
         [String]$method = "get",
         [Parameter(Mandatory = $false)]
+        [ValidateRange(0, 10)]
         [int]$api_version,
         [Parameter(Mandatory = $false)]
         [psobject]$body,
