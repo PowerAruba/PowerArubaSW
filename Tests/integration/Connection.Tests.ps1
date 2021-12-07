@@ -14,9 +14,9 @@ Describe  "Connect to a switch (using HTTP)" {
         $DefaultArubaSWConnection.port | Should -Be "80"
         $DefaultArubaSWConnection.httpOnly | Should -Be $true
         $DefaultArubaSWConnection.session | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.version.min | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.version.max | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.version.cur | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.min | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.max | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.cur | Should -Not -BeNullOrEmpty
     }
     It "Disconnect to a switch (using HTTP) and check global variable" {
         Disconnect-ArubaSW -confirm:$false
@@ -35,9 +35,9 @@ Describe  "Connect to a switch (using HTTPS)" {
         $DefaultArubaSWConnection.port | Should -Be "443"
         $DefaultArubaSWConnection.httpOnly | Should -Be $false
         $DefaultArubaSWConnection.session | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.version.min | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.version.max | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.version.cur | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.min | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.max | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.cur | Should -Not -BeNullOrEmpty
     }
     It "Disconnect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
         Disconnect-ArubaSW -confirm:$false
@@ -59,9 +59,9 @@ Describe  "Connect to a switch (using multi connection)" {
         $sw.port | Should -Be "80"
         $sw.httpOnly | Should -Be $true
         $sw.session | Should -Not -BeNullOrEmpty
-        $sw.version.min | Should -Not -BeNullOrEmpty
-        $sw.version.max | Should -Not -BeNullOrEmpty
-        $sw.version.cur | Should -Not -BeNullOrEmpty
+        $sw.api_version.min | Should -Not -BeNullOrEmpty
+        $sw.api_version.max | Should -Not -BeNullOrEmpty
+        $sw.api_version.cur | Should -Not -BeNullOrEmpty
     }
 
     It "Throw when try to use Invoke-ArubaSWWebRequest and not connected" {

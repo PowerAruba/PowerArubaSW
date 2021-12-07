@@ -86,7 +86,7 @@ function Invoke-ArubaSWWebRequest() {
         }
         else {
             #Get info from connection
-            $fullurl += "rest/v" + $connection.version.cur + "/"
+            $fullurl += "rest/v" + $connection.api_version.cur + "/"
         }
 
         $fullurl += $uri

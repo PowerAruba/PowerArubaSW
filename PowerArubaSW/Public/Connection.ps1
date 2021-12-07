@@ -86,8 +86,8 @@ function Connect-ArubaSW {
 
     Process {
 
-        $version = @{min = ""; cur = ""; max = "" }
-        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; version = $version ; product_number = "" }
+        $api_version = @{min = ""; cur = ""; max = "" }
+        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; api_version = $api_version ; product_number = "" }
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -160,9 +160,9 @@ function Connect-ArubaSW {
         #Remove v and .x (.0, 1)
         $vers = $restversion.version -replace "v" -replace ".0" -replace ".1"
 
-        $connection.version.min = ($vers | Measure-Object -Minimum).Minimum
-        $connection.version.max = ($vers | Measure-Object -Maximum).Maximum
-        $connection.version.cur = "4"
+        $connection.api_version.min = ($vers | Measure-Object -Minimum).Minimum
+        $connection.api_version.max = ($vers | Measure-Object -Maximum).Maximum
+        $connection.api_version.cur = "4"
 
         $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
