@@ -144,7 +144,7 @@ function Connect-ArubaSW {
         }
 
         if ($PsBoundParameters.ContainsKey('api_version')) {
-            $uri += "rest/v${api_verison}/login-sessions"
+            $uri += "rest/v${api_version}/login-sessions"
         }
         else {
             #By default use v3 API (some 'new' device don't support v1/v2 API...)
@@ -178,7 +178,14 @@ function Connect-ArubaSW {
 
         $connection.api_version.min = ($vers | Measure-Object -Minimum).Minimum
         $connection.api_version.max = ($vers | Measure-Object -Maximum).Maximum
-        $connection.api_version.cur = "4"
+
+        if ($PsBoundParameters.ContainsKey('api_version')) {
+            $connection.api_version.cur = $api_version
+        }
+        else {
+            #use by default the high version release supported
+            $connection.api_version.cur = $connection.api_version.max
+        }
 
         $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
