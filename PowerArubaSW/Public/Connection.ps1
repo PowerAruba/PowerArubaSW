@@ -243,7 +243,7 @@ function Disconnect-ArubaSW {
 
     Process {
 
-        $uri = "rest/v3/login-sessions"
+        $uri = "login-sessions"
 
         if ($PSCmdlet.ShouldProcess($connection.server, 'Remove Connection')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection

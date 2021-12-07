@@ -30,7 +30,7 @@ function Get-ArubaSWModules {
 
     Process {
 
-        $uri = "rest/v4/modules"
+        $uri = "modules"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 

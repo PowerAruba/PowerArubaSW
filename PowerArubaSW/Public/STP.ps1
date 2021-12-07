@@ -30,7 +30,7 @@ function Get-ArubaSWSTP {
 
     Process {
 
-        $uri = "rest/v4/stp"
+        $uri = "stp"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -83,7 +83,7 @@ function Set-ArubaSWSTP {
 
     Process {
 
-        $uri = "rest/v4/stp"
+        $uri = "stp"
 
         $_stp = New-Object -TypeName PSObject
 
@@ -161,7 +161,7 @@ function Get-ArubaSWSTPPort {
     Process {
 
 
-        $uri = "rest/v4/stp/ports"
+        $uri = "stp/ports"
 
         if ($port) {
             $uri += "/$port"
@@ -240,7 +240,7 @@ function Set-ArubaSWSTPPort {
 
         $_stp | Add-Member -name "port_id" -membertype NoteProperty -Value $port
 
-        $uri = "rest/v4/stp/ports/${port}"
+        $uri = "stp/ports/${port}"
 
         if ( $PsBoundParameters.ContainsKey('priority') ) {
             $_stp | Add-Member -name "priority" -membertype NoteProperty -Value $priority

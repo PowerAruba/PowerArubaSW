@@ -30,7 +30,7 @@ function Get-ArubaSWLACP {
 
     Process {
 
-        $uri = "rest/v4/lacp/port"
+        $uri = "lacp/port"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -84,7 +84,7 @@ function Add-ArubaSWLACP {
 
     Process {
 
-        $uri = "rest/v4/lacp/port"
+        $uri = "lacp/port"
 
         $lacp = New-Object -TypeName PSObject
 
@@ -149,7 +149,7 @@ function Remove-ArubaSWLACP {
 
         $id = $lacp.port_id
 
-        $uri = "rest/v4/lacp/port/${id}"
+        $uri = "lacp/port/${id}"
 
         if ($PSCmdlet.ShouldProcess($id, 'Remove LACP')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $lacp -uri $uri -connection $connection

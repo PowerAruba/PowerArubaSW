@@ -41,7 +41,7 @@ function Add-ArubaSWVlans {
 
     Process {
 
-        $uri = "rest/v4/vlans"
+        $uri = "vlans"
 
         $vlan = New-Object -TypeName PSObject
 
@@ -135,7 +135,7 @@ function Get-ArubaSWVlans {
 
     Process {
 
-        $uri = "rest/v4/vlans"
+        $uri = "vlans"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -202,7 +202,7 @@ function Set-ArubaSWVlans {
             $id = $vlan.vlan_id
             $oldname = $vlan.name
         }
-        $uri = "rest/v4/vlans/${id}"
+        $uri = "vlans/${id}"
 
         $_vlan = New-Object -TypeName PSObject
 
@@ -303,7 +303,7 @@ function Remove-ArubaSWVlans {
             $id = $vlan.vlan_id
         }
 
-        $uri = "rest/v4/vlans/${id}"
+        $uri = "vlans/${id}"
 
         $target = "Vlan ID {0}" -f $id
         if ($PSCmdlet.ShouldProcess($target, "Remove VLAN")) {

@@ -47,7 +47,7 @@ function Get-ArubaSWCli {
 
     Process {
 
-        $uri = "rest/v4/cli"
+        $uri = "cli"
 
         $run = New-Object -TypeName PSObject
 
@@ -120,7 +120,7 @@ function Send-ArubaSWCliBatch {
             $nb = $nb + 1
         }
 
-        $uri = "rest/v4/cli_batch"
+        $uri = "cli_batch"
 
         $conf = New-Object -TypeName PSObject
 
@@ -167,7 +167,7 @@ function Get-ArubaSWCliBatchStatus {
 
     Process {
 
-        $uri = "rest/v4/cli_batch/status"
+        $uri = "cli_batch/status"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 

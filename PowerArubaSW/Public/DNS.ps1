@@ -30,7 +30,7 @@ function Get-ArubaSWDns {
 
     Process {
 
-        $uri = "rest/v4/dns"
+        $uri = "dns"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -90,7 +90,7 @@ function Set-ArubaSWDns {
 
     Process {
 
-        $uri = "rest/v4/dns"
+        $uri = "dns"
 
         $conf = New-Object -TypeName PSObject
 
@@ -186,7 +186,7 @@ function Remove-ArubaSWDns {
 
         $dns | Add-Member -name "dns_config_mode" -membertype NoteProperty -Value "DCM_DISABLED"
 
-        $uri = "rest/v4/dns"
+        $uri = "dns"
 
         if ($PSCmdlet.ShouldProcess($connection.server, 'Remove DNS')) {
             $null = Invoke-ArubaSWWebRequest -method "PUT" -body $dns -uri $uri -connection $connection

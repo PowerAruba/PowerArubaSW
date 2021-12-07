@@ -37,10 +37,10 @@ function Get-ArubaSWPoE {
 
     Process {
 
-        $uri = "rest/v4/poe/ports"
+        $uri = "poe/ports"
 
         if ( $port_id ) {
-            $uri = "rest/v4/ports/$port_id/poe"
+            $uri = "ports/$port_id/poe"
         }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
@@ -116,7 +116,7 @@ function Set-ArubaSWPoE {
         if ($port_poe) {
             $port_id = $port_poe.port_id
         }
-        $uri = "rest/v4/ports/${port_id}/poe"
+        $uri = "ports/${port_id}/poe"
 
         $_poe = New-Object -TypeName PSObject
 
@@ -221,10 +221,10 @@ function Get-ArubaSWPoEStats {
 
     Process {
 
-        $uri = "rest/v4/poe/ports/stats"
+        $uri = "poe/ports/stats"
 
         if ( $port_id ) {
-            $uri = "rest/v4/ports/$port_id/poe/stats"
+            $uri = "ports/$port_id/poe/stats"
         }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection

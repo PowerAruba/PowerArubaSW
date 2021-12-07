@@ -33,7 +33,7 @@ function Get-ArubaSWRadiusServerGroup {
 
     Process {
 
-        $uri = "rest/v4/radius/server_group/${server_group_name}"
+        $uri = "radius/server_group/${server_group_name}"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -85,7 +85,7 @@ function Add-ArubaSWRadiusServerGroup {
 
     Process {
 
-        $uri = "rest/v4/radius/server_group"
+        $uri = "radius/server_group"
 
         $conf = New-Object -TypeName PSObject
 
@@ -174,7 +174,7 @@ function Remove-ArubaSWRadiusServerGroup {
             $server_group_name = $server_group.server_group_name
         }
 
-        $uri = "rest/v4/radius/server_group/${server_group_name}"
+        $uri = "radius/server_group/${server_group_name}"
 
         if ($PSCmdlet.ShouldProcess($server_group_name, 'Remove RADIUS Server Group')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection

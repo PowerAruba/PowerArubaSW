@@ -37,7 +37,7 @@ function Get-ArubaSWPort {
 
     Process {
 
-        $uri = "rest/v4/ports"
+        $uri = "ports"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -89,7 +89,7 @@ function Get-ArubaSWPortStatistics {
 
     Process {
 
-        $uri = "rest/v4/port-statistics"
+        $uri = "port-statistics"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -171,7 +171,7 @@ function Set-ArubaSWPort {
             $port_id = $port.id
         }
 
-        $uri = "rest/v4/ports/${port_id}"
+        $uri = "ports/${port_id}"
 
         $_port = New-Object -TypeName PSObject
 
