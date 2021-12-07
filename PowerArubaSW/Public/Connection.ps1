@@ -57,6 +57,11 @@ function Connect-ArubaSW {
 
       Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $sw2 variable
       and don't store connection on global ($DefaultArubaSWConnection) variable
+
+     .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1 -api_version 2
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 using v2 API
   #>
 
     Param(
@@ -78,6 +83,9 @@ function Connect-ArubaSW {
         [ValidateRange(1, 65535)]
         [int]$port,
         [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 10)]
+        [int]$api_version,
+        [Parameter(Mandatory = $false)]
         [boolean]$DefaultConnection = $true
     )
 
@@ -86,8 +94,8 @@ function Connect-ArubaSW {
 
     Process {
 
-        $api_version = @{min = ""; cur = ""; max = "" }
-        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; api_version = $api_version ; product_number = "" }
+        $version = @{min = ""; cur = ""; max = "" }
+        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; api_version = $version ; product_number = "" }
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -116,7 +124,7 @@ function Connect-ArubaSW {
                 $port = 80
             }
             $connection.httpOnly = $true
-            $uri = "http://${Server}:${port}/rest/v3/login-sessions"
+            $uri = "http://${Server}:${port}/"
         }
         else {
             if (!$port) {
@@ -132,7 +140,15 @@ function Connect-ArubaSW {
                     Set-ArubaSWuntrustedSSL
                 }
             }
-            $uri = "https://${Server}:${port}/rest/v3/login-sessions"
+            $uri = "https://${Server}:${port}/"
+        }
+
+        if ($PsBoundParameters.ContainsKey('api_version')) {
+            $uri += "rest/v${api_verison}/login-sessions"
+        }
+        else {
+            #By default use v3 API (some 'new' device don't support v1/v2 API...)
+            $uri += "rest/v3/login-sessions"
         }
 
         try {

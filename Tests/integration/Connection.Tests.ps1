@@ -7,7 +7,7 @@
 
 Describe  "Connect to a switch (using HTTP)" {
     It "Connect to a switch (using HTTP) and check global variable" {
-        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -httpOnly -noverbose
+        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -httpOnly -noverbose
         $DefaultArubaSWConnection | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.server | Should -Be $invokeParams.server
         $DefaultArubaSWConnection.cookie | Should -Not -BeNullOrEmpty
@@ -16,7 +16,7 @@ Describe  "Connect to a switch (using HTTP)" {
         $DefaultArubaSWConnection.session | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.api_version.min | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.api_version.max | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.api_version.cur | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.cur | Should -Be "3"
     }
     It "Disconnect to a switch (using HTTP) and check global variable" {
         Disconnect-ArubaSW -confirm:$false
@@ -28,7 +28,7 @@ Describe  "Connect to a switch (using HTTP)" {
 Describe  "Connect to a switch (using HTTPS)" {
     #TODO Try change port => Need AnyCLI
     It "Connect to a switch (using HTTPS and -SkipCertificateCheck) and check global variable" -Skip:($httpOnly) {
-        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -SkipCertificateCheck -noverbose
+        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -SkipCertificateCheck -noverbose
         $DefaultArubaSWConnection | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.server | Should -Be $invokeParams.server
         $DefaultArubaSWConnection.cookie | Should -Not -BeNullOrEmpty
@@ -37,7 +37,7 @@ Describe  "Connect to a switch (using HTTPS)" {
         $DefaultArubaSWConnection.session | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.api_version.min | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.api_version.max | Should -Not -BeNullOrEmpty
-        $DefaultArubaSWConnection.api_version.cur | Should -Not -BeNullOrEmpty
+        $DefaultArubaSWConnection.api_version.cur | Should -Be "3"
     }
     It "Disconnect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly) {
         Disconnect-ArubaSW -confirm:$false
