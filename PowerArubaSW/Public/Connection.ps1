@@ -156,7 +156,7 @@ function Connect-ArubaSW {
             Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
         }
 
-        $restversion = Get-ArubaSWRestversion
+        $restversion = Get-ArubaSWRestversion -connection $connection
         #Remove v and .x (.0, 1)
         $vers = $restversion.version -replace "v" -replace ".0" -replace ".1"
 
