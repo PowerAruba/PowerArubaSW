@@ -28,12 +28,12 @@ function Invoke-ArubaSWWebRequest() {
       Invoke-WebRequest with ArubaSW connection for post est/vX/ssystem uri with $body payload
 
       .EXAMPLE
-      Invoke-ArubaSWWebRequest -method "get" -uri "system" -version 4
+      Invoke-ArubaSWWebRequest -method "get" -uri "system" -api_version 4
 
       Invoke-WebRequest with ArubaSW connection for get rest/v4/ssystem uri
 
             .EXAMPLE
-      Invoke-ArubaSWWebRequest -method "get" -uri "/rest/v8/system" -version 0
+      Invoke-ArubaSWWebRequest -method "get" -uri "/rest/v8/system" -api_version 0
 
       Invoke-WebRequest with ArubaSW connection for get /rest/v8/system uri
 
@@ -46,7 +46,7 @@ function Invoke-ArubaSWWebRequest() {
         [ValidateSet("GET", "POST", "DELETE", "PUT")]
         [String]$method = "get",
         [Parameter(Mandatory = $false)]
-        [int]$version,
+        [int]$api_version,
         [Parameter(Mandatory = $false)]
         [psobject]$body,
         [Parameter(Mandatory = $false)]
@@ -78,10 +78,10 @@ function Invoke-ArubaSWWebRequest() {
             $fullurl = "https://${Server}:${port}/"
         }
 
-        if ( $PsBoundParameters.ContainsKey('version') ) {
-            #Not Equal to 0, we add $version (if 0 we don't add rest info..)
-            if ($version -ne "0") {
-                $fullurl += "rest/v" + $version + "/"
+        if ( $PsBoundParameters.ContainsKey('api_version') ) {
+            #Not Equal to 0, we add $api_version (if 0 we don't add rest info..)
+            if ($api_version -ne "0") {
+                $fullurl += "rest/v" + $api_version + "/"
             }
         }
         else {
