@@ -67,6 +67,11 @@ Describe  "Connect to a switch (using multi connection and multi version)" {
         { Invoke-ArubaSWWebRequest -uri "rest/v4/vlans" } | Should -Throw "Not Connected. Connect to the Switch with Connect-ArubaSW"
     }
 
+    It "use Set-ArubaSWConnection to change api_version (v4)" {
+        Set-ArubaSWConnection -api_version 4 -connection $sw
+        $sw.api_version.cur | Should -Be "4"
+    }
+
     Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
         It "Use Multi connection for call Get vlans" {
             { Get-ArubaSWVlans -connection $sw } | Should -Not -Throw
