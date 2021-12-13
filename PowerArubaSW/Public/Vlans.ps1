@@ -120,6 +120,7 @@ function Get-ArubaSWVlans {
     [CmdLetBinding(DefaultParameterSetName = "Default")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'id', Justification = 'False positive see PSSA #1472')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'name', Justification = 'False positive see PSSA #1472')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "id")]
         [int]$id,
