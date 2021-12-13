@@ -74,8 +74,6 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [PSCredential]$Credentials,
         [Parameter(Mandatory = $false)]
-        [switch]$noverbose = $false,
-        [Parameter(Mandatory = $false)]
         [switch]$httpOnly = $false,
         [Parameter(Mandatory = $false)]
         [switch]$SkipCertificateCheck = $false,
@@ -203,27 +201,23 @@ function Connect-ArubaSW {
             $connection.product_number = $switchstatus.product_number
         }
 
-        if (-not $noverbose) {
-            $switchsystem = Get-ArubaSWSystem -connection $connection
+        $switchsystem = Get-ArubaSWSystem -connection $connection
 
-
-            if ($switchstatus.switch_type -eq "ST_STACKED") {
-                $product_name = $NULL;
-                foreach ($blades in $switchstatus.blades) {
-                    if ($blades.product_name) {
-                        if ($product_name) {
-                            $product_name += ", "
-                        }
-                        $product_name += $blades.product_name
+        if ($switchstatus.switch_type -eq "ST_STACKED") {
+            $product_name = $NULL;
+            foreach ($blades in $switchstatus.blades) {
+                if ($blades.product_name) {
+                    if ($product_name) {
+                        $product_name += ", "
                     }
+                    $product_name += $blades.product_name
                 }
             }
-            else {
-                $product_name = $switchstatus.product_name
-            }
-            Write-Output "Welcome on $($switchsystem.name) -$product_name"
-
         }
+        else {
+            $product_name = $switchstatus.product_name
+        }
+        Write-Verbose "Welcome on $($switchsystem.name) -$product_name"
 
         #Return connection info
         $connection

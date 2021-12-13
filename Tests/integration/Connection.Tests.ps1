@@ -7,8 +7,7 @@
 
 Describe  "Connect to a switch (using HTTP)" {
     It "Connect to a switch (using HTTP) and check global variable" {
-        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -httpOnly -noverbose
-        $DefaultArubaSWConnection | Should -Not -BeNullOrEmpty
+        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -httpOnly
         $DefaultArubaSWConnection.server | Should -Be $invokeParams.server
         $DefaultArubaSWConnection.cookie | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.port | Should -Be "80"
@@ -28,7 +27,7 @@ Describe  "Connect to a switch (using HTTP)" {
 Describe  "Connect to a switch (using HTTPS)" {
     #TODO Try change port => Need AnyCLI
     It "Connect to a switch (using HTTPS and -SkipCertificateCheck) and check global variable" -Skip:($httpOnly) {
-        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -SkipCertificateCheck -noverbose
+        Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -SkipCertificateCheck
         $DefaultArubaSWConnection | Should -Not -BeNullOrEmpty
         $DefaultArubaSWConnection.server | Should -Be $invokeParams.server
         $DefaultArubaSWConnection.cookie | Should -Not -BeNullOrEmpty
@@ -46,13 +45,13 @@ Describe  "Connect to a switch (using HTTPS)" {
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
     #This test will -Be fail, if there is valid certificate...
     It "Connect to a switch (using HTTPS) and check global variable" -Skip:($httpOnly -Or "Desktop" -eq $PSEdition) {
-        { Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -noverbose } | Should -Throw "Unable to connect (certificate)"
+        { Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password } | Should -Throw "Unable to connect (certificate)"
     }
 }
 
 Describe  "Connect to a switch (using multi connection)" {
     It "Connect to a switch (using HTTP and store on sw variable)" {
-        $script:sw = Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -httpOnly -noverbose -DefaultConnection:$false
+        $script:sw = Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -httpOnly -DefaultConnection:$false
         $DefaultArubaSWConnection | Should -BeNullOrEmpty
         $sw.server | Should -Be $invokeParams.server
         $sw.cookie | Should -Not -BeNullOrEmpty
