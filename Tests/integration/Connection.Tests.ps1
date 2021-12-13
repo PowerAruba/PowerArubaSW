@@ -49,9 +49,9 @@ Describe  "Connect to a switch (using HTTPS)" {
     }
 }
 
-Describe  "Connect to a switch (using multi connection)" {
+Describe  "Connect to a switch (using multi connection and multi version)" {
     It "Connect to a switch (using HTTP and store on sw variable)" {
-        $script:sw = Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -httpOnly -DefaultConnection:$false
+        $script:sw = Connect-ArubaSW $invokeParams.server -Username $invokeParams.Username -password $invokeParams.password -api_version 3 -httpOnly -DefaultConnection:$false
         $DefaultArubaSWConnection | Should -BeNullOrEmpty
         $sw.server | Should -Be $invokeParams.server
         $sw.cookie | Should -Not -BeNullOrEmpty
@@ -60,7 +60,7 @@ Describe  "Connect to a switch (using multi connection)" {
         $sw.session | Should -Not -BeNullOrEmpty
         $sw.api_version.min | Should -Not -BeNullOrEmpty
         $sw.api_version.max | Should -Not -BeNullOrEmpty
-        $sw.api_version.cur | Should -Not -BeNullOrEmpty
+        $sw.api_version.cur | Should -Be "3"
     }
 
     It "Throw when try to use Invoke-ArubaSWWebRequest and not connected" {
