@@ -227,6 +227,46 @@ function Connect-ArubaSW {
     }
 }
 
+function Set-ArubaSWConnection {
+
+    <#
+        .SYNOPSIS
+        Configure Aruba SW connection Setting
+
+        .DESCRIPTION
+        Configure Aruba SW connection Setting (api_version...)
+
+        .EXAMPLE
+        Set-ArubaSWConnection -api_version 4
+
+        Configure default connection api_version to 4
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+    Param(
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 10)]
+        [int]$api_version,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultArubaSWConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Set default api_version on connection')) {
+            $connection.api_version.cur = $api_version
+        }
+
+    }
+
+    End {
+    }
+}
+
 function Disconnect-ArubaSW {
 
     <#
