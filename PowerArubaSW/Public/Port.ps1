@@ -76,6 +76,7 @@ function Get-ArubaSWPortStatistics {
         Get Port statistics of port_id 3
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $false)]
         [string]$port_id,
