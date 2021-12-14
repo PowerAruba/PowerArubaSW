@@ -192,6 +192,7 @@ function Get-ArubaSWLLDPNeighborStats {
         Get all the informations about the neighbor stats
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
@@ -235,6 +236,7 @@ function Get-ArubaSWLLDPPortStats {
     #>
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'port', Justification = 'False positive see PSSA #1472')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "port")]
         [string]$port,
