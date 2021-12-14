@@ -38,7 +38,7 @@ function Get-ArubaSWLed {
 
     Process {
 
-        $uri = "rest/v4/led_locator_info"
+        $uri = "led_locator_info"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -104,7 +104,7 @@ function Set-ArubaSWLed {
 
     Process {
 
-        $uri = "rest/v4/locator-led-blink"
+        $uri = "locator-led-blink"
 
         $led = New-Object -TypeName PSObject
 

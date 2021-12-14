@@ -43,7 +43,7 @@ function Add-ArubaSWVlansPorts {
 
     Process {
 
-        $uri = "rest/v4/vlans-ports"
+        $uri = "vlans-ports"
 
         $vlanports = New-Object -TypeName PSObject
 
@@ -109,7 +109,7 @@ function Get-ArubaSWVlansPorts {
 
     Process {
 
-        $uri = "rest/v4/vlans-ports"
+        $uri = "vlans-ports"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
         $vlansports = ($response.Content | ConvertFrom-Json).vlan_port_element
@@ -174,7 +174,7 @@ function Set-ArubaSWVlansPorts {
             $vlan_id = $vlanports.vlan_id
             $port_id = $vlanports.port_id
         }
-        $uri = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
+        $uri = "vlans-ports/${vlan_id}-${port_id}"
 
         $_vlanport = New-Object -TypeName PSObject
 
@@ -245,7 +245,7 @@ function Remove-ArubaSWVlansPorts {
             $port_id = $vlanport.port_id
         }
 
-        $uri = "rest/v4/vlans-ports/${vlan_id}-${port_id}"
+        $uri = "vlans-ports/${vlan_id}-${port_id}"
 
         if ($PSCmdlet.ShouldProcess("${vlan_id}-${port_id}", 'Configure Vlans Ports')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection

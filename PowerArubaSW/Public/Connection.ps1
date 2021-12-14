@@ -57,6 +57,11 @@ function Connect-ArubaSW {
 
       Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $sw2 variable
       and don't store connection on global ($DefaultArubaSWConnection) variable
+
+     .EXAMPLE
+      Connect-ArubaSW -Server 192.0.2.1 -api_version 2
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 using v2 API
   #>
 
     Param(
@@ -69,14 +74,15 @@ function Connect-ArubaSW {
         [Parameter(Mandatory = $false)]
         [PSCredential]$Credentials,
         [Parameter(Mandatory = $false)]
-        [switch]$noverbose = $false,
-        [Parameter(Mandatory = $false)]
         [switch]$httpOnly = $false,
         [Parameter(Mandatory = $false)]
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 65535)]
         [int]$port,
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 10)]
+        [int]$api_version,
         [Parameter(Mandatory = $false)]
         [boolean]$DefaultConnection = $true
     )
@@ -86,7 +92,8 @@ function Connect-ArubaSW {
 
     Process {
 
-        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" }
+        $version = @{min = ""; cur = ""; max = "" }
+        $connection = @{server = ""; session = ""; cookie = ""; httpOnly = $false; port = ""; invokeParams = ""; switch_type = "" ; api_version = $version ; product_number = "" }
 
         #If there is a password (and a user), create a credentials
         if ($Password) {
@@ -115,7 +122,7 @@ function Connect-ArubaSW {
                 $port = 80
             }
             $connection.httpOnly = $true
-            $uri = "http://${Server}:${port}/rest/v3/login-sessions"
+            $uri = "http://${Server}:${port}/"
         }
         else {
             if (!$port) {
@@ -131,7 +138,15 @@ function Connect-ArubaSW {
                     Set-ArubaSWuntrustedSSL
                 }
             }
-            $uri = "https://${Server}:${port}/rest/v3/login-sessions"
+            $uri = "https://${Server}:${port}/"
+        }
+
+        if ($PsBoundParameters.ContainsKey('api_version')) {
+            $uri += "rest/v${api_version}/login-sessions"
+        }
+        else {
+            #By default use v3 API (some 'new' device don't support v1/v2 API...)
+            $uri += "rest/v3/login-sessions"
         }
 
         try {
@@ -155,33 +170,97 @@ function Connect-ArubaSW {
             Set-Variable -name DefaultArubaSWConnection -value $connection -scope Global
         }
 
+        $restversion = Get-ArubaSWRestversion -connection $connection
+        #Remove v and .x (.0, 1)
+        $vers = $restversion.version -replace "v" -replace ".0" -replace ".1"
+
+        $connection.api_version.min = ($vers | Measure-Object -Minimum).Minimum
+        $connection.api_version.max = ($vers | Measure-Object -Maximum).Maximum
+
+        if ($PsBoundParameters.ContainsKey('api_version')) {
+            $connection.api_version.cur = $api_version
+        }
+        else {
+            #use by default the high version release supported
+            $connection.api_version.cur = $connection.api_version.max
+        }
+
         $switchstatus = Get-ArubaSWSystemStatusSwitch -connection $connection
         $connection.switch_type = $switchstatus.switch_type
 
-        if (-not $noverbose) {
-            $switchsystem = Get-ArubaSWSystem -connection $connection
-
-
-            if ($switchstatus.switch_type -eq "ST_STACKED") {
-                $product_name = $NULL;
-                foreach ($blades in $switchstatus.blades) {
-                    if ($blades.product_name) {
-                        if ($product_name) {
-                            $product_name += ", "
-                        }
-                        $product_name += $blades.product_name
-                    }
-                }
+        if ('ST_STACKED' -eq $switchstatus.switch_type) {
+            if ( $switchstatus.blades.count -eq "1") {
+                $connection.product_number = $switchstatus.blades.product_number
             }
             else {
-                $product_name = $switchstatus.product_name
+                $connection.product_number = $switchstatus.blades.product_number[0]
             }
-            Write-Output "Welcome on $($switchsystem.name) -$product_name"
 
         }
+        else {
+            $connection.product_number = $switchstatus.product_number
+        }
+
+        $switchsystem = Get-ArubaSWSystem -connection $connection
+
+        if ($switchstatus.switch_type -eq "ST_STACKED") {
+            $product_name = $NULL;
+            foreach ($blades in $switchstatus.blades) {
+                if ($blades.product_name) {
+                    if ($product_name) {
+                        $product_name += ", "
+                    }
+                    $product_name += $blades.product_name
+                }
+            }
+        }
+        else {
+            $product_name = $switchstatus.product_name
+        }
+        Write-Verbose "Welcome on $($switchsystem.name) -$product_name"
 
         #Return connection info
         $connection
+    }
+
+    End {
+    }
+}
+
+function Set-ArubaSWConnection {
+
+    <#
+        .SYNOPSIS
+        Configure Aruba SW connection Setting
+
+        .DESCRIPTION
+        Configure Aruba SW connection Setting (api_version...)
+
+        .EXAMPLE
+        Set-ArubaSWConnection -api_version 4
+
+        Configure default connection api_version to 4
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+    Param(
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 10)]
+        [int]$api_version,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultArubaSWConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Set default api_version on connection')) {
+            $connection.api_version.cur = $api_version
+        }
+
     }
 
     End {
@@ -221,7 +300,7 @@ function Disconnect-ArubaSW {
 
     Process {
 
-        $uri = "rest/v3/login-sessions"
+        $uri = "login-sessions"
 
         if ($PSCmdlet.ShouldProcess($connection.server, 'Remove Connection')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection

@@ -30,7 +30,7 @@ function Get-ArubaSWTrunk {
 
     Process {
 
-        $uri = "rest/v4/trunk/port"
+        $uri = "trunk/port"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -85,7 +85,7 @@ function Add-ArubaSWTrunk {
 
     Process {
 
-        $uri = "rest/v4/trunk/port"
+        $uri = "trunk/port"
 
         $trunk = New-Object -TypeName PSObject
 
@@ -149,7 +149,7 @@ function Remove-ArubaSWTrunk {
 
         $id = $trunk.port_id
 
-        $uri = "rest/v4/trunk/port/${id}"
+        $uri = "trunk/port/${id}"
 
         if ($PSCmdlet.ShouldProcess($id, 'Remove Trunk')) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -body $trunk -uri $uri -connection $connection

@@ -37,7 +37,7 @@ function Get-ArubaSWLLDPRemote {
 
     Process {
 
-        $uri = "rest/v4/lldp/remote-device"
+        $uri = "lldp/remote-device"
 
         if ($port_id) {
             $uri += "/$port_id"
@@ -84,7 +84,7 @@ function Get-ArubaSWLLDPGlobalStatus {
 
     Process {
 
-        $uri = "rest/v4/lldp"
+        $uri = "lldp"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -138,7 +138,7 @@ function Set-ArubaSWLLDPGlobalStatus {
 
     Process {
 
-        $uri = "rest/v4/lldp"
+        $uri = "lldp"
 
         $conf = New-Object -TypeName PSObject
 
@@ -203,7 +203,7 @@ function Get-ArubaSWLLDPNeighborStats {
 
     Process {
 
-        $uri = "rest/v4/lldp/stats/device"
+        $uri = "lldp/stats/device"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -248,7 +248,7 @@ function Get-ArubaSWLLDPPortStats {
 
     Process {
 
-        $uri = "rest/v4/lldp/stats/ports"
+        $uri = "lldp/stats/ports"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 

@@ -30,7 +30,7 @@ function Get-ArubaSWIpAddress {
 
     Process {
 
-        $uri = "rest/v4/ipaddresses"
+        $uri = "ipaddresses"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 

@@ -40,7 +40,7 @@ function Test-ArubaSWPing {
 
     Process {
 
-        $uri = "rest/v4/ping"
+        $uri = "ping"
         $dest = New-Object -TypeName PSObject
 
         if ($PsBoundParameters.ContainsKey('ipv4_address')) {

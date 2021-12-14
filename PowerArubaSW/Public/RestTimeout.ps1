@@ -29,7 +29,7 @@ function Get-ArubaSWRestSessionTimeout {
 
     Process {
 
-        $uri = "rest/v4/session-idle-timeout"
+        $uri = "session-idle-timeout"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -78,7 +78,7 @@ function Set-ArubaSWRestSessionTimeout {
 
     Process {
 
-        $uri = "rest/v4/session-idle-timeout"
+        $uri = "session-idle-timeout"
 
         $time = New-Object -TypeName PSObject
 

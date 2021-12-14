@@ -32,7 +32,7 @@ function Get-ArubaSWSystem {
 
     Process {
 
-        $uri = "rest/v4/system"
+        $uri = "system"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -77,7 +77,7 @@ function Set-ArubaSWSystem {
 
     Process {
 
-        $uri = "rest/v4/system"
+        $uri = "system"
 
         $system = New-Object -TypeName PSObject
 
@@ -135,7 +135,7 @@ function Get-ArubaSWSystemStatus {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatusGlobal"
         }
 
-        $uri = "rest/v4/system/status"
+        $uri = "system/status"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -169,7 +169,7 @@ function Get-ArubaSWSystemStatusSwitch {
 
     Process {
 
-        $uri = "rest/v4/system/status/switch"
+        $uri = "system/status/switch"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -210,7 +210,7 @@ function Get-ArubaSWSystemStatusGlobal {
         if ('ST_STANDALONE' -eq $connection.switch_type -or 'ST_CHASSIS' -eq $connection.switch_type) {
             Throw "Unable to use this cmdlet, you need to use Get-ArubaSWSystemStatus"
         }
-        $uri = "rest/v4/system/status/global_info"
+        $uri = "system/status/global_info"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 

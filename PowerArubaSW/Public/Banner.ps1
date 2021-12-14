@@ -32,7 +32,7 @@ function Get-ArubaSWBanner {
 
     Process {
 
-        $uri = "rest/v4/banner"
+        $uri = "banner"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -105,7 +105,7 @@ function Set-ArubaSWBanner {
     }
 
     Process {
-        $uri = "rest/v4/banner"
+        $uri = "banner"
 
         $banner = New-Object -TypeName PSObject
 

@@ -59,16 +59,16 @@ function Get-ArubaSWMacTable {
     Process {
 
         if ($PsBoundParameters.ContainsKey('port_id')) {
-            $uri = "rest/v4/ports/${port_id}/mac-table"
+            $uri = "ports/${port_id}/mac-table"
         }
         elseif ($PsBoundParameters.ContainsKey('vlan_id')) {
-            $uri = "rest/v4/vlans/${vlan_id}/mac-table"
+            $uri = "vlans/${vlan_id}/mac-table"
         }
         elseif ($PsBoundParameters.ContainsKey('mac_address')) {
-            $uri = "rest/v4/mac-table/${mac_address}"
+            $uri = "mac-table/${mac_address}"
         }
         else {
-            $uri = "rest/v4/mac-table"
+            $uri = "mac-table"
         }
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection

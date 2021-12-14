@@ -30,7 +30,7 @@ function Get-ArubaSWRadiusProfile {
     }
 
     Process {
-        $uri = "rest/v4/radius_profile"
+        $uri = "radius_profile"
 
         $response = Invoke-ArubaSWWebRequest -method "GET" -uri $uri -connection $connection
 
@@ -100,7 +100,7 @@ function Set-ArubaSWRadiusProfile {
 
     Process {
 
-        $uri = "rest/v4/radius_profile"
+        $uri = "radius_profile"
 
         $conf = New-Object -TypeName PSObject
 
