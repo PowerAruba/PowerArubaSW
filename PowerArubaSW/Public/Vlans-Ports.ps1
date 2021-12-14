@@ -25,6 +25,7 @@ function Add-ArubaSWVlansPorts {
 
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true, Position = 1)]
         [int]$vlan_id,
@@ -93,7 +94,7 @@ function Get-ArubaSWVlansPorts {
     #>
 
     #[CmdLetBinding(DefaultParameterSetName="Default")]
-
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $false)]
         [int]$vlan_id,
@@ -148,6 +149,7 @@ function Set-ArubaSWVlansPorts {
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$vlan_id,
@@ -221,6 +223,7 @@ function Remove-ArubaSWVlansPorts {
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$vlan_id,

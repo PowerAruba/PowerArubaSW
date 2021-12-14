@@ -20,6 +20,7 @@ function Add-ArubaSWVlans {
 
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [int]$id,
@@ -120,6 +121,7 @@ function Get-ArubaSWVlans {
     [CmdLetBinding(DefaultParameterSetName = "Default")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'id', Justification = 'False positive see PSSA #1472')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'name', Justification = 'False positive see PSSA #1472')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $false, ParameterSetName = "id")]
         [int]$id,
@@ -173,6 +175,7 @@ function Set-ArubaSWVlans {
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -283,6 +286,7 @@ function Remove-ArubaSWVlans {
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,

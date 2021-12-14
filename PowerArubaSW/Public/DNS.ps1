@@ -19,6 +19,7 @@ function Get-ArubaSWDns {
         This function give you all the informations about the dns parameters configured on the switch
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
@@ -70,6 +71,7 @@ function Set-ArubaSWDns {
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [ValidateSet ("DHCP", "Manual")]
@@ -171,6 +173,7 @@ function Remove-ArubaSWDns {
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]

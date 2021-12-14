@@ -20,6 +20,7 @@ function Get-ArubaSWModules {
 
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]

@@ -208,6 +208,7 @@ function Get-ArubaSWPoEStats {
 
         Get PoE statistics on port 3
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     Param(
         [Parameter (Mandatory = $false, position = 1)]
         [string]$port_id,
