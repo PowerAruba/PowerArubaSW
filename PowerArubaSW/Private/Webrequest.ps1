@@ -32,7 +32,7 @@ function Invoke-ArubaSWWebRequest() {
 
       Invoke-WebRequest with ArubaSW connection for get rest/v4/ssystem uri
 
-            .EXAMPLE
+      .EXAMPLE
       Invoke-ArubaSWWebRequest -method "get" -uri "/rest/v8/system" -api_version 0
 
       Invoke-WebRequest with ArubaSW connection for get /rest/v8/system uri
