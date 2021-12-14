@@ -1,6 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
-# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
+# Copyright 2018, Cedric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
