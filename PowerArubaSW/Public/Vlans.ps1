@@ -309,8 +309,7 @@ function Remove-ArubaSWVlans {
 
         $uri = "vlans/${id}"
 
-        $target = "Vlan ID {0}" -f $id
-        if ($PSCmdlet.ShouldProcess($target, "Remove VLAN")) {
+        if ($PSCmdlet.ShouldProcess($id, "Remove VLAN")) {
             $null = Invoke-ArubaSWWebRequest -method "DELETE" -uri $uri -connection $connection
         }
     }
