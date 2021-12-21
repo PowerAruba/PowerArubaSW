@@ -7,7 +7,7 @@ This is a Powershell module for configure a ArubaOS Switch.
 <img src="https://raw.githubusercontent.com/PowerAruba/PowerArubaSW/master/Medias/PowerArubaSW.png" width="250" height="250" />
 </p>
 
-With this module (version 0.9.0) you can manage:
+With this module (version 1.0.0) you can manage:
 
 - System (Name, Location, Contact) & Switch Status (Product and Hardware info)
 - Vlans (Add/Configure/Remove)
@@ -30,6 +30,7 @@ With this module (version 0.9.0) you can manage:
 - Banner (Get/set)
 - Ping (Test)
 - [Multi Connection](#MultiConnection)
+- [Multi Version](#MultiVersion)
 
 More functionality will be added later.
 
@@ -194,6 +195,23 @@ For example to get Vlan Ports of 2 switchs
 
 ```
 
+# MultiVersion
+
+From release 1.0.0, it is possible to select API Version
+
+For example to connect using API v2 (for some very old device)
+by default using v3 API and use last available (v8) release for other call
+
+```powershell
+# Connect using API version
+    Connect-ArubaSW 192.0.2.1 -SkipCertificateCheck -api_version 2
+
+#to change the api version, you can use, the other API call will be use API v8
+
+#You can also use -api_version with Invoke-ArubaSWWebRequest
+
+```
+
 # List of available command
 ```powershell
 Add-ArubaSWLACP
@@ -246,6 +264,7 @@ Remove-ArubaSWVlansPorts
 Send-ArubaSWCliBatch
 Set-ArubaSWBanner
 Set-ArubaSWCipherSSL
+Set-ArubaSWConnection
 Set-ArubaSWDns
 Set-ArubaSWLed
 Set-ArubaSWLLDPGlobalStatus
